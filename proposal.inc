@@ -200,13 +200,7 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 	$form['pincode'] = array(
 		'#type' => 'textfield',
 		'#title' => t('Pincode'),
-		'#size' => 30,
-		'#maxlength' => 6,
-		'#required' => False,
-		'#attributes' => array(
-			'placeholder' => 'Enter pincode....'
-		),
-		'#required' => TRUE
+		'#size' => 6
 	);
 	/***************************************************************************/
 	$form['hr'] = array(
@@ -240,15 +234,15 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 	);
 	$form['samplefile'] = array(
 		'#type' => 'fieldset',
-		'#title' => t('Circuit Diagram'),
+		'#title' => t('Relevant Documents (if any)'),
 		'#collapsible' => FALSE,
 		'#collapsed' => FALSE
 	);
 	$form['samplefile']['samplefilepath'] = array(
 		'#type' => 'file',
-		'#title' => t('Upload circuit diagram'),
+		//'#title' => t('Upload circuit diagram'),
 		'#size' => 48,
-		//'#description' => t('Separate filenames with underscore. No spaces or any special characters allowed in filename.') . '<br />' . t('<span style="color:red;">Allowed file extensions : ') . variable_get('textbook_companion_source_extensions', '') . '</span>'
+		'#description' => t('Upload filenames with allowed extensions only. No spaces or any special characters allowed in filename.') . '<br />' . t('<span style="color:red;">Allowed file extensions : ') . variable_get('resource_upload_extensions', '') . '</span>'
 	);
 	$form['term_condition'] = array(
 		'#type' => 'checkboxes',
@@ -464,7 +458,7 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
     :university, 
     :city, 
     :pincode, 
-    :state, 
+    :state,  
     :country,
     :project_guide_name,
     :project_guide_email_id,
