@@ -13,10 +13,10 @@ function circuit_simulation_mail($key, &$message, $params)
 			/* initializing data */
 			$query = db_select('esim_circuit_simulation_proposal');
 			$query->fields('esim_circuit_simulation_proposal');
-			$query->condition('id', $params['circuit_simulation_proposal_received']['proposal_id']);
+			$query->condition('id', $params['circuit_simulation_proposal_received']['result1']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user_data = user_load($params['circuit_simulation_proposal_received']['user_id']);
+			$user = user_load($params['circuit_simulation_proposal_received']['user_id']);
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
 				$project_guide_name = "Not Entered";
@@ -47,22 +47,14 @@ Dear !user_name,
 We have received your eSim Circuit Simulation Project proposal with the following details:
 
 Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user_data->mail . '
-Month and Year of Award of Degree : ' . $proposal_data->month_year_of_degree . '
+Email : ' . $user->mail . '
 University/Institute : ' . $proposal_data->university . '
 City : ' . $proposal_data->city . '
 State : ' . $proposal_data->state . '
 Country : ' . $proposal_data->country . '
-
 Project Guide  : ' . $project_guide_name . '
 Project Guide Email : ' . $project_guide_email_id . '
-
-eSim Version : ' . $proposal_data->version . '
-
 Project Title  : ' . $proposal_data->project_title . '
-
-Name of compound for which process development is carried out  : ' . $proposal_data->process_development_compound_name . '
-
 
 Your proposal is under review. You will soon receive an email when same has been approved/disapproved.
 
@@ -71,7 +63,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
@@ -84,7 +76,7 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_disapproved']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user_data = user_load($params['circuit_simulation_proposal_disapproved']['user_id']);
+			$user = user_load($params['circuit_simulation_proposal_disapproved']['user_id']);
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
 				$project_guide_name = "Not Entered";
@@ -114,22 +106,14 @@ Dear !user_name,
 We regret to inform you that your eSim Circuit Simulation Project proposal with following details have been disapproved:
 
 Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user_data->mail . '
-Month and Year of Award of Degree : ' . $proposal_data->month_year_of_degree . '
+Email : ' . $user->mail . '
 University/Institute : ' . $proposal_data->university . '
 City : ' . $proposal_data->city . '
 State : ' . $proposal_data->state . '
 Country : ' . $proposal_data->country . '
-
 Project Guide  : ' . $project_guide_name . '
 Project Guide Email : ' . $project_guide_email_id . '
-
-eSim Version : ' . $proposal_data->version . '
-
 Project Title  : ' . $proposal_data->project_title . '
-
-Name of compound for which process development is carried out  : ' . $proposal_data->process_development_compound_name . '
-
 
 Reason for rejection: : ' . $proposal_data->dissapproval_reason . '
 
@@ -141,7 +125,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
@@ -154,7 +138,7 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_approved']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user_data = user_load($params['circuit_simulation_proposal_approved']['user_id']);
+			$user = user_load($params['circuit_simulation_proposal_approved']['user_id']);
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
 				$project_guide_name = "Not Entered";
@@ -184,22 +168,14 @@ Dear !user_name,
 Your eSim Circuit Simulation Project proposal with the following details has been approved:
 
 Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user_data->mail . '
-Month and Year of Award of Degree : ' . $proposal_data->month_year_of_degree . '
+Email : ' . $user->mail . '
 University/Institute : ' . $proposal_data->university . '
 City : ' . $proposal_data->city . '
 State : ' . $proposal_data->state . '
 Country : ' . $proposal_data->country . '
-
 Project Guide  : ' . $project_guide_name . '
 Project Guide Email : ' . $project_guide_email_id . '
-
-eSim Version : ' . $proposal_data->version . '
-
 Project Title  : ' . $proposal_data->project_title . '
-
-Name of compound for which process development is carried out  : ' . $proposal_data->process_development_compound_name . '
-
 
 You can upload your abstract using abstract submission interface.
 
@@ -208,7 +184,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
@@ -221,7 +197,7 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_completed']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user_data = user_load($params['circuit_simulation_proposal_completed']['user_id']);
+			$user = user_load($params['circuit_simulation_proposal_completed']['user_id']);
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
 				$project_guide_name = "Not Entered";
@@ -251,8 +227,7 @@ Dear !user_name,
 Your eSim circuit simulation and abstract on the following process have been completed successfully.
 
 Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user_data->mail . '
-Month and Year of Award of Degree : ' . $proposal_data->month_year_of_degree . '
+Email : ' . $user->mail . '
 University/Institute : ' . $proposal_data->university . '
 City : ' . $proposal_data->city . '
 State : ' . $proposal_data->state . '
@@ -260,18 +235,13 @@ Country : ' . $proposal_data->country . '
 
 Project Guide  : ' . $project_guide_name . '
 Project Guide Email : ' . $project_guide_email_id . '
-
-eSim Version : ' . $proposal_data->version . '
-
 Project Title  : ' . $proposal_data->project_title . '
-
-Name of compound for which process development is carried out  : ' . $proposal_data->process_development_compound_name . '
 Best Wishes,
 
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
@@ -284,7 +254,7 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_deleted']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user_data = user_load($params['circuit_simulation_proposal_deleted']['user_id']);
+			$user = user_load($params['circuit_simulation_proposal_deleted']['user_id']);
 			
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
@@ -315,23 +285,15 @@ Dear !user_name,
 Your eSim Circuit Simulation Project proposal with the following details has been deleted :
 
 Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user_data->mail . '
-Month and Year of Award of Degree : ' . $proposal_data->month_year_of_degree . '
+Email : ' . $user->mail . '
+
 University/Institute : ' . $proposal_data->university . '
 City : ' . $proposal_data->city . '
 State : ' . $proposal_data->state . '
 Country : ' . $proposal_data->country . '
-
 Project Guide  : ' . $project_guide_name . '
 Project Guide Email : ' . $project_guide_email_id . '
-
-eSim Version : ' . $proposal_data->version . '
-
 Project Title  : ' . $proposal_data->project_title . '
-
-Name of compound for which process development is carried out  : ' . $proposal_data->process_development_compound_name . '
-
-
 
 You can propose a new circuit simulation project.
 
@@ -340,7 +302,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
@@ -351,11 +313,11 @@ FOSSEE,IIT Bombay', array(
 			// $solution_q = db_query("SELECT * FROM {circuit_simulation_solution} WHERE id = %d LIMIT 1", $params['abstract_uploaded']['solution_id']);
 			$query = db_select('esim_circuit_simulation_proposal');
 			$query->fields('esim_circuit_simulation_proposal');
-			$query->condition('id', $params['abstract_uploaded']['proposal_id']);
+			$query->condition('id', $params['abstract_uploaded']['result1']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
 			
-			$user_data = user_load($params['abstract_uploaded']['user_id']);
+			$user = user_load($params['abstract_uploaded']['user_id']);
 			$message['subject'] = t('[!site_name][Circuit Simulation Project] You have uploaded eSim circuit simulation abstract', array(
 				'!site_name' => variable_get('site_name', '')
 			), array(
@@ -378,7 +340,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
@@ -398,7 +360,7 @@ FOSSEE,IIT Bombay', array(
 			$query->range(0, 1);
 			$experiment_q = $query->execute();
 			$experiment_data = $experiment_q->fetchObject();
-			$user_data = user_load($params['solution_approved']['user_id']);
+			$user = user_load($params['solution_approved']['user_id']);
 			$message['headers'] = $params['solution_approved']['headers'];
 			$message['subject'] = t('[!site_name] Your uploaded eSim circuit simulation solution has been approved', array(
 				'!site_name' => variable_get('site_name', '')
@@ -423,14 +385,14 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
 			);
 			break;
 		case 'solution_disapproved':
-			$user_data = user_load($params['solution_disapproved']['user_id']);
+			$user = user_load($params['solution_disapproved']['user_id']);
 			$message['headers'] = $params['solution_disapproved']['headers'];
 			$message['subject'] = t('[!site_name] Your uploaded eSim circuit-simulation solution has been disapproved', array(
 				'!site_name' => variable_get('site_name', '')
@@ -454,14 +416,14 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
 			);
 			break;
 		case 'solution_deleted_user':
-			$user_data = user_load($params['solution_deleted_user']['user_id']);
+			$user = user_load($params['solution_deleted_user']['user_id']);
 			$message['headers'] = $params['solution_deleted_user']['headers'];
 			$message['subject'] = t('[!site_name] User has deleted pending eSim circuit-simulation solution', array(
 				'!site_name' => variable_get('site_name', '')
@@ -486,14 +448,14 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))
 			);
 			break;
 		case 'dependency_uploaded':
-			$user_data = user_load($params['dependency_uploaded']['user_id']);
+			$user = user_load($params['dependency_uploaded']['user_id']);
 			$dependency_files = implode(',', $params['dependency_uploaded']['dependency_names']);
 			$message['headers'] = $params['dependency_uploaded']['headers'];
 			$message['subject'] = t('[!site_name] You have uploaded dependency file', array(
@@ -515,7 +477,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user_data->name
+					'!user_name' => $user->name
 				), array(
 					'language' => $language->language
 				))

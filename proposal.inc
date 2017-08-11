@@ -551,7 +551,7 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
 	$form = variable_get('circuit_simulation_from_email', '');
 	$bcc = variable_get('circuit_simulation_emails', '');
 	$cc = variable_get('circuit_simulation_cc_emails', '');
-	$params['circuit_simulation_proposal_received']['proposal_id'] = $proposal_id;
+	$params['circuit_simulation_proposal_received']['result1'] = $result1;
 	$params['circuit_simulation_proposal_received']['user_id'] = $user->uid;
 	$params['circuit_simulation_proposal_received']['headers'] = array(
 		'From' => $form,
