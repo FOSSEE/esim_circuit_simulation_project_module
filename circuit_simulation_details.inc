@@ -23,7 +23,8 @@ function circuit_simulation_completed_proposals_all()
 			$approval_date = date("Y", $row->approval_date);
 			$preference_rows[] = array(
 				$i,
-				l($row->project_title, "circuit-simulation-project/esim-circuit-simulation-run/" . $row->id, array('attributes' => array('title' => 'This is a zip file containing a pdf (abstract) and a dwxml/dwxmz file which is the eSim circuit simulation which is to be viewed by right clicking on the file and opening with eSim.'))),
+				l($row->project_title, "circuit-simulation-project/esim-circuit-simulation-run/" . $row->id),
+				$row->contributor_name,
 				$row->university,
 				$approval_date
 			);
@@ -32,6 +33,7 @@ function circuit_simulation_completed_proposals_all()
 		$preference_header = array(
 			'No',
 			'Circuit Simulation Project',
+			'Contributor Name',
 			'Institute',
 			'Year'
 		);
@@ -58,14 +60,31 @@ function circuit_simulation_progress_all()
 	else
 	{
 		$page_content .= "Work is in progress for the following circuit simulation under Circuit Simulation Project<hr>";
-		$page_content .= "<ol>";
+		$preference_rows = array();
+		$i = 1;
 		while ($row = $result->fetchObject())
 		{
-			$page_content .= "<li>";
-			$page_content .= $row->project_title;
-			$page_content .= "</li>";
+			$approval_date = date("Y", $row->approval_date);
+			$preference_rows[] = array(
+				$i,
+				$row->project_title,
+				$row->contributor_name,
+				$row->university,
+				$approval_date
+			);
+			$i++;
 		} //$row = $result->fetchObject()
-		$page_content .= "</ol>";
+		$preference_header = array(
+			'No',
+			'Circuit Simulation Project',
+			'Contributor Name',
+			'Institute',
+			'Year'
+		);
+		$page_content .= theme('table', array(
+			'header' => $preference_header,
+			'rows' => $preference_rows
+		));
 	}
 	return $page_content;
 }

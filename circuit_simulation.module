@@ -319,7 +319,7 @@ function circuit_simulation_menu()
 	$items['circuit-simulation-project/full-download/experiment'] = array(
 		'title' => 'Code Download',
 		'description' => 'Code Download',
-		'page callback' => 'circuit_simulation_download_full_experiment',
+		'page callback' => 'circuit_simulation_download_completed_project',
 		'access arguments' => array(
 			'esim circuit simulation approve code'
 		),
@@ -337,7 +337,7 @@ function circuit_simulation_menu()
 		'file' => 'full_download.inc'
 	);
 	/* COMPLETED esim circuit simulationS */
-	$items['circuit-simulation-project/completed-circuit-simulation'] = array(
+	$items['circuit-simulation-project/completed-circuit-simulations'] = array(
 		'title' => 'Completed Circuit Simulations',
 		'page callback' => 'circuit_simulation_completed_proposals_all',
 		'access arguments' => array(
@@ -641,6 +641,10 @@ function circuit_simulation_path()
 {
 	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/circuit_simulation_uploads/';
 }
+function circuit_simulation_file_path($value='')
+{
+	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/';
+}
 /************************* USER VERIFICATION FUNCTIONS ************************/
 function circuit_simulation_get_proposal()
 {
@@ -748,7 +752,7 @@ function _df_list_of_thermodynamic_packages()
 		$esim_thermodynamic_packages[$esim_thermodynamic_packages_list_data->thermodynamic_packages] = $esim_thermodynamic_packages_list_data->thermodynamic_packages;
 	} //$esim_thermodynamic_packages_list_data = $esim_thermodynamic_packages_list->fetchObject()
 	return $esim_thermodynamic_packages;
-}*/
+}*//*
 function _df_list_of_logical_block()
 {
 	$esim_logical_block = array();
@@ -761,7 +765,7 @@ function _df_list_of_logical_block()
 		$esim_logical_block[$esim_logical_block_list_data->logical_block] = $esim_logical_block_list_data->logical_block;
 	} //$esim_logical_block_list_data = $esim_logical_block_list->fetchObject()
 	return $esim_logical_block;
-}
+}*/
 function _df_list_of_states()
 {
 	$states = array(
@@ -901,7 +905,7 @@ function CreateReadmeFileeSimCircuitSimulationProject($proposal_id)
 	$root_path = circuit_simulation_path();
 	$readme_file = fopen($root_path . $proposal_data->directory_name . "/README.txt", "w") or die("Unable to open file!");
 	$txt = "";
-	$txt .= "About the lab";
+	$txt .= "About the Circuit Simulation";
 	$txt .= "\n" . "\n";
 	$txt .= "Title Of The Circuit Simulation Project: " . $proposal_data->project_title . "\n";
 	$txt .= "Proposar Name: " . $proposal_data->name_title . " " . $proposal_data->contributor_name . "\n";

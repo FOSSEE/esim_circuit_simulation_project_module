@@ -121,7 +121,7 @@ function circuit_simulation_download_solution()
 	while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
 	{
 		//$dependency_file_data = (db_query("SELECT * FROM {circuit_simulation_dependency_files} WHERE id = %d LIMIT 1", $solution_dependency_files_row->dependency_id))->fetchObject();
-		$query = db_select('esim_esim_circuit_simulation_dependency_files');
+		$query = db_select('esim_circuit_simulation_dependency_files');
 		$query->fields('esim_circuit_simulation_dependency_files');
 		$query->condition('id', $solution_dependency_files_row->dependency_id);
 		$query->range(0, 1);
@@ -154,7 +154,7 @@ function circuit_simulation_download_experiment()
 	$root_path = circuit_simulation_path();
 	/* get solution data */
 	//$experiment_q = db_query("SELECT * FROM {esim_circuit_simulation_experiment} WHERE id = %d", $experiment_id);
-	$query = db_select('esim_esim_circuit_simulation_experiment');
+	$query = db_select('esim_circuit_simulation_experiment');
 	$query->fields('esim_circuit_simulation_experiment');
 	$query->condition('id', $experiment_id);
 	$experiment_q = $query->execute();
@@ -166,7 +166,7 @@ function circuit_simulation_download_experiment()
 	$zip = new ZipArchive;
 	$zip->open($zip_filename, ZipArchive::CREATE);
 	//$solution_q = db_query("SELECT * FROM {esim_circuit_simulation_solution} WHERE experiment_id = %d AND approval_status = 1", $experiment_id);
-	$query = db_select('esim_esim_circuit_simulation_solution');
+	$query = db_select('esim_circuit_simulation_solution');
 	$query->fields('esim_circuit_simulation_solution');
 	$query->condition('experiment_id', $experiment_id);
 	$query->condition('approval_status', 1);
@@ -188,14 +188,14 @@ function circuit_simulation_download_experiment()
 			$zip->addFile($root_path . $solution_files_row->directory_name . '/' . $solution_files_row->filepath, $EXP_PATH . $CODE_PATH . str_replace(' ', '_', ($solution_files_row->filename)));
 		} //$solution_files_row = $solution_files_q->fetchObject()
 		/* dependency files */
-		$query = db_select('esim_esim_circuit_simulation_solution_dependency');
+		$query = db_select('esim_circuit_simulation_solution_dependency');
 		$query->fields('esim_circuit_simulation_solution_dependency');
 		$query->condition('solution_id', $solution_row->id);
 		$solution_dependency_files_q = $query->execute();
 		while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
 		{
 			//$dependency_file_data = (db_query("SELECT * FROM {circuit_simulation_dependency_files} WHERE id = %d LIMIT 1", $solution_dependency_files_row->dependency_id))->fetchObject();
-			$query = db_select('esim_esim_circuit_simulation_dependency_files');
+			$query = db_select('esim_circuit_simulation_dependency_files');
 			$query->fields('esim_circuit_simulation_dependency_files');
 			$query->condition('id', $solution_dependency_files_row->dependency_id);
 			$query->range(0, 1);

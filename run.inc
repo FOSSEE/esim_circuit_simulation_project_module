@@ -44,7 +44,7 @@ function circuit_simulation_run_form($form, &$form_state)
 		);
 		$form['selected_circuit_simulation'] = array(
 			'#type' => 'item',
-			'#markup' => '<div id="ajax_selected_circuit_simulation">' . l('Download Circuit Simulation', 'circuit_simulationing-project/full-download/project/' . $circuit_simulation_default_value,array('attributes' => array('title' => 'This is a zip file containing a pdf (abstract) and a dwxml/dwxmz file which is the eSim circuit simulation which is to be viewed by right clicking on the file and opening with eSim.'))) . '</div>'
+			'#markup' => '<div id="ajax_selected_circuit_simulation">' . l('Download Circuit Simulation', 'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</div>'
 		);
 	}
 	return $form;
@@ -58,7 +58,7 @@ function circuit_simulation_project_details_callback($form, $form_state)
 		$circuit_simulation_details = _circuit_simulation_information($circuit_simulation_default_value);
 		$provider = user_load($circuit_simulation_details->uid);
 		if ($circuit_simulation_details->uid > 0) {
-			$commands[] = ajax_command_html('#ajax_selected_circuit_simulation', l('Download Circuit Simulation', 'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_valuei,array('attributes' => array('title' => 'This is a zip file containing a pdf (abstract) and a dwxml/dwxmz file which is the eSim circuit simulation which is to be viewed by right clicking on the file and opening with eSim.'))));
+			$commands[] = ajax_command_html('#ajax_selected_circuit_simulation', l('Download Circuit Simulation', 'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value));
 		} //$circuit_simulation_details->uid > 0
 		else {
 			$commands[] = ajax_command_html('#ajax_selected_circuit_simulation', '');
@@ -108,8 +108,8 @@ function _list_of_circuit_simulation()
 		'0' => 'Please select...'
 	);
 	//$lab_titles_q = db_query("SELECT * FROM {circuit_simulation_proposal} WHERE solution_display = 1 ORDER BY lab_title ASC");
-	$query = db_select('circuit_simulation_proposal');
-	$query->fields('circuit_simulation_proposal');
+	$query = db_select('esim_circuit_simulation_proposal');
+	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('approval_status', 3);
 	$query->orderBy('project_title', 'ASC');
 	$circuit_simulation_titles_q = $query->execute();
@@ -120,8 +120,8 @@ function _list_of_circuit_simulation()
 }
 function _circuit_simulation_information($proposal_id)
 {
-	$query = db_select('circuit_simulation_proposal');
-	$query->fields('circuit_simulation_proposal');
+	$query = db_select('esim_circuit_simulation_proposal');
+	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $proposal_id);
 	$query->condition('approval_status', 3);
 	$circuit_simulation_q = $query->execute();
@@ -143,7 +143,7 @@ function _circuit_simulation_details($circuit_simulation_default_value)
 		}else{
 		$reference = 'Not provided';
 		}
-		$form['circuit_simulation_details']['#markup'] = '<span style="color: rgb(128, 0, 0);"><strong>About the Circuit Simulation</strong></span></td><td style="width: 35%;"><br />' . '<ul>' . '<li><strong>Proposer Name:</strong> ' . $circuit_simulation_details->name_title . ' ' . $circuit_simulation_details->contributor_name . '</li>' . '<li><strong>Title of the Flowhseet:</strong> ' . l($circuit_simulation_details->project_title,'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value,array('attributes' => array('title' => 'This is a zip file containing a pdf (abstract) and a dwxml/dwxmz file which is the eSim circuit simulation which is to be viewed by right clicking on the file and opening with eSim.'))) . '</li>' . '<li><strong>University:</strong> ' . $circuit_simulation_details->university . '</li>' . '<li>'.'<strong>Reference:</strong> ' . $reference .'</li>'.'</ul>';
+		$form['circuit_simulation_details']['#markup'] = '<span style="color: rgb(128, 0, 0);"><strong>About the Circuit Simulation</strong></span></td><td style="width: 35%;"><br />' . '<ul>' . '<li><strong>Proposer Name:</strong> ' . $circuit_simulation_details->name_title . ' ' . $circuit_simulation_details->contributor_name . '</li>' . '<li><strong>Title of the Flowhseet:</strong> ' . l($circuit_simulation_details->project_title,'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</li>' . '<li><strong>University:</strong> ' . $circuit_simulation_details->university . '</li>' . '<li>'.'<strong>Reference:</strong> ' . $reference .'</li>'.'</ul>';
 		$details = $form['circuit_simulation_details']['#markup'];
 		return $details;
 	} //$circuit_simulation_default_value != 0
