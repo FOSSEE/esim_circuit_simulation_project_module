@@ -248,7 +248,7 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 		'#type' => 'checkboxes',
 		'#title' => t('Terms And Conditions'),
 		'#options' => array(
-			'status' => t('I agree to the Terms and Conditions')
+			'status' => t('<a href="/term-and-conditions" target="_blank">I agree to the Terms and Conditions</a>')
 		),
 		'#required' => TRUE
 	);

@@ -22,7 +22,7 @@ function circuit_simulation_download_full_project()
 	$circuit_simulation_udc_q = $query->execute();
 	while ($circuit_simulation_udc_row = $circuit_simulation_udc_q->fetchObject()) {
 		if ($circuit_simulation_udc_row->samplefilepath != 'NULL') {
-			$REFERENCE_PATH = 'reference_file/';
+			$REFERENCE_PATH = 'Reference_file/';
 			$str = substr($circuit_simulation_udc_row->samplefilepath,strrpos($circuit_simulation_udc_row->samplefilepath, '/'));
 		$resource_file =ltrim($str, '/');
 			$zip->addFile($root_path . $CIRCUITSIMULATION_PATH . $resource_file , $REFERENCE_PATH . str_replace(' ', '_', basename($resource_file)));
@@ -93,7 +93,7 @@ function circuit_simulation_download_completed_project()
 	$circuit_simulation_udc_q = $query->execute();
 	while ($circuit_simulation_udc_row = $circuit_simulation_udc_q->fetchObject()) {
 		if ($circuit_simulation_udc_row->samplefilepath != 'NULL') {
-			$REFERENCE_PATH = 'reference_file/';
+			$REFERENCE_PATH = 'Reference_file/';
 			$str = substr($circuit_simulation_udc_row->samplefilepath,strrpos($circuit_simulation_udc_row->samplefilepath, '/'));
 		$resource_file =ltrim($str, '/');
 			$zip->addFile($root_path . $CIRCUITSIMULATION_PATH . $resource_file , $REFERENCE_PATH . str_replace(' ', '_', basename($resource_file)));
