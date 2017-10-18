@@ -1,0 +1,7 @@
+name = "eSim Circuit Simulation"
+description = "eSim Project, FOSSEE, IIT Bombay"
+package = FOSSEE
+version = "7.x"
+core = "7.x"
+
+;scripts[] = js/jquery-1.4.1.min.js
