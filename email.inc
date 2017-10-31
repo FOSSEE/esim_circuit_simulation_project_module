@@ -76,7 +76,8 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_disapproved']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user = user_load($params['circuit_simulation_proposal_disapproved']['user_id']);
+			$user_data = user_load($params['circuit_simulation_proposal_disapproved']['user_id']);
+			//$user = user_load($params['circuit_simulation_proposal']['name']);
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
 				$project_guide_name = "Not Entered";
@@ -106,7 +107,7 @@ Dear !user_name,
 We regret to inform you that your eSim Circuit Simulation Project proposal with following details have been disapproved:
 
 Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user->mail . '
+Email : ' . $user_data->mail . '
 University/Institute : ' . $proposal_data->university . '
 City : ' . $proposal_data->city . '
 State : ' . $proposal_data->state . '
@@ -125,7 +126,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user->name
+					'!user_name' => $user_data->name
 				), array(
 					'language' => $language->language
 				))
@@ -138,7 +139,8 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_approved']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user = user_load($params['circuit_simulation_proposal_approved']['user_id']);
+			$user_data = user_load($params['circuit_simulation_proposal_approved']['user_id']);
+
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
 				$project_guide_name = "Not Entered";
@@ -168,7 +170,7 @@ Dear !user_name,
 Your eSim Circuit Simulation Project proposal with the following details has been approved:
 
 Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user->mail . '
+Email : ' . $user_data->mail . '
 University/Institute : ' . $proposal_data->university . '
 City : ' . $proposal_data->city . '
 State : ' . $proposal_data->state . '
@@ -184,7 +186,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user->name
+					'!user_name' => $user_data->name
 				), array(
 					'language' => $language->language
 				))
