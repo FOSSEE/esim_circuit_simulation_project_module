@@ -115,7 +115,7 @@ Project Guide  : ' . $project_guide_name . '
 Project Guide Email : ' . $project_guide_email_id . '
 Project Title  : ' . $proposal_data->project_title . '
 
-Reason for rejection: : ' . $proposal_data->dissapproval_reason . '
+Reason for rejection : ' . $proposal_data->dissapproval_reason . '
 
 
 You are welcome to submit a new proposal.
