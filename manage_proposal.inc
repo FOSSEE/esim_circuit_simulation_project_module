@@ -429,7 +429,7 @@ function circuit_simulation_proposal_approval_form_submit($form, &$form_state)
 		$bcc = $user->mail . ', ' . variable_get('circuit_simulation_emails', '');
 		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_disapproved']['proposal_id'] = $proposal_id;
-		$params['circuit_simulation_proposal_disapproved']['user_id'] = $user->uid;
+		$params['circuit_simulation_proposal_disapproved']['user_id'] = $proposal_data->uid;
 		$params['circuit_simulation_proposal_disapproved']['headers'] = array(
 			'From' => $from,
 			'MIME-Version' => '1.0',
