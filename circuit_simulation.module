@@ -212,36 +212,37 @@ function circuit_simulation_menu()
 		'file' => 'notes.inc'
 	);
 	/* CODE UPLOAD */
+	/* CODE UPLOAD */
 	$items['circuit-simulation-project/abstract-code'] = array(
-		'title' => 'Abstract and Circuit Simulation Submission',
+		'title' => 'Abstract and Project Files Upload',
 		'description' => 'Abstract Submission',
 		'page callback' => 'circuit_simulation_abstract',
 		'access callback' => 'user_access',
 		'access arguments' => array(
-			'esim circuit simulation upload code'
+			'esim circuit simulation upload abstract'
 		),
 		'file' => 'upload_code.inc'
 	);
 	$items['circuit-simulation-project/abstract-code/circuit simulation-project-list'] = array(
-		'title' => 'Circuit Simulation project',
+		'title' => 'Circuit Simulation',
 		'description' => 'List Experiments',
 		'page callback' => 'circuit_simulation_abstract',
 		'access arguments' => array(
-			'esim circuit simulation upload code'
+			'esim circuit simulation upload abstract'
 		),
 		'type' => MENU_DEFAULT_LOCAL_TASK,
 		'file' => 'upload_code.inc',
 		'weight' => 1
 	);
 	$items['circuit-simulation-project/abstract-code/upload'] = array(
-		'title' => 'Abstract and Circuit Simulation Submission',
-		'description' => 'Abstract Submission',
+		'title' => 'Abstract and Project Upload',
+		'description' => 'Project Upload',
 		'page callback' => 'drupal_get_form',
 		'page arguments' => array(
 			'circuit_simulation_upload_abstract_code_form'
 		),
 		'access arguments' => array(
-			'esim circuit simulation upload code'
+			'esim circuit simulation upload abstract'
 		),
 		'type' => MENU_LOCAL_TASK,
 		'file' => 'upload_code.inc',
@@ -371,6 +372,16 @@ function circuit_simulation_menu()
 		'title' => 'Download user defined compound file',
 		'description' => 'Download resource file',
 		'page callback' => 'circuit_simulation_download_upload_file',
+		'access arguments' => array(
+			'download code'
+		),
+		'type' => MENU_CALLBACK,
+		'file' => 'download.inc'
+	);
+	$items['circuit-simulation-project/download/project-file'] = array(
+		'title' => 'Download Project file',
+		'description' => 'Download project file',
+		'page callback' => 'esim_circuit_simulation_project_files',
 		'access arguments' => array(
 			'download code'
 		),
@@ -640,7 +651,11 @@ function circuit_simulation_check_code_number($number = '')
 function circuit_simulation_path()
 {
 	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/circuit_simulation_uploads/';
-}
+}/*
+function circuit_simulation_path_project_files()
+{
+	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/circuit_simulation_uploads/project_files/';
+}*/
 function circuit_simulation_file_path($value='')
 {
 	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/';
