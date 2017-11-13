@@ -2,28 +2,39 @@
 // eSim Circuit Simulation display completed proposals
 function circuit_simulation_completed_proposals_all()
 {
+	//$proposal_data =circuit_simulation_get_proposal();
 	$output = "";
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('approval_status', 3);
 	//$query->condition('is_completed', 1);
 	$result = $query->execute();
+	
+	//var_dump($esim_project_abstract);die;
 	if ($result->rowCount() == 0)
 	{
-		$output .= "Work has been completed for the following circuit simulation. We welcome your contributions. For more details, please visit ".l("http://esim.fossee.in/circuit-simulation-project","http://esim.fossee.in/circuit-simulation-project")."<br>"."<h4>"."If you are looking for circuit-simulation project ideas, ".l("click here","http://esim.fossee.in/circuit-simulation-ideas",array('attributes' => array('class' => array('flash_content'))))."</h4>"."<hr>";
+		$output .= "Work has been completed for the following circuit simulation. We welcome your contributions." ."<hr>";
 
 	} //$result->rowCount() == 0
 	else
 	{
-		$output .= "Work has been completed for the following circuit simulation. We welcome your contributions. For more details, please visit ".l("http://esim.fossee.in/circuit-simulation-project","http://esim.fossee.in/circuit-simulation-project")."<br>"."<h4>"."If you are looking for circuit-simulation project ideas, ".l("click here","http://esim.fossee.in/circuit-simulation-ideas",array('attributes' => array('class' => array('flash_content'))))."</h4>"."<hr>";
+		$output .= "Work has been completed for the following circuit simulation. We welcome your contributions." . "<hr>";
 		$preference_rows = array();
 		$i = 1;
 		while ($row = $result->fetchObject())
 		{
+			$proposal_id = $row->id;
+			$query1 = db_select('esim_circuit_simulation_submitted_abstracts_file');
+			$query1->fields('esim_circuit_simulation_submitted_abstracts_file');
+			$query1->condition('file_approval_status', 1);
+			$query1->condition('proposal_id', $proposal_id);
+			$esim_project_files = $query1->execute();
+			$esim_project_abstract = $esim_project_files->fetchObject();
 			$approval_date = date("Y", $row->approval_date);
 			$preference_rows[] = array(
 				$i,
 				l($row->project_title, "circuit-simulation-project/esim-circuit-simulation-run/" . $row->id),
+				l($esim_project_abstract->filename, "circuit-simulation-project/download/project-file/" . $row->id),
 				$row->contributor_name,
 				$row->university,
 				$approval_date
@@ -33,6 +44,7 @@ function circuit_simulation_completed_proposals_all()
 		$preference_header = array(
 			'No',
 			'Circuit Simulation Project',
+			'Abstract File',
 			'Contributor Name',
 			'Institute',
 			'Year'

@@ -244,6 +244,15 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 		'#size' => 48,
 		'#description' => t('Upload filenames with allowed extensions only. No spaces or any special characters allowed in filename.') . '<br />' . t('<span style="color:red;">Allowed file extensions : ') . variable_get('resource_upload_extensions', '') . '</span>'
 	);
+	$form['reference'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Reference'),
+		'#size' => 250,
+		'#required' => TRUE,
+		'#attributes' => array(
+			'placeholder' => 'Enter reference'
+		)
+	);
 	$form['term_condition'] = array(
 		'#type' => 'checkboxes',
 		'#title' => t('Terms And Conditions'),
@@ -447,7 +456,8 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
     dissapproval_reason,
     creation_date, 
     approval_date,
-    samplefilepath
+    samplefilepath,
+    reference
     ) VALUES
     (
     :uid, 
@@ -471,7 +481,8 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
     :dissapproval_reason,
     :creation_date, 
     :approval_date,
-    :samplefilepath
+    :samplefilepath,
+    :reference
     )";
 	$args = array(
 		":uid" => $user->uid,
@@ -495,7 +506,8 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
 		":dissapproval_reason" => "NULL",
 		":creation_date" => time(),
 		":approval_date" => 0,
-		":samplefilepath" => ""
+		":samplefilepath" => "",
+		":reference" => $v['reference']
 		);
 	//	var_dump($args);die;
 	//var_dump($result);die;

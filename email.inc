@@ -134,6 +134,7 @@ FOSSEE,IIT Bombay', array(
 			break;
 		case 'circuit_simulation_proposal_approved':
 			/* initializing data */
+			$url = 'http://esim.fossee.in/circuit-simulation-project/project-upload';
 			$query = db_select('esim_circuit_simulation_proposal');
 			$query->fields('esim_circuit_simulation_proposal');
 			$query->condition('id', $params['circuit_simulation_proposal_approved']['proposal_id']);
@@ -179,8 +180,7 @@ Project Guide  : ' . $project_guide_name . '
 Project Guide Email : ' . $project_guide_email_id . '
 Project Title  : ' . $proposal_data->project_title . '
 
-You can upload your abstract using abstract submission interface.
-
+You can upload your abstract and the completed simulation at: ' . $url . '
 Best Wishes,
 
 !site_name Team,
@@ -315,7 +315,7 @@ FOSSEE,IIT Bombay', array(
 			// $solution_q = db_query("SELECT * FROM {circuit_simulation_solution} WHERE id = %d LIMIT 1", $params['abstract_uploaded']['solution_id']);
 			$query = db_select('esim_circuit_simulation_proposal');
 			$query->fields('esim_circuit_simulation_proposal');
-			$query->condition('id', $params['abstract_uploaded']['result1']);
+			$query->condition('id', $params['abstract_uploaded']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
 			
@@ -330,12 +330,12 @@ FOSSEE,IIT Bombay', array(
 				'body' => t('
 Dear !user_name,
 
-You have uploaded the following Abstract:
+You have uploaded the following Abstract and Project files:
 
 Project Title  : ' . $proposal_data->project_title . '
 
 
-The abstract is under review. You will be notified when it has been approved.
+The abstract and project files are under review. You will be notified when it has been approved.
 
 Best Wishes,
 
@@ -376,9 +376,6 @@ Dear !user_name,
 Your following solution has been approved:
 
 Experiment Title : ' . $experiment_data->title . '
-
-Solution number : ' . $solution_data->code_number . '
-Caption : ' . $solution_data->caption . '
 
 Please ensure that ALL the codes follow guidelines at http://esim.fossee.in/esim-circuit-simulation-project/esim-circuit-simulation-guidelines
 
