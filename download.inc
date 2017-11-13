@@ -51,7 +51,7 @@ function circuit_simulation_download_upload_file()
 		return;
 	}
 	return;
-}
+}*/
 function esim_circuit_simulation_project_files() {
 	$proposal_id = arg(3);
 	$root_path = circuit_simulation_document_path();
@@ -59,58 +59,31 @@ function esim_circuit_simulation_project_files() {
 	$query->fields('esim_circuit_simulation_submitted_abstracts_file');
 	$query->condition('proposal_id', $proposal_id);
 	$result = $query->execute();
-	$esim_circuit_simulation_project_files = $result->fetchAll();
+	$esim_circuit_simulation_project_files = $result->fetchObject();
 	//var_dump($esim_circuit_simulation_project_files);die;
 	$query1 = db_select('esim_circuit_simulation_proposal');
 	$query1->fields('esim_circuit_simulation_proposal');
 	$query1->condition('id', $proposal_id);
-	$query1->range(0, 1);
 	$result1 = $query1->execute();
 	$circuit_simulation = $result1->fetchObject();
 	$directory_name = $circuit_simulation->directory_name . '/project_files/';
-		foreach($esim_circuit_simulation_project_files as $row){
-			if($row->filetype == "A"){
-						$samplecodename = $row->filename;
-						ob_clean();
-			            header("Pragma: public");
-			            header("Expires: 0");
-			            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			            header("Cache-Control: public");
-			            header("Content-Description: File Transfer");
-			            header("Content-Type: application/pdf");
-			            header('Content-disposition: attachment; filename="' . $samplecodename . '"');
-			            header("Content-Length: " . filesize($root_path . $directory_name . $samplecodename));
-			            header("Content-Transfer-Encoding: binary");
-			            header("Expires: 0");
-			            header("Pragma: no-cache");
-			            readfile($root_path . $directory_name . $samplecodename);
-				        ob_end_flush();
-			          	ob_clean();
-			          
-		    }   
-   			else if ($row->filetype == "S"){
-				   		$samplecodename = $row->filename;
-				    	ob_clean();
-			            header("Pragma: public");
-			            header("Expires: 0");
-			            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			            header("Cache-Control: public");
-			            header("Content-Description: File Transfer");
-			            header('Content-Type: application/zip');
-			            header('Content-disposition: attachment; filename="' . $samplecodename . '"');
-			            header('Content-Length: ' . filesize($root_path . $directory_name . $samplecodename));
-			            header("Content-Transfer-Encoding: binary");
-			            header('Expires: 0');
-			            header('Pragma: no-cache');
-			            readfile($root_path . $directory_name . $samplecodename);
-				        ob_end_flush();
-			           	ob_clean();
-			           	flush();
-   			}
-  		$esim_circuit_simulation_project_files++;
-		}
+	$samplecodename = $esim_circuit_simulation_project_files->filename;
+	ob_clean();
+	header("Pragma: public");
+	header("Expires: 0");
+	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	header("Cache-Control: public");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/pdf");
+	header('Content-disposition: attachment; filename="' . $samplecodename . '"');
+	header("Content-Length: " . filesize($root_path . $directory_name . $samplecodename));
+	header("Content-Transfer-Encoding: binary");
+	header("Expires: 0");
+	header("Pragma: no-cache");
+	readfile($root_path . $directory_name . $samplecodename);
+	ob_end_flush();
+	ob_clean();
 }
-*/
 
 function circuit_simulation_download_solution_file()
 {

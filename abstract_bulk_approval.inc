@@ -97,10 +97,10 @@ function circuit_simulation_abstract_bulk_approval_form_submit($form, &$form_sta
 	{
 		if ($form_state['values']['circuit_simulation_project'])
 		// circuit_simulation_abstract_del_lab_pdf($form_state['values']['circuit_simulation_project']);
-			if (user_access('esim circuit_simulation bulk manage abstract'))
+			if (user_access('esim circuit simulation bulk manage abstract'))
 			{
-				$query = db_select('circuit_simulation_proposal');
-				$query->fields('circuit_simulation_proposal');
+				$query = db_select('esim_circuit_simulation_proposal');
+				$query->fields('esim_circuit_simulation_proposal');
 				$query->condition('id', $form_state['values']['circuit_simulation_project']);
 				$user_query = $query->execute();
 				$user_info = $user_query->fetchObject();
@@ -108,18 +108,18 @@ function circuit_simulation_abstract_bulk_approval_form_submit($form, &$form_sta
 				if ($form_state['values']['circuit_simulation_actions'] == 1)
 				{
 					// approving entire project //
-					$query = db_select('circuit_simulation_submitted_abstracts');
-					$query->fields('circuit_simulation_submitted_abstracts');
+					$query = db_select('esim_circuit_simulation_submitted_abstracts');
+					$query->fields('esim_circuit_simulation_submitted_abstracts');
 					$query->condition('proposal_id', $form_state['values']['circuit_simulation_project']);
 					$abstracts_q = $query->execute();
 					$experiment_list = '';
 					while ($abstract_data = $abstracts_q->fetchObject())
 					{
-						db_query("UPDATE {circuit_simulation_submitted_abstracts} SET abstract_approval_status = 1, approver_uid = :approver_uid WHERE id = :id", array(
+						db_query("UPDATE {esim_circuit_simulation_submitted_abstracts} SET abstract_approval_status = 1, approver_uid = :approver_uid WHERE id = :id", array(
 							':approver_uid' => $user->uid,
 							':id' => $abstract_data->id
 						));
-						db_query("UPDATE {circuit_simulation_submitted_abstracts_file} SET file_approval_status = 1, approvar_uid = :approver_uid WHERE submitted_abstract_id = :submitted_abstract_id", array(
+						db_query("UPDATE {esim_circuit_simulation_submitted_abstracts_file} SET file_approval_status = 1, approvar_uid = :approver_uid WHERE submitted_abstract_id = :submitted_abstract_id", array(
 							':approver_uid' => $user->uid,
 							':submitted_abstract_id' => $abstract_data->id
 						));
@@ -518,13 +518,13 @@ function _circuit_simulation_details($circuit_simulation_proposal_id)
 	$download_circuit_simulation = l('Download circuit simulation project','circuit-simulation-project/full-download/project/'.$circuit_simulation_proposal_id);
 	$return_html .= '<strong>Proposer Name:</strong><br />' . $abstracts_pro->name_title . ' ' . $abstracts_pro->contributor_name . '<br /><br />';
 	$return_html .= '<strong>Title of the Circuit Simulation Project:</strong><br />' . $abstracts_pro->project_title . '<br /><br />';
-	$return_html .= '<strong>eSim version:</strong><br />' . $abstracts_pro->version . '<br /><br />';
+	/*$return_html .= '<strong>eSim version:</strong><br />' . $abstracts_pro->version . '<br /><br />';
 	$return_html .= '<strong>Unit Operations used in eSim:</strong><br />' . $unit_operations_used_in_esim . '<br /><br />';
 	$return_html .= '<strong>Thermodynamic Packages Used:</strong><br />' . $thermodynamic_packages_used . '<br /><br />';
 	$return_html .= '<strong>Logical Blocks used:</strong><br />' . $logical_blocks_used . '<br /><br />';
 	$return_html .= '<strong>Name of compound for which process development is carried out:</strong><br />' . $prodata . '<br />';
 	$return_html .= '<strong>List of compounds from eSim Database used in process circuit simulation:</strong><br />' . $abstracts_pro->esim_database_compound_name . '<br /><br />';
-	$return_html .= '<strong>List of user defined compounds used in process circuit simulation:</strong><br />' . _circuit_simulation_list_of_user_defined_compound($abstracts_pro->id) . '<br />';
+	$return_html .= '<strong>List of user defined compounds used in process circuit simulation:</strong><br />' . _circuit_simulation_list_of_user_defined_compound($abstracts_pro->id) . '<br />';*/
 	$return_html .= '<strong>Uploaded an abstract (brief outline) of the project:</strong><br />' . $abstract_filename . '<br /><br />';
 	$return_html .= '<strong>Upload the eSim circuit simulation for the developed process:</strong><br />' . $abstracts_query_process_filename . '<br /><br />';
 	$return_html .= $download_circuit_simulation;

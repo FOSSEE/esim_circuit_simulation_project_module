@@ -156,7 +156,9 @@ function circuit_simulation_upload_abstract_code_form($form, &$form_state)
 	$form['upload_an_abstract'] = array(
 		'#type' => 'file',
 		'#title' => t('Upload an abstract of the project.') ,
-		'#description' => t('<span style="font-size:16px;"><a href="http://static.fossee.in/esim/manuals/Analysis_of_frequency_response_of_the_BJT_amplifier_using_eSim_with_Python_Plots.pdf">For a sample click here</a></span>' . '<br />' . t('<span style="color:red;">Current File :</span> ' . $existing_uploaded_A_file->filename . '<br />' . t('<span style="color:red;">Allowed file extensions : ') . variable_get('circuit_simulation_abstract_upload_extensions', '') . '</span>'
+		'#description' => t('<span style="font-size:16px;">For a sample of the abstract <span style="font-size:20px;">&rarr;</span>
+			<a href="http://static.fossee.in/esim/manuals/Analysis_of_frequency_response_of_the_BJT_amplifier_using_eSim.pdf"> 
+			Click here</a></span>' . '<br />' . t('<span style="color:red;">Current File :</span> ' . $existing_uploaded_A_file->filename . '<br />' . t('<span style="color:red;">Allowed file extensions : ') . variable_get('circuit_simulation_abstract_upload_extensions', '') . '</span>'
 	)));
 	$existing_uploaded_S_file = default_value_for_uploaded_files("S", $proposal_data->id);
 	if (!$existing_uploaded_S_file)
@@ -182,7 +184,7 @@ function circuit_simulation_upload_abstract_code_form($form, &$form_state)
 	);
 	$form['cancel'] = array(
 		'#type' => 'item',
-		'#markup' => l(t('Cancel'), 'circuit-simulation-project/manage-proposal')
+		'#markup' => l(t('Cancel'), 'circuit-simulation-project/abstract-code')
 	);
 	return $form;
 }
