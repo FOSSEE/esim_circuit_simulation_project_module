@@ -246,12 +246,15 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 	);
 	$form['reference'] = array(
 		'#type' => 'textfield',
+		'#description' => t('The links to the documents or websites which are referenced while proposing this project.'),
 		'#title' => t('Reference'),
 		'#size' => 250,
 		'#required' => TRUE,
+
 		'#attributes' => array(
 			'placeholder' => 'Enter reference'
 		)
+
 	);
 	$form['term_condition'] = array(
 		'#type' => 'checkboxes',
@@ -267,26 +270,6 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 	);
 	return $form;
 }
-/***************************************//*
-function udc_compound_add_more_add_one($form, &$form_state)
-{
-	$form_state['user_defined_compound_num']++;
-	$form_state['rebuild'] = TRUE;
-	//$form_state['no_redirect'] = TRUE;
-}
-function udc_compound_add_more_remove_one($form, &$form_state)
-{
-	if ($form_state['user_defined_compound_num'] > 1)
-	{
-		$form_state['user_defined_compound_num']--;
-	} //$form_state['user_defined_compound_num'] > 1
-	$form_state['rebuild'] = TRUE;
-}
-function udc_compound_add_more_callback($form, &$form_state)
-{
-	return $form['upload_u_compound']['udc_field1_fieldset'];
-}*/
-/***************************************/
 function circuit_simulation_proposal_form_validate($form, &$form_state)
 {
 	if ($form_state['values']['term_condition'] == '1')
