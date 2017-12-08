@@ -115,7 +115,7 @@ function circuit_simulation_abstract_bulk_approval_form_submit($form, &$form_sta
 					$experiment_list = '';
 					while ($abstract_data = $abstracts_q->fetchObject())
 					{
-						db_query("UPDATE {esim_circuit_simulation_submitted_abstracts} SET abstract_approval_status = 1, approver_uid = :approver_uid WHERE id = :id", array(
+						db_query("UPDATE {esim_circuit_simulation_submitted_abstracts} SET abstract_approval_status = 1, is_submitted = 1, approver_uid = :approver_uid WHERE id = :id", array(
 							':approver_uid' => $user->uid,
 							':id' => $abstract_data->id
 						));
@@ -177,7 +177,7 @@ FOSSEE,IIT Bombay', array(
 					$experiment_list = '';
 					while ($abstract_data = $abstracts_q->fetchObject())
 					{
-						db_query("UPDATE {esim_circuit_simulation_submitted_abstracts} SET abstract_approval_status = 0, approver_uid = :approver_uid WHERE id = :id", array(
+						db_query("UPDATE {esim_circuit_simulation_submitted_abstracts} SET abstract_approval_status = 0, is_submitted = 0, approver_uid = :approver_uid WHERE id = :id", array(
 							':approver_uid' => $user->uid,
 							':id' => $abstract_data->id
 						));
@@ -186,7 +186,7 @@ FOSSEE,IIT Bombay', array(
 							':submitted_abstract_id' => $abstract_data->id
 						));
 					} //$abstract_data = $abstracts_q->fetchObject()
-					drupal_set_message(t('Approved Circuit Simulation project.'), 'status');
+					drupal_set_message(t('Resubmit the project files'), 'status');
 					// email 
 					$email_subject = t('[!site_name][Circuit Simulation Project] Your uploaded circuit simulation project have been marked as pending', array(
 						'!site_name' => variable_get('site_name', '')
@@ -196,9 +196,8 @@ FOSSEE,IIT Bombay', array(
 
 Dear !user_name,
 
-Your all the uploaded circuit simulation project with Title : ' . $user_info->project_title . ' have been marked as pending to be reviewed.
+Kindly resubmit the project files for the project : ' . $user_info->project_title . '.
  
-You will be able to see the circuit simulation project after approved by one of our reviewers.
 
 Best Wishes,
 
@@ -237,7 +236,7 @@ FOSSEE,IIT Bombay', array(
 						$msg = drupal_set_message("Please mention the reason for disapproval. Minimum 30 character required", 'error');
 						return $msg;
 					} //strlen(trim($form_state['values']['message'])) <= 30
-					if (!user_access('esim circuit_simulation bulk delete abstract'))
+					if (!user_access('esim circuit simulation bulk delete abstract'))
 					{
 						$msg = drupal_set_message(t('You do not have permission to Bulk Dis-Approved and Deleted Entire Lab.'), 'error');
 						return $msg;
@@ -393,6 +392,7 @@ function _bulk_list_of_circuit_simulation_project()
 	);
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
+	$query->condition('is_submitted', 1);
 	$query->condition('approval_status', 1);
 	$query->orderBy('project_title', 'ASC');
 	$project_titles_q = $query->execute();
@@ -408,7 +408,7 @@ function _bulk_list_circuit_simulation_actions()
 		0 => 'Please select...'
 	);
 	$circuit_simulation_actions[1] = 'Approve Entire Circuit Simulation Project';
-	//$circuit_simulation_actions[2] = 'Pending Review Entire Circuit Simulation Project';
+	$circuit_simulation_actions[2] = 'Resubmit Project files';
 	$circuit_simulation_actions[3] = 'Dis-Approve Entire Circuit Simulation Project (This will delete Circuit Simulation Project)';
 	//$circuit_simulation_actions[4] = 'Delete Entire Circuit Simulation Project Including Proposal';
 	return $circuit_simulation_actions;
@@ -468,63 +468,15 @@ function _circuit_simulation_details($circuit_simulation_proposal_id)
 		{
 			$abstracts_query_process_filename = "File not uploaded";
 		}
-		if ($abstracts_q->unit_operations_used_in_esim == '')
-		{
-			$unit_operations_used_in_esim = "Not entered";
-		} //$abstracts_q->unit_operations_used_in_esim == ''
-		else
-		{
-			$unit_operations_used_in_esim = $abstracts_q->unit_operations_used_in_esim;
-		}
-		if ($abstracts_q->thermodynamic_packages_used == '')
-		{
-			$thermodynamic_packages_used = "Not entered";
-		} //$abstracts_q->thermodynamic_packages_used == ''
-		else
-		{
-			$thermodynamic_packages_used = $abstracts_q->thermodynamic_packages_used;
-		}
-		if ($abstracts_q->logical_blocks_used == '')
-		{
-			$logical_blocks_used = "Not entered";
-		} //$abstracts_q->logical_blocks_used == ''
-		else
-		{
-			$logical_blocks_used = $abstracts_q->logical_blocks_used;
-		}
 	} //$abstracts_query_process == TRUE
 	else
 	{
 		$url = l('Upload abstract', 'circuit-simulation-project/abstract-code/upload');
-		$unit_operations_used_in_esim = "Not entered";
-		$thermodynamic_packages_used = "Not entered";
-		$logical_blocks_used = "Not entered";
 		$abstracts_query_process_filename = "File not uploaded";
 	}
-	$headers = array(
-		"Name of compound for which process development is carried out",
-		"CAS No."
-	);
-	$rows = array();
-	$item = array(
-		"{$abstracts_pro->process_development_compound_name}",
-		"{$abstracts_pro->process_development_compound_cas_number}"
-	);
-	array_push($rows, $item);
-	$prodata = theme('table', array(
-		'header' => $headers,
-		'rows' => $rows
-	));
 	$download_circuit_simulation = l('Download circuit simulation project','circuit-simulation-project/full-download/project/'.$circuit_simulation_proposal_id);
 	$return_html .= '<strong>Proposer Name:</strong><br />' . $abstracts_pro->name_title . ' ' . $abstracts_pro->contributor_name . '<br /><br />';
 	$return_html .= '<strong>Title of the Circuit Simulation Project:</strong><br />' . $abstracts_pro->project_title . '<br /><br />';
-	/*$return_html .= '<strong>eSim version:</strong><br />' . $abstracts_pro->version . '<br /><br />';
-	$return_html .= '<strong>Unit Operations used in eSim:</strong><br />' . $unit_operations_used_in_esim . '<br /><br />';
-	$return_html .= '<strong>Thermodynamic Packages Used:</strong><br />' . $thermodynamic_packages_used . '<br /><br />';
-	$return_html .= '<strong>Logical Blocks used:</strong><br />' . $logical_blocks_used . '<br /><br />';
-	$return_html .= '<strong>Name of compound for which process development is carried out:</strong><br />' . $prodata . '<br />';
-	$return_html .= '<strong>List of compounds from eSim Database used in process circuit simulation:</strong><br />' . $abstracts_pro->esim_database_compound_name . '<br /><br />';
-	$return_html .= '<strong>List of user defined compounds used in process circuit simulation:</strong><br />' . _circuit_simulation_list_of_user_defined_compound($abstracts_pro->id) . '<br />';*/
 	$return_html .= '<strong>Uploaded an abstract (brief outline) of the project:</strong><br />' . $abstract_filename . '<br /><br />';
 	$return_html .= '<strong>Upload the eSim circuit simulation for the developed process:</strong><br />' . $abstracts_query_process_filename . '<br /><br />';
 	$return_html .= $download_circuit_simulation;

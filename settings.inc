@@ -31,14 +31,14 @@ function circuit_simulation_settings_form($form, $form_state)
 	);
 	$form['extensions']['resource_upload'] = array(
 		'#type' => 'textfield',
-		'#title' => t('Allowed file extensions for uploading resources'),
+		'#title' => t('Allowed file extensions for uploading resource files'),
 		'#description' => t('A comma separated list WITHOUT SPACE of source file extensions that are permitted to be uploaded on the server'),
 		'#size' => 50,
 		'#maxlength' => 255,
 		'#required' => TRUE,
 		'#default_value' => variable_get('resource_upload_extensions', '')
 	);
-	$form['extensions']['dependency'] = array(
+	/*$form['extensions']['dependency'] = array(
 		'#type' => 'textfield',
 		'#title' => t('Allowed dependency file extensions'),
 		'#description' => t('A comma separated list WITHOUT SPACE of dependency file extensions that are permitted to be uploaded on the server'),
@@ -55,10 +55,10 @@ function circuit_simulation_settings_form($form, $form_state)
 		'#maxlength' => 255,
 		'#required' => TRUE,
 		'#default_value' => variable_get('circuit_simulation_result_extensions', '')
-	);
+	);*/
 	$form['extensions']['abstract_upload'] = array(
 		'#type' => 'textfield',
-		'#title' => t('Allowed abstract file extensions'),
+		'#title' => t('Allowed file extensions for abstract'),
 		'#description' => t('A comma separated list WITHOUT SPACE of pdf file extensions that are permitted to be uploaded on the server'),
 		'#size' => 50,
 		'#maxlength' => 255,
@@ -67,12 +67,12 @@ function circuit_simulation_settings_form($form, $form_state)
 	);
 	$form['extensions']['circuit_simulation_upload'] = array(
 		'#type' => 'textfield',
-		'#title' => t('Allowed eSim circuit simulation for the developed process'),
+		'#title' => t('Allowed extensions for project files'),
 		'#description' => t('A comma separated list WITHOUT SPACE of pdf file extensions that are permitted to be uploaded on the server'),
 		'#size' => 50,
 		'#maxlength' => 255,
 		'#required' => TRUE,
-		'#default_value' => variable_get('circuit_simulation_circuit_simulation_developed_process_source_extensions', '')
+		'#default_value' => variable_get('circuit_simulation_project_files_extensions', '')
 	);
 	$form['submit'] = array(
 		'#type' => 'submit',
@@ -90,9 +90,9 @@ function circuit_simulation_settings_form_submit($form, &$form_state)
 	variable_set('circuit_simulation_cc_emails', $form_state['values']['cc_emails']);
 	variable_set('circuit_simulation_from_email', $form_state['values']['from_email']);
 	variable_set('resource_upload_extensions', $form_state['values']['resource_upload']);
-	variable_set('circuit_simulation_dependency_extensions', $form_state['values']['dependency']);
-	variable_set('circuit_simulation_result_extensions', $form_state['values']['result']);
+	/*variable_set('circuit_simulation_dependency_extensions', $form_state['values']['dependency']);
+	variable_set('circuit_simulation_result_extensions', $form_state['values']['result']);*/
 	variable_set('circuit_simulation_abstract_upload_extensions', $form_state['values']['abstract_upload']);
-	variable_set('circuit_simulation_circuit_simulation_developed_process_source_extensions', $form_state['values']['circuit_simulation_upload']);
+	variable_set('circuit_simulation_project_files_extensions', $form_state['values']['circuit_simulation_upload']);
 	drupal_set_message(t('Settings updated'), 'status');
 }
