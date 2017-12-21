@@ -38,6 +38,7 @@ function circuit_simulation_download_full_project()
 	$project_files = $query->execute();
 	//var_dump($root_path . $CIRCUITSIMULATION_PATH . 'project_files/');die;
 	while ($esim_project_files = $project_files->fetchObject()) {
+		//var_dump($esim_project_files);die;
 		$zip->addFile($root_path . $CIRCUITSIMULATION_PATH . 'project_files/' . $esim_project_files->filepath, $CIRCUITSIMULATION_PATH . str_replace(' ', '_', basename($esim_project_files->filename)));
 	}
 	$zip_file_count = $zip->numFiles;

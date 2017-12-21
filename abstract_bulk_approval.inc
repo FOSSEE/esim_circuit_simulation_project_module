@@ -244,32 +244,52 @@ FOSSEE,IIT Bombay', array(
 					if (circuit_simulation_abstract_delete_project($form_state['values']['circuit_simulation_project'])) //////
 					{
 						drupal_set_message(t('Dis-Approved and Deleted Entire Circuit Simulation project.'), 'status');
+						$email_subject = t('[!site_name][Circuit Simulation Project] Your uploaded circuit simulation project have been marked as dis-approved', array(
+						'!site_name' => variable_get('site_name', '')
+					));
+					$email_body = array(
+						0 => t('
+
+					Dear !user_name,
+
+					Your uploaded circuit simulation project files for the circuit simulation project Title : ' . $user_info->project_title . ' have been marked as dis-approved.
+
+					Reason for dis-approval: ' . $form_state['values']['message'] . '
+
+					Best Wishes,
+
+					!site_name Team,
+					FOSSEE,IIT Bombay', array(
+												'!site_name' => variable_get('site_name', ''),
+												'!user_name' => $user_data->name
+											))
+					);
+					$email_to = $user_data->mail;
+					$from = variable_get('circuit_simulation_from_email', '');
+					$bcc = variable_get('circuit_simulation_emails', '');
+					$cc = variable_get('circuit_simulation_cc_emails', '');
+					$params['standard']['subject'] = $email_subject;
+					$params['standard']['body'] = $email_body;
+					$params['standard']['headers'] = array(
+						'From' => $from,
+						'MIME-Version' => '1.0',
+						'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
+						'Content-Transfer-Encoding' => '8Bit',
+						'X-Mailer' => 'Drupal',
+						'Cc' => $cc,
+						'Bcc' => $bcc
+					);
+					if (!drupal_mail('circuit_simulation', 'standard', $email_to, language_default(), $params, $from, TRUE))
+					{
+						drupal_set_message('Error sending email message.', 'error');
+					}
 					} //circuit_simulation_abstract_delete_project($form_state['values']['circuit_simulation_project'])
 					else
 					{
 						drupal_set_message(t('Error Dis-Approving and Deleting Entire circuit simulation project.'), 'error');
 					}
 					// email 
-					$email_subject = t('[!site_name][Circuit Simulation Project] Your uploaded circuit simulation project have been marked as dis-approved', array(
-						'!site_name' => variable_get('site_name', '')
-					));
-					$email_body = array(
-						0 => t('
-
-Dear !user_name,
-
-Your all the uploaded circuit simulation for the whole circuit simulation project Title : ' . $user_info->project_title . ' have been marked as dis-approved.
-
-Reason for dis-approval: ' . $form_state['values']['message'] . '
-
-Best Wishes,
-
-!site_name Team,
-FOSSEE,IIT Bombay', array(
-							'!site_name' => variable_get('site_name', ''),
-							'!user_name' => $user_data->name
-						))
-					);
+					
 				} //$form_state['values']['circuit_simulation_actions'] == 3
 				elseif ($form_state['values']['circuit_simulation_actions'] == 4)
 				{

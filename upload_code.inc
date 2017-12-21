@@ -297,11 +297,17 @@ function circuit_simulation_upload_abstract_code_form_submit($form, &$form_state
 			":abstract_approval_status" => 0,
 			":abstract_upload_date" => time(),
 			":abstract_approval_date" => 0,
-			":is_submitted" => 0
+			":is_submitted" => 1
 		);
 		$submitted_abstract_id = db_query($query, $args, array(
 			'return' => Database::RETURN_INSERT_ID
 		));
+		$query1 = "UPDATE {esim_circuit_simulation_proposal} SET is_submitted = :is_submitted WHERE id = :id";
+		$args1 = array(
+			":is_submitted" => 1,
+			":id" => $proposal_id
+		);
+		db_query($query1,$args1);
 		drupal_set_message('Abstract uploaded successfully.', 'status');
 	} //!$query_s_result
 	else
