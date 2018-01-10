@@ -7,6 +7,7 @@ function circuit_simulation_completed_proposals_all()
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('approval_status', 3);
+	$query->orderBy('actual_completion_date', 'DESC');
 	//$query->condition('is_completed', 1);
 	$result = $query->execute();
 	
