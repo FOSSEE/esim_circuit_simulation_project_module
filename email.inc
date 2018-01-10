@@ -46,15 +46,15 @@ Dear !user_name,
 
 We have received your eSim Circuit Simulation Project proposal with the following details:
 
-Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user->mail . '
-University/Institute : ' . $proposal_data->university . '
-City : ' . $proposal_data->city . '
-State : ' . $proposal_data->state . '
-Country : ' . $proposal_data->country . '
-Project Guide  : ' . $project_guide_name . '
-Project Guide Email : ' . $project_guide_email_id . '
-Project Title  : ' . $proposal_data->project_title . '
+Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
+Email: ' . $user->mail . '
+University/Institute: ' . $proposal_data->university . '
+City: ' . $proposal_data->city . '
+State: ' . $proposal_data->state . '
+Country: ' . $proposal_data->country . '
+Project Guide: ' . $project_guide_name . '
+Project Guide Email: ' . $project_guide_email_id . '
+Project Title: ' . $proposal_data->project_title . '
 
 Your proposal is under review. You will soon receive an email when same has been approved/disapproved.
 
@@ -106,17 +106,17 @@ Dear !user_name,
 
 We regret to inform you that your eSim Circuit Simulation Project proposal with following details have been disapproved:
 
-Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user_data->mail . '
-University/Institute : ' . $proposal_data->university . '
-City : ' . $proposal_data->city . '
-State : ' . $proposal_data->state . '
-Country : ' . $proposal_data->country . '
-Project Guide  : ' . $project_guide_name . '
-Project Guide Email : ' . $project_guide_email_id . '
-Project Title  : ' . $proposal_data->project_title . '
+Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
+Email: ' . $user_data->mail . '
+University/Institute: ' . $proposal_data->university . '
+City: ' . $proposal_data->city . '
+State: ' . $proposal_data->state . '
+Country: ' . $proposal_data->country . '
+Project Guide: ' . $project_guide_name . '
+Project Guide Email: ' . $project_guide_email_id . '
+Project Title: ' . $proposal_data->project_title . '
 
-Reason for rejection : ' . $proposal_data->dissapproval_reason . '
+Reason for rejection: ' . $proposal_data->dissapproval_reason . '
 
 
 You are welcome to submit a new proposal.
@@ -170,15 +170,15 @@ Dear !user_name,
 
 Your eSim Circuit Simulation Project proposal with the following details has been approved:
 
-Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user_data->mail . '
-University/Institute : ' . $proposal_data->university . '
-City : ' . $proposal_data->city . '
-State : ' . $proposal_data->state . '
-Country : ' . $proposal_data->country . '
-Project Guide  : ' . $project_guide_name . '
-Project Guide Email : ' . $project_guide_email_id . '
-Project Title  : ' . $proposal_data->project_title . '
+Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
+Email: ' . $user_data->mail . '
+University/Institute: ' . $proposal_data->university . '
+City: ' . $proposal_data->city . '
+State: ' . $proposal_data->state . '
+Country: ' . $proposal_data->country . '
+Project Guide: ' . $project_guide_name . '
+Project Guide Email: ' . $project_guide_email_id . '
+Project Title: ' . $proposal_data->project_title . '
 
 You can upload your abstract and the completed simulation at: ' . $url . '
 Best Wishes,
@@ -228,16 +228,16 @@ Dear !user_name,
 
 Your eSim circuit simulation and abstract on the following process have been completed successfully.
 
-Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user->mail . '
-University/Institute : ' . $proposal_data->university . '
-City : ' . $proposal_data->city . '
-State : ' . $proposal_data->state . '
-Country : ' . $proposal_data->country . '
+Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
+Email: ' . $user->mail . '
+University/Institute: ' . $proposal_data->university . '
+City: ' . $proposal_data->city . '
+State: ' . $proposal_data->state . '
+Country: ' . $proposal_data->country . '
 
-Project Guide  : ' . $project_guide_name . '
-Project Guide Email : ' . $project_guide_email_id . '
-Project Title  : ' . $proposal_data->project_title . '
+Project Guide: ' . $project_guide_name . '
+Project Guide Email: ' . $project_guide_email_id . '
+Project Title: ' . $proposal_data->project_title . '
 Best Wishes,
 
 !site_name Team,
@@ -286,16 +286,15 @@ Dear !user_name,
 
 Your eSim Circuit Simulation Project proposal with the following details has been deleted :
 
-Full Name : ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email : ' . $user->mail . '
-
-University/Institute : ' . $proposal_data->university . '
-City : ' . $proposal_data->city . '
-State : ' . $proposal_data->state . '
-Country : ' . $proposal_data->country . '
-Project Guide  : ' . $project_guide_name . '
-Project Guide Email : ' . $project_guide_email_id . '
-Project Title  : ' . $proposal_data->project_title . '
+Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
+Email: ' . $user->mail . '
+University/Institute: ' . $proposal_data->university . '
+City: ' . $proposal_data->city . '
+State: ' . $proposal_data->state . '
+Country: ' . $proposal_data->country . '
+Project Guide: ' . $project_guide_name . '
+Project Guide Email: ' . $project_guide_email_id . '
+Project Title: ' . $proposal_data->project_title . '
 
 You can propose a new circuit simulation project.
 
@@ -320,7 +319,7 @@ FOSSEE,IIT Bombay', array(
 			$proposal_data = $query->execute()->fetchObject();
 			
 			$user = user_load($params['abstract_uploaded']['user_id']);
-			$message['subject'] = t('[!site_name][Circuit Simulation Project] You have uploaded eSim circuit simulation abstract', array(
+			$message['subject'] = t('[!site_name][Circuit Simulation Project] You have uploaded eSim circuit simulation project files', array(
 				'!site_name' => variable_get('site_name', '')
 			), array(
 				'language' => $language->language
@@ -332,7 +331,7 @@ Dear !user_name,
 
 You have uploaded the following Abstract and Project files:
 
-Project Title  : ' . $proposal_data->project_title . '
+Project Title: ' . $proposal_data->project_title . '
 
 
 The abstract and project files are under review. You will be notified when it has been approved.
@@ -375,7 +374,7 @@ Dear !user_name,
 
 Your following solution has been approved:
 
-Experiment Title : ' . $experiment_data->title . '
+Experiment Title: ' . $experiment_data->title . '
 
 Please ensure that ALL the codes follow guidelines at http://esim.fossee.in/esim-circuit-simulation-project/esim-circuit-simulation-guidelines
 
@@ -404,10 +403,10 @@ Dear !user_name,
 
 Your following solution has been disapproved:
 
-Solution number : ' . $params['solution_disapproved']['solution_number'] . '
-Caption : ' . $params['solution_disapproved']['solution_caption'] . '
+Solution number: ' . $params['solution_disapproved']['solution_number'] . '
+Caption: ' . $params['solution_disapproved']['solution_caption'] . '
 
-Reason for dis-approval : ' . $params['solution_disapproved']['message'] . '
+Reason for dis-approval: ' . $params['solution_disapproved']['message'] . '
 
 
 Best Wishes,
@@ -435,11 +434,10 @@ Dear !user_name,
 
 Your following pending solution has been deleted :
 
-Title of the Lab : ' . $params['solution_deleted_user']['lab_title'] . '
-Title of the Experiment : ' . $params['solution_deleted_user']['experiment_title'] . '
-
-Solution number : ' . $params['solution_deleted_user']['solution_number'] . '
-Caption : ' . $params['solution_deleted_user']['solution_caption'] . '
+Title of the Lab: ' . $params['solution_deleted_user']['lab_title'] . '
+Title of the Experiment: ' . $params['solution_deleted_user']['experiment_title'] . '
+Solution number: ' . $params['solution_deleted_user']['solution_number'] . '
+Caption: ' . $params['solution_deleted_user']['solution_caption'] . '
 
 
 Best Wishes,
@@ -466,8 +464,7 @@ FOSSEE,IIT Bombay', array(
 				'body' => t('
 Dear !user_name,
 
-You have uploaded following dependency files :
-    ' . $dependency_files . '
+You have uploaded following dependency files : ' . $dependency_files . '
 
 Please ensure that ALL the codes follow guidelines at http://esim.fossee.in/esim-circuit-simulation-project/esim-circuit-simulation-guidelines
 
