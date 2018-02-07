@@ -181,6 +181,10 @@ FOSSEE,IIT Bombay', array(
 							':approver_uid' => $user->uid,
 							':id' => $abstract_data->id
 						));
+						db_query("UPDATE {esim_circuit_simulation_proposal} SET is_submitted = 0, approver_uid = :approver_uid WHERE id = :id", array(
+							':approver_uid' => $user->uid,
+							':id' => $abstract_data->proposal_id
+						));
 						db_query("UPDATE {esim_circuit_simulation_submitted_abstracts_file} SET file_approval_status = 0, approvar_uid = :approver_uid WHERE submitted_abstract_id = :submitted_abstract_id", array(
 							':approver_uid' => $user->uid,
 							':submitted_abstract_id' => $abstract_data->id
