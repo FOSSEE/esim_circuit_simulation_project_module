@@ -35,7 +35,7 @@ function circuit_simulation_completed_proposals_all()
 			$preference_rows[] = array(
 				$i,
 				l($row->project_title, "circuit-simulation-project/esim-circuit-simulation-run/" . $row->id),
-				l($esim_project_abstract->filename, "circuit-simulation-project/download/project-file/" . $row->id),
+				l('Download', "circuit-simulation-project/download/project-file/" . $row->id),
 				$row->contributor_name,
 				$row->university,
 				$approval_date
