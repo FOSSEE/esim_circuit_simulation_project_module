@@ -980,7 +980,7 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		$bcc = variable_get('circuit_simulation_emails', '');
 		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
-		$params['circuit_simulation_proposal_deleted']['user_id'] = $user->uid;
+		$params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->uid;
 		//$params['dwsim_flowsheet_proposal_deleted']['file_name'] = $_FILES['files']['name'][$file_form_name];
 		$params['circuit_simulation_proposal_deleted']['headers'] = array(
 			'From' => $from,
