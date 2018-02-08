@@ -726,10 +726,11 @@ function circuit_simulation_proposal_status_form_submit($form, &$form_state)
 		);
 		if (!drupal_mail('circuit_simulation', 'circuit_simulation_proposal_completed', $email_to, language_default(), $params, $from, TRUE))
 			drupal_set_message('Error sending email message.', 'error');
-		drupal_set_message('Congratulations! eSim circuit-simulation proposal has been marked as completed. User has been notified of the completion.', 'status');
-	} //$form_state['values']['completed'] == 1
-	drupal_goto('circuit-simulation-project/manage-proposal');
-	return;
+		drupal_set_message('Congratulations! eSim circuit simulation proposal has been marked as completed. User has been notified of the completion.', 'status');
+	}
+		drupal_goto('circuit-simulation-project/manage-proposal');
+		return;
+	
 }
 /******************************************************************************/
 /**************************** PROPOSAL EDIT FORM ******************************/
@@ -941,33 +942,6 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 	);
 	return $form;
 }
-/*
-function circuit_simulation_proposal_edit_form_validate($form, &$form_state)
-{
-$proposal_id = (int) arg(3);
-// check before delete proposal 
-if ($form_state['values']['delete_proposal'] == 1)
-{
-//$experiment_q = db_query("SELECT * FROM {esim_circuit_simulation_experiment} WHERE proposal_id = %d", $proposal_id);
-$query = db_select('esim_circuit_simulation_user_defined_compound');
-$query->fields('esim_circuit_simulation_user_defined_compound');
-$query->condition('proposal_id', $proposal_id);
-$experiment_q = $query->execute();
-while ($experiment_data = $experiment_q->fetchObject())
-{
-//$solution_q = db_query("SELECT * FROM {esim_circuit_simulation_solution} WHERE experiment_id = %d", $experiment_data->id);
-$query = db_select('esim_circuit_simulation_user_defined_compound');
-$query->fields('esim_circuit_simulation_user_defined_compound');
-$query->condition('proposal_id', $proposal_id);
-$solution_q = $query->execute();
-if ($solution_q->fetchObject())
-{
-form_set_error('', t('Cannot delete proposal since there are solutions already uploaded. Use the "Bulk Manage" interface to delete this proposal'));
-} //$solution_q->fetchObject()
-} //$experiment_data = $experiment_q->fetchObject()
-} //$form_state['values']['delete_proposal'] == 1
-return;
-}*/
 function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 {
 	global $user;
@@ -1006,8 +980,8 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		$bcc = variable_get('circuit_simulation_emails', '');
 		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
-		$params['circuit_simulation_proposal_deleted']['user_id'] = $user->uid;
-		//$params['circuit_simulation_proposal_deleted']['file_name'] = $_FILES['files']['name'][$file_form_name];
+		$params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->uid;
+		//$params['dwsim_flowsheet_proposal_deleted']['file_name'] = $_FILES['files']['name'][$file_form_name];
 		$params['circuit_simulation_proposal_deleted']['headers'] = array(
 			'From' => $from,
 			'MIME-Version' => '1.0',
@@ -1019,19 +993,20 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		);
 		if (!drupal_mail('circuit_simulation', 'circuit_simulation_proposal_deleted', $email_to, user_preferred_language($user), $params, $from, TRUE))
 			drupal_set_message('Error sending email message.', 'error');
-		drupal_set_message(t('eSim Circuit Simulation proposal has been deleted.'), 'status');
+		drupal_set_message(t('eSim Cicuit simulation proposal has been deleted.'), 'status');
+
 		//db_query("DELETE FROM {esim_circuit_simulation_proposal} WHERE id = %d", $proposal_id);
 		if (rrmdir_project($proposal_id) == TRUE)
 		{
 			$query = db_delete('esim_circuit_simulation_proposal');
 			$query->condition('id', $proposal_id);
 			$num_deleted = $query->execute();
-			db_query("DELETE FROM {esim_circuit_simulation_user_defined_compound} WHERE proposal_id = :proposal_id", array(
+			/*db_query("DELETE FROM {esim_circuit_simulation_user_defined_compound} WHERE proposal_id = :proposal_id", array(
 				":proposal_id" => $proposal_id
-			));
+			));*/
 			drupal_set_message(t('Proposal Deleted'), 'status');
 			drupal_goto('circuit-simulation-project/manage-proposal');
-			return;
+		return;
 		} //rrmdir_project($proposal_id) == TRUE
 	} //$form_state['values']['delete_proposal'] == 1
 	/* update proposal */

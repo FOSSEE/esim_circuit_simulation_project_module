@@ -199,7 +199,7 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_completed']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user = user_load($params['circuit_simulation_proposal_completed']['user_id']);
+			$user_data = user_load($params['circuit_simulation_proposal_completed']['user_id']);
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
 				$project_guide_name = "Not Entered";
@@ -229,7 +229,7 @@ Dear !user_name,
 Your eSim circuit simulation and abstract on the following process have been completed successfully.
 
 Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email: ' . $user->mail . '
+Email: ' . $user_data->mail . '
 University/Institute: ' . $proposal_data->university . '
 City: ' . $proposal_data->city . '
 State: ' . $proposal_data->state . '
@@ -243,7 +243,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user->name
+					'!user_name' => $user_data->name
 				), array(
 					'language' => $language->language
 				))
@@ -256,7 +256,7 @@ FOSSEE,IIT Bombay', array(
 			$query->condition('id', $params['circuit_simulation_proposal_deleted']['proposal_id']);
 			$query->range(0, 1);
 			$proposal_data = $query->execute()->fetchObject();
-			$user = user_load($params['circuit_simulation_proposal_deleted']['user_id']);
+			$user_data = user_load($params['circuit_simulation_proposal_deleted']['user_id']);
 			
 			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
 			{
@@ -287,7 +287,7 @@ Dear !user_name,
 Your eSim Circuit Simulation Project proposal with the following details has been deleted :
 
 Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
-Email: ' . $user->mail . '
+Email: ' . $user_data->mail . '
 University/Institute: ' . $proposal_data->university . '
 City: ' . $proposal_data->city . '
 State: ' . $proposal_data->state . '
@@ -303,7 +303,7 @@ Best Wishes,
 !site_name Team,
 FOSSEE,IIT Bombay', array(
 					'!site_name' => variable_get('site_name', ''),
-					'!user_name' => $user->name
+					'!user_name' => $user_data->name
 				), array(
 					'language' => $language->language
 				))
