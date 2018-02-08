@@ -710,9 +710,9 @@ function circuit_simulation_proposal_status_form_submit($form, &$form_state)
 		/* sending email */
 		$user_data = user_load($proposal_data->uid);
 		$email_to = $user_data->mail;
-		$from = variable_get('dwsim_flowsheet_from_email', '');
-		$bcc = $user->mail . ', ' . variable_get('dwsim_flowsheet_emails', '');
-		$cc = variable_get('dwsim_flowsheet_cc_emails', '');
+		$from = variable_get('circuit_simulation_from_email', '');
+		$bcc = $user->mail . ', ' . variable_get('circuit_simulation_emails', '');
+		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_completed']['proposal_id'] = $proposal_id;
 		$params['circuit_simulation_proposal_completed']['user_id'] = $proposal_data->uid;
 		$params['circuit_simulation_proposal_completed']['headers'] = array(
@@ -976,9 +976,9 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 	{
 		/* sending email */
 		$email_to = $user->mail;
-		$from = variable_get('dwsim_flowsheet_from_email', '');
-		$bcc = variable_get('dwsim_flowsheet_emails', '');
-		$cc = variable_get('dwsim_flowsheet_cc_emails', '');
+		$from = variable_get('circuit_simulation_from_email', '');
+		$bcc = variable_get('circuit_simulation_emails', '');
+		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
 		$params['circuit_simulation_proposal_deleted']['user_id'] = $user->uid;
 		//$params['dwsim_flowsheet_proposal_deleted']['file_name'] = $_FILES['files']['name'][$file_form_name];
@@ -1001,9 +1001,9 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 			$query = db_delete('esim_circuit_simulation_proposal');
 			$query->condition('id', $proposal_id);
 			$num_deleted = $query->execute();
-			db_query("DELETE FROM {esim_circuit_simulation_user_defined_compound} WHERE proposal_id = :proposal_id", array(
+			/*db_query("DELETE FROM {esim_circuit_simulation_user_defined_compound} WHERE proposal_id = :proposal_id", array(
 				":proposal_id" => $proposal_id
-			));
+			));*/
 			drupal_set_message(t('Proposal Deleted'), 'status');
 			drupal_goto('circuit-simulation-project/manage-proposal');
 		return;
