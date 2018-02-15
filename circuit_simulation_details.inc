@@ -2,7 +2,6 @@
 // eSim Circuit Simulation display completed proposals
 function circuit_simulation_completed_proposals_all()
 {
-	//$proposal_data =circuit_simulation_get_proposal();
 	$output = "";
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');

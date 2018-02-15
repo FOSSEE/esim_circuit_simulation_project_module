@@ -4,7 +4,6 @@ function circuit_simulation_proposal_pending()
 {
 	/* get pending proposals to be approved */
 	$pending_rows = array();
-	//$pending_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE approval_status = 0 ORDER BY id DESC");
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('approval_status', 0);
@@ -43,7 +42,6 @@ function circuit_simulation_proposal_all()
 {
 	/* get pending proposals to be approved */
 	$proposal_rows = array();
-	//$proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} ORDER BY id DESC");
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->orderBy('id', 'DESC');
@@ -114,7 +112,6 @@ function circuit_simulation_proposal_approval_form($form, &$form_state)
 	global $user;
 	/* get current proposal */
 	$proposal_id = (int) arg(3);
-	//$proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE id = %d", $proposal_id);
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $proposal_id);
@@ -209,11 +206,6 @@ function circuit_simulation_proposal_approval_form($form, &$form_state)
 		'#markup' => $proposal_data->pincode,
 		'#title' => t('Pincode/Postal code')
 	);
-	/*$form['version'] = array(
-		'#type' => 'item',
-		'#title' => t('eSim version'),
-		'#markup' => $proposal_data->version
-	);*/
 	$form['project_guide_name'] = array(
 		'#type' => 'item',
 		'#title' => t('Project guide'),
@@ -253,59 +245,6 @@ function circuit_simulation_proposal_approval_form($form, &$form_state)
 			'#markup' => "Not uploaded<br><br>"
 		);
 	}
-
-	/*$headers = array(
-		"User defined compound",
-		"CAS No."
-	);
-	$rows = array();
-	$item = array(
-		"{$proposal_data->process_development_compound_name}",
-		"{$proposal_data->process_development_compound_cas_number}"
-	);
-	array_push($rows, $item);
-	$prodata = theme('table', array(
-		'header' => $headers,
-		'rows' => $rows
-	));
-	$form['process_development_compound_name'] = array(
-		'#type' => 'item',
-		'#title' => t('Name of compound for which process development is carried out'),
-		'#markup' => $prodata
-	);
-	/*
-	$form['process_development_compound_cas_number'] = array(
-	'#type' => 'item',
-	'#title' => t('CAS Number of compound for which process development is carried out'),
-	'#markup' => $proposal_data->process_development_compound_cas_number
-	);*/
-	/*$form['esim_database_compound_name'] = array(
-		'#type' => 'item',
-		'#title' => t('List of compounds from eSim Database used in process circuit simulation'),
-		'#markup' => $proposal_data->esim_database_compound_name
-	);
-
-	$form['user_defined_compounds_used_in_process_circuit_simulationcompound_name'] = array(
-		'#type' => 'item',
-		'#title' => t('List of user defined compounds used in process circuit simulation'),
-		'#markup' => _circuit_simulation_list_of_user_defined_compound($proposal_id)
-	);
-	if (($proposal_data->user_defined_compound_filepath != "") && ($proposal_data->user_defined_compound_filepath != 'NULL'))
-	{
-		$form['user_defined_compound_filepath'] = array(
-			'#type' => 'item',
-			'#title' => t('Uploaded the user defined compound '),
-			'#markup' => l('Download user defined compound list', 'circuit-simulation-project/download/user-defined-compound-file/' . $proposal_id) . "<br><br>"
-		);
-	} //$proposal_data->user_defined_compound_filepath != ""
-	else
-	{
-		$form['user_defined_compound_filepath'] = array(
-			'#type' => 'item',
-			'#title' => t('Uploaded the user defined compound '),
-			'#markup' => "Not uploaded<br><br>"
-		);
-	}*/
 	$form['approval'] = array(
 		'#type' => 'radios',
 		'#title' => t('eSim circuit-simulation proposal'),
@@ -356,7 +295,6 @@ function circuit_simulation_proposal_approval_form_submit($form, &$form_state)
 	global $user;
 	/* get current proposal */
 	$proposal_id = (int) arg(3);
-	// $proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE id = %d", $proposal_id);
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $proposal_id);
@@ -454,7 +392,6 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 	global $user;
 	/* get current proposal */
 	$proposal_id = (int) arg(3);
-	//$proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE id = %d", $proposal_id);
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $proposal_id);
@@ -528,11 +465,6 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 		'#markup' => $proposal_data->pincode,
 		'#title' => t('Pincode/Postal code')
 	);
-	/*$form['version'] = array(
-		'#type' => 'item',
-		'#title' => t('eSim version'),
-		'#markup' => $proposal_data->version
-	);*/
 	$form['project_guide_name'] = array(
 		'#type' => 'item',
 		'#title' => t('Project guide'),
@@ -557,21 +489,6 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 		'#markup' => $reference,
 		'#title' => t('References')
 	);
-	/*$form['process_development_compound_name'] = array(
-		'#type' => 'item',
-		'#title' => t('Name of compound for which process development is carried out'),
-		'#markup' => $proposal_data->process_development_compound_name
-	);
-	$form['process_development_compound_cas_number'] = array(
-		'#type' => 'item',
-		'#title' => t('CAS Number of compound for which process development is carried out'),
-		'#markup' => $proposal_data->process_development_compound_cas_number
-	);
-	$form['esim_database_compound_name'] = array(
-		'#type' => 'item',
-		'#title' => t('List of compounds from eSim Database used in process circuit simulation'),
-		'#markup' => $proposal_data->esim_database_compound_name
-	);*/
 	$proposal_status = '';
 	switch ($proposal_data->approval_status)
 	{
@@ -590,39 +507,7 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 		default:
 			$proposal_status = t('Unkown');
 			break;
-	} //$proposal_data->approval_status
-	/*if (_circuit_simulation_list_of_user_defined_compound($proposal_data->id) != "Not entered")
-	{
-		$form['user_defined_compounds_used_in_process_circuit_simulationcompound_name'] = array(
-			'#type' => 'item',
-			'#title' => t('List of user defined compounds used in process circuit simulation'),
-			'#markup' => _circuit_simulation_list_of_user_defined_compound($proposal_data->id)
-		);
-	} //$proposal_data->user_defined_compounds_used_in_process != "" || $proposal_data->user_defined_compounds_used_in_process != NULL
-	else
-	{
-		$form['user_defined_compounds_used_in_process_circuit_simulationcompound_name'] = array(
-			'#type' => 'item',
-			'#title' => t('List of user defined compounds used in process circuit simulation'),
-			'#markup' => "Not entered"
-		);
-	}
-	if ($proposal_data->user_defined_compound_filepath != "" && $proposal_data->user_defined_compound_filepath != "NULL")
-	{
-		$form['user_defined_compound_filepath'] = array(
-			'#type' => 'item',
-			'#title' => t('Uploaded the user defined compound '),
-			'#markup' => l('Download user defined compound list', 'circuit-simulation-project/download/user-defined-compound-file/' . $proposal_id) . "<br><br>"
-		);
-	} //$proposal_data->user_defined_compound_filepath != ""
-	else
-	{
-		$form['user_defined_compound_filepath'] = array(
-			'#type' => 'item',
-			'#title' => t('Uploaded the user defined compound '),
-			'#markup' => "Not uploaded<br><br>"
-		);
-	}*/
+	} 
 	$form['proposal_status'] = array(
 		'#type' => 'item',
 		'#markup' => $proposal_status,
@@ -921,7 +806,6 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 	$form['reference'] = array(
 		'#type' => 'textarea',
 		'#title' => t('Reference'),
-		'#required' => TRUE,
 		'#size' => 10000,
 		'#attributes' => array(
 			'placeholder' => 'Links of must be provided....'
@@ -947,7 +831,6 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 	global $user;
 	/* get current proposal */
 	$proposal_id = (int) arg(3);
-	// $proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE id = %d", $proposal_id);
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $proposal_id);
@@ -975,13 +858,13 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 	if ($form_state['values']['delete_proposal'] == 1)
 	{
 		/* sending email */
-		$email_to = $user->mail;
+		$user_data = user_load($proposal_data->uid);
+		$email_to = $user_data->mail;
 		$from = variable_get('circuit_simulation_from_email', '');
 		$bcc = variable_get('circuit_simulation_emails', '');
 		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
 		$params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->uid;
-		//$params['dwsim_flowsheet_proposal_deleted']['file_name'] = $_FILES['files']['name'][$file_form_name];
 		$params['circuit_simulation_proposal_deleted']['headers'] = array(
 			'From' => $from,
 			'MIME-Version' => '1.0',
@@ -994,16 +877,11 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		if (!drupal_mail('circuit_simulation', 'circuit_simulation_proposal_deleted', $email_to, user_preferred_language($user), $params, $from, TRUE))
 			drupal_set_message('Error sending email message.', 'error');
 		drupal_set_message(t('eSim Cicuit simulation proposal has been deleted.'), 'status');
-
-		//db_query("DELETE FROM {esim_circuit_simulation_proposal} WHERE id = %d", $proposal_id);
 		if (rrmdir_project($proposal_id) == TRUE)
 		{
 			$query = db_delete('esim_circuit_simulation_proposal');
 			$query->condition('id', $proposal_id);
 			$num_deleted = $query->execute();
-			/*db_query("DELETE FROM {esim_circuit_simulation_user_defined_compound} WHERE proposal_id = :proposal_id", array(
-				":proposal_id" => $proposal_id
-			));*/
 			drupal_set_message(t('Proposal Deleted'), 'status');
 			drupal_goto('circuit-simulation-project/manage-proposal');
 		return;

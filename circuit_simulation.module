@@ -248,16 +248,6 @@ function circuit_simulation_menu()
 		'file' => 'upload_code.inc',
 		'weight' => 2
 	);
-	/* $items['circuit_simulation/code/upload_dep'] = array(
-	'title' => 'Upload Dependency',
-	'description' => 'Upload Dependency Files',
-	'page callback' => 'drupal_get_form',
-	'page arguments' => array('circuit_simulation_upload_dependency_form'),
-	'access arguments' => array('esim circuit simulation upload code'),
-	'type' => MENU_LOCAL_TASK,
-	'file' => 'dependency.inc',
-	'weight' => 3,
-	);*/
 	$items['circuit-simulation-project/abstract-code/delete'] = array(
 		'title' => 'Delete Solution',
 		'description' => 'Delete Solution',
@@ -279,14 +269,6 @@ function circuit_simulation_menu()
 		'type' => MENU_CALLBACK,
 		'file' => 'download.inc'
 	);
-	/*$items['circuit_simulation/download/dependency'] = array(
-	'title' => 'Code Download',
-	'description' => 'Code Download', 
-	'page callback' => 'circuit_simulation_download_dependency_file',
-	'access arguments' => array('esim circuit simulation download code'),
-	'type' => MENU_CALLBACK,
-	'file' => 'download.inc',
-	);*/
 	$items['circuit-simulation-project/download/solution'] = array(
 		'title' => 'Code Download',
 		'description' => 'Code Download',
@@ -388,27 +370,6 @@ function circuit_simulation_menu()
 		'type' => MENU_CALLBACK,
 		'file' => 'download.inc'
 	);
-	/*$items['circuit_simulation_run'] = array(
-	'title' => 'Download Codes',
-	'page callback' => 'drupal_get_form',
-	'page arguments' => array('circuit_simulation_run_form_ajax'),
-	'access arguments' => array('access content'),
-	'type' => MENU_NORMAL_ITEM,
-	'file' => 'run.inc',
-	);
-	$items['circuit_simulation_run_ajax'] = array(
-	'page callback' => 'circuit_simulation_run_ajax',
-	'access callback' => TRUE,
-	'file' => 'run.inc',
-	);
-	$items['download_codes'] = array(
-	'title' => 'Download Codes',
-	'page callback' => 'drupal_get_form',
-	'page arguments' => array('circuit_simulation_run_form_ajax'),
-	'access arguments' => array('access content'),
-	'type' => MENU_NORMAL_ITEM,
-	'file' => 'run.inc',
-	);*/
 	/* LATEX SCRIPT */
 	$items['circuit-simulation-project/generate-lab'] = array(
 		'title' => 'Generate Lab',
@@ -488,13 +449,6 @@ function circuit_simulation_menu()
 		'type' => MENU_CALLBACK,
 		'file' => 'pdf/verify_certificates.inc'
 	);
-	/*  $items["circuit_simulation/code_approval/dependency/ajax"] = array(
-	"title" => "Ajax callbacks",
-	"page callback" => "circuit_simulation_dependency_approval_ajax",
-	"access arguments" => array("esim circuit simulation bulk manage abstract"),
-	"type" => MENU_CALLBACK,
-	'file' => 'dependency_approval.inc',
-	);*/
 	return $items;
 }
 /**
@@ -651,11 +605,7 @@ function circuit_simulation_check_code_number($number = '')
 function circuit_simulation_path()
 {
 	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/circuit_simulation_uploads/';
-}/*
-function circuit_simulation_path_project_files()
-{
-	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/circuit_simulation_uploads/project_files/';
-}*/
+}
 function circuit_simulation_file_path($value='')
 {
 	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/';
@@ -664,7 +614,6 @@ function circuit_simulation_file_path($value='')
 function circuit_simulation_get_proposal()
 {
 	global $user;
-	//$proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE solution_provider_uid = ".$user->uid." AND solution_status = 2 ORDER BY id DESC LIMIT 1");
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('uid', $user->uid);
@@ -728,59 +677,7 @@ function _df_sentence_case($string)
 		} //strpos($string, $delimiter) !== false
 	} //array( '-', '\'' ) as $delimiter
 	return $string;
-}/*
-function _df_list_of_esim_compound()
-{
-	$esim_compound = array();
-	$query = db_select('esim_circuit_simulation_compounds_from_esim');
-	$query->fields('esim_circuit_simulation_compounds_from_esim');
-	$query->orderBy('compound', 'ASC');
-	$esim_compound_list = $query->execute();
-	while ($esim_compound_list_data = $esim_compound_list->fetchObject())
-	{
-		$esim_compound[$esim_compound_list_data->compound] = $esim_compound_list_data->compound;
-	} //$esim_compound_list_data = $esim_compound_list->fetchObject()
-	return $esim_compound;
 }
-function _df_list_of_unit_operations()
-{
-	$esim_unit_operations = array();
-	$query = db_select('esim_circuit_simulation_unit_operations');
-	$query->fields('esim_circuit_simulation_unit_operations');
-	$query->orderBy('id', 'ASC');
-	$esim_unit_operations_list = $query->execute();
-	while ($esim_unit_operations_list_data = $esim_unit_operations_list->fetchObject())
-	{
-		$esim_unit_operations[$esim_unit_operations_list_data->unit_operations] = $esim_unit_operations_list_data->unit_operations;
-	} //$esim_unit_operations_list_data = $esim_unit_operations_list->fetchObject()
-	return $esim_unit_operations;
-}
-function _df_list_of_thermodynamic_packages()
-{
-	$esim_thermodynamic_packages = array();
-	$query = db_select('esim_circuit_simulation_thermodynamic_packages');
-	$query->fields('esim_circuit_simulation_thermodynamic_packages');
-	$query->orderBy('id', 'ASC');
-	$esim_thermodynamic_packages_list = $query->execute();
-	while ($esim_thermodynamic_packages_list_data = $esim_thermodynamic_packages_list->fetchObject())
-	{
-		$esim_thermodynamic_packages[$esim_thermodynamic_packages_list_data->thermodynamic_packages] = $esim_thermodynamic_packages_list_data->thermodynamic_packages;
-	} //$esim_thermodynamic_packages_list_data = $esim_thermodynamic_packages_list->fetchObject()
-	return $esim_thermodynamic_packages;
-}*//*
-function _df_list_of_logical_block()
-{
-	$esim_logical_block = array();
-	$query = db_select('esim_circuit_simulation_logical_block');
-	$query->fields('esim_circuit_simulation_logical_block');
-	$query->orderBy('id', 'ASC');
-	$esim_logical_block_list = $query->execute();
-	while ($esim_logical_block_list_data = $esim_logical_block_list->fetchObject())
-	{
-		$esim_logical_block[$esim_logical_block_list_data->logical_block] = $esim_logical_block_list_data->logical_block;
-	} //$esim_logical_block_list_data = $esim_logical_block_list->fetchObject()
-	return $esim_logical_block;
-}*/
 function _df_list_of_states()
 {
 	$states = array(
@@ -839,19 +736,6 @@ function _df_list_of_departments()
 	} //$department_list_data = $department_list->fetchObject()
 	return $department;
 }
-/*function _df_list_of_software_version()
-{
-	$software_version = array();
-	$query = db_select('esim_software_version');
-	$query->fields('esim_software_version');
-	$query->orderBy('esim_version', 'ASC');
-	$software_version_list = $query->execute();
-	while ($software_version_list_data = $software_version_list->fetchObject())
-	{
-		$software_version[$software_version_list_data->esim_version] = $software_version_list_data->esim_version;
-	} //$software_version_list_data = $software_version_list->fetchObject()
-	return $software_version;
-}*/
 function _df_dir_name($project, $proposar_name)
 {
 	$project_title = ucname($project);
@@ -899,15 +783,6 @@ function DF_RenameDir($proposal_id, $dir_name)
 		drupal_set_message('Project directory name not present in databse');
 		return;
 	}
-	//var_dump($files);die;
-	/* if ($files != NULL)
-	{
-	$new_directory_name = rename(circuit_simulation_path() . $result->directory_name, circuit_simulation_path() . $dir_name) or drupal_set_message("Unable to rename folder");
-	}
-	else
-	{
-	$new_directory_name = 'Can not rename the directory. Directory not present';
-	}*/
 	return;
 }
 function CreateReadmeFileeSimCircuitSimulationProject($proposal_id)
@@ -992,36 +867,4 @@ function rrmdir($dir)
 		reset($objects);
 		rmdir($dir);
 	} //is_dir($dir)
-}
-function _circuit_simulation_list_of_user_defined_compound($proposal_id)
-{
-	$data = "";
-	//$query = db_select('esim_esim_circuit_simulation_user_defined_compound');
-	//$query->fields('circuit_simulation_user_defined_compound');
-	//$query->condition('proposal_id', $proposal_id, '=');
-	//$query->orderBy('user_defined_compound', 'ASC');
-	$user_defined_compound_list = db_query("SELECT * FROM esim_circuit_simulation_user_defined_compound WHERE proposal_id = :proposal_id", array(":proposal_id" => $proposal_id));
-	$headers = array(
-		"List of user defined compounds used in process circuit simulation",
-		"CAS No."
-	);
-	if($user_defined_compound_list){
-	$rows = array();
-	while ($row = $user_defined_compound_list->fetchObject())
-	{
-		$item = array(
-			"{$row->user_defined_compound}",
-			"{$row->cas_no}"
-		);
-		array_push($rows, $item);
-	} //$row = $user_defined_compound_list->fetchObject()
-	
-	$data .= theme('table', array(
-		'header' => $headers,
-		'rows' => $rows
-	));
-	}else{
-		$data .= "Not entered";
-	}
-	return $data;
 }
