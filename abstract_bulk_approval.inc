@@ -72,9 +72,6 @@ function ajax_bulk_circuit_simulation_abstract_details_callback($form, $form_sta
 	{
 		$commands[] = ajax_command_html('#ajax_selected_circuit_simulation', _circuit_simulation_details($circuit_simulation_project_default_value));
 		$form['circuit_simulation_actions']['#options'] = _bulk_list_circuit_simulation_actions();
-		//$form['lab_experiment_list']['#options'] = _ajax_bulk_get_experiment_list($lab_default_value);
-		// $commands[] = ajax_command_data('#ajax_selected_circuit_simulation', 'form_state_value_select', $form_state['values']['lab_experiment_list']);
-		// $commands[] = ajax_command_replace('#ajax_selected_experiment', drupal_render($form['lab_experiment_list']));
 		$commands[] = ajax_command_replace('#ajax_selected_circuit_simulation_action', drupal_render($form['circuit_simulation_actions']));
 	} //$circuit_simulation_project_default_value != 0
 	else
@@ -350,8 +347,6 @@ FOSSEE,IIT Bombay', array(
 						{
 							drupal_set_message(t("Lab directory not present : " . $dir_path . ". Skipping deleting lab directory."), 'status');
 						}
-						//deleting full proposal 
-						//$proposal_q = db_query("SELECT * FROM {circuit_simulation_abstract_proposal} WHERE id = %d", $form_state['values']['lab']);
 						$proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_abstract_proposal} WHERE id = :id", array(
 							":id" => $form_state['values']['lab']
 						));

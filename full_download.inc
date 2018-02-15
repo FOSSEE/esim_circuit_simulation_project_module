@@ -21,14 +21,6 @@ function circuit_simulation_download_full_project()
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $id);
 	$circuit_simulation_udc_q = $query->execute();
-	/*while ($circuit_simulation_udc_row = $circuit_simulation_udc_q->fetchObject()) {
-		if ($circuit_simulation_udc_row->samplefilepath != 'NULL') {
-			$REFERENCE_PATH = 'Reference_file/';
-			$str = substr($circuit_simulation_udc_row->samplefilepath,strrpos($circuit_simulation_udc_row->samplefilepath, '/'));
-		$resource_file =ltrim($str, '/');
-			$zip->addFile($root_path . $CIRCUITSIMULATION_PATH . $resource_file , $REFERENCE_PATH . str_replace(' ', '_', basename($resource_file)));
-		} //$CIRCUITSIMULATION_udc_row->user_defined_compound_filepath || $CIRCUITSIMULATION_udc_row->user_defined_compound_filepath != 'NULL'
-	}*/ //$CIRCUITSIMULATION_udc_row = $CIRCUITSIMULATION_udc_q->fetchObject()
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $id);
@@ -36,9 +28,7 @@ function circuit_simulation_download_full_project()
 	$query->fields('esim_circuit_simulation_submitted_abstracts_file');
 	$query->condition('proposal_id', $id);
 	$project_files = $query->execute();
-	//var_dump($root_path . $CIRCUITSIMULATION_PATH . 'project_files/');die;
 	while ($esim_project_files = $project_files->fetchObject()) {
-		//var_dump($esim_project_files);die;
 		$zip->addFile($root_path . $CIRCUITSIMULATION_PATH . 'project_files/' . $esim_project_files->filepath, $CIRCUITSIMULATION_PATH . str_replace(' ', '_', basename($esim_project_files->filename)));
 	}
 	$zip_file_count = $zip->numFiles;
@@ -94,14 +84,6 @@ function circuit_simulation_download_completed_project()
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $id);
 	$circuit_simulation_udc_q = $query->execute();
-	/*while ($circuit_simulation_udc_row = $circuit_simulation_udc_q->fetchObject()) {
-		if ($circuit_simulation_udc_row->samplefilepath != 'NULL') {
-			$REFERENCE_PATH = 'Reference_file/';
-			$str = substr($circuit_simulation_udc_row->samplefilepath,strrpos($circuit_simulation_udc_row->samplefilepath, '/'));
-		$resource_file =ltrim($str, '/');
-			$zip->addFile($root_path . $CIRCUITSIMULATION_PATH . $resource_file , $REFERENCE_PATH . str_replace(' ', '_', basename($resource_file)));
-		} //$CIRCUITSIMULATION_udc_row->user_defined_compound_filepath || $CIRCUITSIMULATION_udc_row->user_defined_compound_filepath != 'NULL'
-	}*/ //$CIRCUITSIMULATION_udc_row = $CIRCUITSIMULATION_udc_q->fetchObject()
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $id);

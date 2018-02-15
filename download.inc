@@ -28,30 +28,6 @@ function circuit_simulation_download_upload_file()
            ob_clean();
            flush();
 }
-/*function default_value_for_uploaded_files($filetype, $proposal_id)
-{
-	$query = db_select('esim_circuit_simulation_submitted_abstracts_file');
-	$query->fields('esim_circuit_simulation_submitted_abstracts_file');
-	$query->condition('proposal_id', $proposal_id);
-	$selected_files_array = "";
-	if ($filetype == "A")
-	{
-		$query->condition('filetype', $filetype);
-		$filetype_q = $query->execute()->fetchObject();
-		return $filetype_q;
-	} //$filetype == "A"
-	elseif ($filetype == "S")
-	{
-		$query->condition('filetype', $filetype);
-		$filetype_q = $query->execute()->fetchObject();
-		return $filetype_q;
-	}
-	else
-	{
-		return;
-	}
-	return;
-}*/
 function esim_circuit_simulation_project_files() {
 	$proposal_id = arg(3);
 	$root_path = circuit_simulation_document_path();
@@ -93,11 +69,6 @@ function circuit_simulation_download_solution_file()
 	$solution_files_q = db_query("SELECT lmsf.*, lmp.directory_name FROM esim_circuit_simulation_solution_files lmsf JOIN esim_circuit_simulation_solution lms JOIN esim_circuit_simulation_experiment lme JOIN esim_circuit_simulation_proposal lmp WHERE lms.id = lmsf.solution_id AND lme.id = lms.experiment_id AND lmp.id = lme.proposal_id AND lmsf.id = :solution_id LIMIT 1", array(
 		':solution_id' => $solution_file_id
 	));
-	/*$query = db_select(esim_'circuit_simulation_solution_files');
-	$query->fields('esim_circuit_simulation_solution_files');
-	$query->condition('id', $solution_file_id);
-	$query->range(0, 1);
-	$solution_files_q = $query->execute();*/
 	$solution_file_data = $solution_files_q->fetchObject();
 	header('Content-Type: ' . $solution_file_data->filemime);
 	//header('Content-Type: application/octet-stram');
@@ -125,28 +96,19 @@ function circuit_simulation_download_solution()
 {
 	$solution_id = arg(3);
 	$root_path = circuit_simulation_path();
-	/* get solution data */
-	//$solution_q = db_query("SELECT * FROM {esim_circuit_simulation_solution} WHERE id = %d", $solution_id);
 	$query = db_select('esim_circuit_simulation_solution');
 	$query->fields('esim_circuit_simulation_solution');
 	$query->condition('id', $solution_id);
 	$solution_q = $query->execute();
 	$solution_data = $solution_q->fetchObject();
-	//$experiment_q = db_query("SELECT * FROM {esim_circuit_simulation_experiment} WHERE id = %d", $solution_data->experiment_id);
 	$query = db_select('esim_circuit_simulation_experiment');
 	$query->fields('esim_circuit_simulation_experiment');
 	$query->condition('id', $solution_data->experiment_id);
 	$experiment_q = $query->execute();
 	$experiment_data = $experiment_q->fetchObject();
-	//$solution_files_q = db_query("SELECT * FROM {esim_circuit_simulation_solution_files} WHERE solution_id = %d", $solution_id);
-	/*$query = db_select('esim_esim_circuit_simulation_solution_files');
-	$query->fields('esim_circuit_simulation_solution_files');
-	$query->condition('solution_id', $solution_id);
-	$solution_files_q = $query->execute();*/
 	$solution_files_q = db_query("SELECT lmsf.*, lmp.directory_name FROM esim_circuit_simulation_solution_files lmsf JOIN esim_circuit_simulation_solution lms JOIN esim_circuit_simulation_experiment lme JOIN esim_circuit_simulation_proposal lmp WHERE lms.id = lmsf.solution_id AND lme.id = lms.experiment_id AND lmp.id = lme.proposal_id AND lmsf.id = :solution_id", array(
 		':solution_id' => $solution_id
 	));
-	//$solution_dependency_files_q = db_query("SELECT * FROM {circuit_simulation_solution_dependency} WHERE solution_id = %d", $solution_id);
 	$query = db_select('esim_esim_circuit_simulation_solution_dependency');
 	$query->fields('esim_circuit_simulation_solution_dependency');
 	$query->condition('solution_id', $solution_id);
@@ -164,7 +126,6 @@ function circuit_simulation_download_solution()
 	/* dependency files */
 	while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
 	{
-		//$dependency_file_data = (db_query("SELECT * FROM {circuit_simulation_dependency_files} WHERE id = %d LIMIT 1", $solution_dependency_files_row->dependency_id))->fetchObject();
 		$query = db_select('esim_circuit_simulation_dependency_files');
 		$query->fields('esim_circuit_simulation_dependency_files');
 		$query->condition('id', $solution_dependency_files_row->dependency_id);
@@ -197,7 +158,6 @@ function circuit_simulation_download_experiment()
 	$experiment_id = (int) arg(3);
 	$root_path = circuit_simulation_path();
 	/* get solution data */
-	//$experiment_q = db_query("SELECT * FROM {esim_circuit_simulation_experiment} WHERE id = %d", $experiment_id);
 	$query = db_select('esim_circuit_simulation_experiment');
 	$query->fields('esim_circuit_simulation_experiment');
 	$query->condition('id', $experiment_id);
@@ -209,7 +169,6 @@ function circuit_simulation_download_experiment()
 	/* creating zip archive on the server */
 	$zip = new ZipArchive;
 	$zip->open($zip_filename, ZipArchive::CREATE);
-	//$solution_q = db_query("SELECT * FROM {esim_circuit_simulation_solution} WHERE experiment_id = %d AND approval_status = 1", $experiment_id);
 	$query = db_select('esim_circuit_simulation_solution');
 	$query->fields('esim_circuit_simulation_solution');
 	$query->condition('experiment_id', $experiment_id);
@@ -218,15 +177,9 @@ function circuit_simulation_download_experiment()
 	while ($solution_row = $solution_q->fetchObject())
 	{
 		$CODE_PATH = 'CODE' . $solution_row->code_number . '/';
-		// $solution_files_q = db_query("SELECT * FROM {circuit_simulation_solution_files} WHERE solution_id = %d", $solution_row->id);
 		$solution_files_q = db_query("SELECT lmsf.*, lmp.directory_name FROM esim_circuit_simulation_solution_files lmsf JOIN esim_circuit_simulation_solution lms JOIN esim_circuit_simulation_experiment lme JOIN esim_circuit_simulation_proposal lmp WHERE lms.id = lmsf.solution_id AND lme.id = lms.experiment_id AND lmp.id = lme.proposal_id AND lmsf.solution_id = :solution_id", array(
 			':solution_id' => $solution_row->id
 		));
-		/* $query = db_select('esim_esim_circuit_simulation_solution_files');
-		$query->fields('esim_circuit_simulation_solution_files');
-		$query->condition('solution_id', $solution_row->id);
-		$solution_files_q = $query->execute();*/
-		// $solution_dependency_files_q = db_query("SELECT * FROM {circuit_simulation_solution_dependency} WHERE solution_id = %d", $solution_row->id);        
 		while ($solution_files_row = $solution_files_q->fetchObject())
 		{
 			$zip->addFile($root_path . $solution_files_row->directory_name . '/' . $solution_files_row->filepath, $EXP_PATH . $CODE_PATH . str_replace(' ', '_', ($solution_files_row->filename)));
@@ -238,7 +191,6 @@ function circuit_simulation_download_experiment()
 		$solution_dependency_files_q = $query->execute();
 		while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
 		{
-			//$dependency_file_data = (db_query("SELECT * FROM {circuit_simulation_dependency_files} WHERE id = %d LIMIT 1", $solution_dependency_files_row->dependency_id))->fetchObject();
 			$query = db_select('esim_circuit_simulation_dependency_files');
 			$query->fields('esim_circuit_simulation_dependency_files');
 			$query->condition('id', $solution_dependency_files_row->dependency_id);
@@ -272,8 +224,6 @@ function circuit_simulation_download_lab()
 	global $user;
 	$lab_id = arg(3);
 	$root_path = circuit_simulation_path();
-	/* get solution data */
-	//$lab_q = db_query("SELECT * FROM {circuit_simulation_proposal} WHERE id = %d", $lab_id);
 	$query = db_select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('id', $lab_id);
@@ -285,7 +235,6 @@ function circuit_simulation_download_lab()
 	/* creating zip archive on the server */
 	$zip = new ZipArchive();
 	$zip->open($zip_filename, ZipArchive::CREATE);
-	//$experiment_q = db_query("SELECT * FROM {circuit_simulation_experiment} WHERE proposal_id = %d", $lab_id);
 	$query = db_select('esim_circuit_simulation_experiment');
 	$query->fields('esim_circuit_simulation_experiment');
 	$query->condition('proposal_id', $lab_id);
@@ -306,11 +255,6 @@ function circuit_simulation_download_lab()
 			$solution_files_q = db_query("SELECT lmsf.*, lmp.directory_name FROM esim_circuit_simulation_solution_files lmsf JOIN esim_circuit_simulation_solution lms JOIN esim_circuit_simulation_experiment lme JOIN esim_circuit_simulation_proposal lmp WHERE lms.id = lmsf.solution_id AND lme.id = lms.experiment_id AND lmp.id = lme.proposal_id AND lmsf.id = :solution_id", array(
 				':solution_id' => $solution_row->id
 			));
-			/*$query = db_select('esim_esim_circuit_simulation_solution_files');
-			$query->fields('esim_circuit_simulation_solution_files');
-			$query->condition('solution_id', $solution_row->id);
-			$solution_files_q = $query->execute();*/
-			//$solution_dependency_files_q = db_query("SELECT * FROM {circuit_simulation_solution_dependency} WHERE solution_id = %d", $solution_row->id);
 			$query = db_select('esim_circuit_simulation_solution_dependency');
 			$query->fields('esim_circuit_simulation_solution_dependency');
 			$query->condition('solution_id', $solution_row->id);
