@@ -439,6 +439,7 @@ function _circuit_simulation_details($circuit_simulation_proposal_id)
 	$query_pro->fields('esim_circuit_simulation_proposal');
 	$query_pro->condition('id', $circuit_simulation_proposal_id);
 	$abstracts_pro = $query_pro->execute()->fetchObject();
+	//var_dump($abstracts_pro);die;
 	$query_pdf = db_select('esim_circuit_simulation_submitted_abstracts_file');
 	$query_pdf->fields('esim_circuit_simulation_submitted_abstracts_file');
 	$query_pdf->condition('proposal_id', $circuit_simulation_proposal_id);
@@ -498,6 +499,7 @@ function _circuit_simulation_details($circuit_simulation_proposal_id)
 	$return_html .= '<strong>Title of the Circuit Simulation Project:</strong><br />' . $abstracts_pro->project_title . '<br /><br />';
 	$return_html .= '<strong>Uploaded an abstract (brief outline) of the project:</strong><br />' . $abstract_filename . '<br /><br />';
 	$return_html .= '<strong>Upload the eSim circuit simulation for the developed process:</strong><br />' . $abstracts_query_process_filename . '<br /><br />';
+	$return_html .= '<strong>Project under FOSSEE Summer Fellowship 2018:</strong><br />' . $abstracts_pro->fellowship . '<br /><br />';
 	$return_html .= $download_circuit_simulation;
 	return $return_html;
 }

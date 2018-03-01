@@ -256,6 +256,15 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 		)
 
 	);
+	$form['fellowship'] = array(
+		'#type' => 'radios',
+		'#title' => t('If you are applying for FOSSEE Summer Fellowship 2018 - eSim Screening level Task 1, select Yes.(To know more about the FOSSEE Summer Fellowship 2018 <a href="https://fossee.in/fellowship/" target="_blank">Click here</a>)'),
+		'#options' => array(
+			'1' => 'Yes',
+			'2' => 'No'
+		),
+		'#required' => TRUE
+	);
 	$form['term_condition'] = array(
 		'#type' => 'checkboxes',
 		'#title' => t('Terms And Conditions'),
@@ -416,6 +425,7 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
 	$university = $v['university'];
 	$month_year_of_degree = $v['month_year_of_degree'];
 	$directory_name = _df_dir_name($project_title, $proposar_name);
+	if($form_state['values']['fellowship'] == 1){
 	$result = "INSERT INTO {esim_circuit_simulation_proposal} 
     (
     uid, 
@@ -440,7 +450,8 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
     creation_date, 
     approval_date,
     samplefilepath,
-    reference
+    reference,
+    fellowship
     ) VALUES
     (
     :uid, 
@@ -465,7 +476,8 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
     :creation_date, 
     :approval_date,
     :samplefilepath,
-    :reference
+    :reference,
+    :fellowship
     )";
 	$args = array(
 		":uid" => $user->uid,
@@ -490,8 +502,91 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
 		":creation_date" => time(),
 		":approval_date" => 0,
 		":samplefilepath" => "",
-		":reference" => $v['reference']
+		":reference" => $v['reference'],
+		":fellowship" => 'Yes'
 		);
+}
+else if ($form_state['values']['fellowship'] == 2){
+	$result = "INSERT INTO {esim_circuit_simulation_proposal} 
+    (
+    uid, 
+    approver_uid,
+    name_title, 
+    contributor_name,
+    contact_no,
+    university,
+    city, 
+    pincode, 
+    state, 
+    country,
+    project_guide_name,
+    project_guide_email_id,
+    project_title, 
+    description,
+    operating_system,
+    directory_name,
+    approval_status,
+    is_completed, 
+    dissapproval_reason,
+    creation_date, 
+    approval_date,
+    samplefilepath,
+    reference,
+    fellowship
+    ) VALUES
+    (
+    :uid, 
+    :approver_uid, 
+    :name_title, 
+    :contributor_name, 
+    :contact_no,
+    :university, 
+    :city, 
+    :pincode, 
+    :state,  
+    :country,
+    :project_guide_name,
+    :project_guide_email_id,
+    :project_title, 
+    :description,
+    :operating_system,
+    :directory_name,
+    :approval_status,
+    :is_completed, 
+    :dissapproval_reason,
+    :creation_date, 
+    :approval_date,
+    :samplefilepath,
+    :reference,
+    :fellowship
+    )";
+	$args = array(
+		":uid" => $user->uid,
+		":approver_uid" => 0,
+		":name_title" => $v['name_title'],
+		":contributor_name" => _df_sentence_case(trim($v['contributor_name'])),
+		":contact_no" => $v['contributor_contact_no'],
+		":university" => _df_sentence_case($v['university']),
+		":city" => $v['city'],
+		":pincode" => $v['pincode'],
+		":state" => $v['all_state'],
+		":country" => $v['country'],
+		":project_guide_name" => _df_sentence_case($v['project_guide_name']),
+		":project_guide_email_id" => trim($v['project_guide_email_id']),
+		":project_title" => _df_sentence_case($v['project_title']),
+		":description" => _df_sentence_case($v['description']),
+		":operating_system" =>$v['operating_system'],
+		":directory_name" => $directory_name,
+		":approval_status" => 0,
+		":is_completed" => 0,
+		":dissapproval_reason" => "NULL",
+		":creation_date" => time(),
+		":approval_date" => 0,
+		":samplefilepath" => "",
+		":reference" => $v['reference'],
+		":fellowship" => 'No'
+		);
+}
 	//	var_dump($args);die;
 	//var_dump($result);die;
 	$result1 = db_query($result, $args, array(
