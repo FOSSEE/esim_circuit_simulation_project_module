@@ -418,11 +418,11 @@ function circuit_simulation_menu()
 	$items['circuit-simulation-project/certificates'] = array(
 		'title' => 'List of Circuit Simulation Certificates',
 		'description' => 'List of circuit simulation Certificates',
-		'page callback' => '_list_circuit simulation_certificates',
+		'page callback' => '_list_circuit_simulation_certificates',
 		'access arguments' => array(
 			'list circuit simulation certificates'
 		),
-		'file' => 'pdf/list_circuit simulation_certificate.inc'
+		'file' => 'pdf/list_circuit_simulation_certificate.inc'
 	);
 	$items['circuit-simulation-project/certificates/generate-pdf'] = array(
 		'title' => 'Download Certificate',
