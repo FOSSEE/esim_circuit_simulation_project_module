@@ -80,8 +80,7 @@ function circuit_simulation_proposal_all()
 			$proposal_data->project_title,
 			$actual_completion_date,
 			$approval_status,
-			l('Status', 'circuit-simulation-project/manage-proposal/status/' . $proposal_data->id) . ' | ' . l('Edit', 'circuit-simulation-project/manage-proposal/edit/' . $proposal_data->id),
-			$proposal_data->fellowship
+			l('Status', 'circuit-simulation-project/manage-proposal/status/' . $proposal_data->id) . ' | ' . l('Edit', 'circuit-simulation-project/manage-proposal/edit/' . $proposal_data->id)
 		);
 	} //$proposal_data = $proposal_q->fetchObject()
 	/* check if there are any pending proposals */
@@ -96,8 +95,7 @@ function circuit_simulation_proposal_all()
 		'Title of the circuit-simulation project',
 		'Date of Completion',
 		'Status',
-		'Action',
-		'Fellowship Project'
+		'Action'
 	);
 	$output = theme('table', array(
 		'header' => $proposal_header,
@@ -246,10 +244,6 @@ function circuit_simulation_proposal_approval_form($form, &$form_state)
 			'#markup' => "Not uploaded<br><br>"
 		);
 	}
-	$form['fellowship'] = array(
-		'#type' => 'item',
-		'#title' => t('Project under FOSSEE Summer Fellowship 2018'),
-		'#markup' => $proposal_data->fellowship );
 	$form['approval'] = array(
 		'#type' => 'radios',
 		'#title' => t('eSim circuit-simulation proposal'),
