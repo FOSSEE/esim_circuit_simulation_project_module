@@ -60,8 +60,8 @@ function verify_certificates_form_submit($form, &$form_state)
 }
 function verify_qrcode_fromdb($qr_code)
 {
-	$query = db_select('dwsim_flowsheet_qr_code');
-	$query->fields('dwsim_flowsheet_qr_code', array(
+	$query = db_select('esim_circuit_simulation_qr_code');
+	$query->fields('esim_circuit_simulation_qr_code', array(
 		'proposal_id'
 	));
 	$query->condition('qr_code', $qr_code);
@@ -69,11 +69,11 @@ function verify_qrcode_fromdb($qr_code)
 	$proposal_id = $result->fetchObject()->proposal_id;
 	if ($proposal_id)
 	{
-		$query2 = db_query("SELECT * FROM {dwsim_flowsheet_proposal} WHERE approval_status=3", array(
+		$query2 = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE approval_status=3", array(
 		':uid' => $proposal_id
 		));
 		$data2 = $query2->fetchObject();
-		$query3 = db_query("SELECT * FROM dwsim_flowsheet_proposal WHERE approval_status=3 AND id=:uid", array(
+		$query3 = db_query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND id=:uid", array(
 		':uid' => $proposal_id
 	));
 	$data3 = $query3->fetchObject();
@@ -85,7 +85,7 @@ function verify_qrcode_fromdb($qr_code)
 		$page_content .= "<h4>Participation Details</h4><table><tr><td>Name</td>";
 		$page_content .= "<td>" . $data3->contributor_name . "</td></tr>";
 		$page_content .= "<tr><td>Project</td>";
-		$page_content .= "<td>DWSIM Flowsheeting Project</td></tr>";
+		$page_content .= "<td>Circuit Simulation Project</td></tr>";
 		$page_content .= "<tr><td>Flowsheets completed</td>";
 		$page_content .= "<td>" . $data3->project_title . "</td></tr>";
 		//$page_content .= "<tr><td>Book Author</td>";

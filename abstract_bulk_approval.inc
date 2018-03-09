@@ -292,7 +292,7 @@ FOSSEE,IIT Bombay', array(
 					// email 
 					
 				} //$form_state['values']['circuit_simulation_actions'] == 3
-				elseif ($form_state['values']['circuit_simulation_actions'] == 4)
+				/*elseif ($form_state['values']['circuit_simulation_actions'] == 4)
 				{
 					if (strlen(trim($form_state['values']['message'])) <= 30)
 					{
@@ -398,7 +398,7 @@ FOSSEE,IIT Bombay', array(
 				else
 				{
 					$msg = drupal_set_message(t('You do not have permission to bulk manage code.'), 'error');
-				}
+				}*/
 			} //user_access('circuit_simulation project bulk manage code')
 		return $msg;
 	} //$form_state['clicked_button']['#value'] == 'Submit'
