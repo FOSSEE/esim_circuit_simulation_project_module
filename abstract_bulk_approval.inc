@@ -292,7 +292,7 @@ FOSSEE,IIT Bombay', array(
 					// email 
 					
 				} //$form_state['values']['circuit_simulation_actions'] == 3
-				elseif ($form_state['values']['circuit_simulation_actions'] == 4)
+				/*elseif ($form_state['values']['circuit_simulation_actions'] == 4)
 				{
 					if (strlen(trim($form_state['values']['message'])) <= 30)
 					{
@@ -398,7 +398,7 @@ FOSSEE,IIT Bombay', array(
 				else
 				{
 					$msg = drupal_set_message(t('You do not have permission to bulk manage code.'), 'error');
-				}
+				}*/
 			} //user_access('circuit_simulation project bulk manage code')
 		return $msg;
 	} //$form_state['clicked_button']['#value'] == 'Submit'
@@ -499,7 +499,6 @@ function _circuit_simulation_details($circuit_simulation_proposal_id)
 	$return_html .= '<strong>Title of the Circuit Simulation Project:</strong><br />' . $abstracts_pro->project_title . '<br /><br />';
 	$return_html .= '<strong>Uploaded an abstract (brief outline) of the project:</strong><br />' . $abstract_filename . '<br /><br />';
 	$return_html .= '<strong>Upload the eSim circuit simulation for the developed process:</strong><br />' . $abstracts_query_process_filename . '<br /><br />';
-	$return_html .= '<strong>Project under FOSSEE Summer Fellowship 2018:</strong><br />' . $abstracts_pro->fellowship . '<br /><br />';
 	$return_html .= $download_circuit_simulation;
 	return $return_html;
 }

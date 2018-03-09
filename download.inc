@@ -11,7 +11,7 @@ function circuit_simulation_download_upload_file()
 	$result = $query->execute();
 	$circuit_simulation_upload_file = $result->fetchObject();
 	$samplecodename = substr($circuit_simulation_upload_file->samplefilepath, strrpos($circuit_simulation_upload_file->samplefilepath, '/') + 1);
-	ob_clean();
+			ob_clean();
             header("Pragma: public");
             header("Expires: 0");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -60,7 +60,7 @@ function esim_circuit_simulation_project_files() {
 	ob_end_flush();
 	ob_clean();
 }
-
+/*
 function circuit_simulation_download_solution_file()
 {
 	$solution_file_id = arg(3);
@@ -115,16 +115,16 @@ function circuit_simulation_download_solution()
 	$solution_dependency_files_q = $query->execute();
 	$CODE_PATH = 'CODE' . $solution_data->code_number . '/';
 	/* zip filename */
-	$zip_filename = $root_path . 'zip-' . time() . '-' . rand(0, 999999) . '.zip';
+	//$zip_filename = $root_path . 'zip-' . time() . '-' . rand(0, 999999) . '.zip';
 	/* creating zip archive on the server */
-	$zip = new ZipArchive;
+	/*$zip = new ZipArchive;
 	$zip->open($zip_filename, ZipArchive::CREATE);
 	while ($solution_files_row = $solution_files_q->fetchObject())
 	{
 		$zip->addFile($root_path . $solution_files_row->directory_name . '/' . $solution_files_row->filepath, $CODE_PATH . str_replace(' ', '_', ($solution_files_row->filename)));
 	} //$solution_files_row = $solution_files_q->fetchObject()
 	/* dependency files */
-	while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
+	/*while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
 	{
 		$query = db_select('esim_circuit_simulation_dependency_files');
 		$query->fields('esim_circuit_simulation_dependency_files');
@@ -139,7 +139,7 @@ function circuit_simulation_download_solution()
 	if ($zip_file_count > 0)
 	{
 		/* download zip file */
-		header('Content-Type: application/zip');
+		/*header('Content-Type: application/zip');
 		header('Content-disposition: attachment; filename="CODE' . $solution_data->code_number . '.zip"');
 		header('Content-Length: ' . filesize($zip_filename));
 		ob_clean();
@@ -158,16 +158,16 @@ function circuit_simulation_download_experiment()
 	$experiment_id = (int) arg(3);
 	$root_path = circuit_simulation_path();
 	/* get solution data */
-	$query = db_select('esim_circuit_simulation_experiment');
+/*	$query = db_select('esim_circuit_simulation_experiment');
 	$query->fields('esim_circuit_simulation_experiment');
 	$query->condition('id', $experiment_id);
 	$experiment_q = $query->execute();
 	$experiment_data = $experiment_q->fetchObject();
 	$EXP_PATH = 'EXP' . $experiment_data->number . '/';
 	/* zip filename */
-	$zip_filename = $root_path . 'zip-' . time() . '-' . rand(0, 999999) . '.zip';
+	//$zip_filename = $root_path . 'zip-' . time() . '-' . rand(0, 999999) . '.zip';
 	/* creating zip archive on the server */
-	$zip = new ZipArchive;
+	/*$zip = new ZipArchive;
 	$zip->open($zip_filename, ZipArchive::CREATE);
 	$query = db_select('esim_circuit_simulation_solution');
 	$query->fields('esim_circuit_simulation_solution');
@@ -185,7 +185,7 @@ function circuit_simulation_download_experiment()
 			$zip->addFile($root_path . $solution_files_row->directory_name . '/' . $solution_files_row->filepath, $EXP_PATH . $CODE_PATH . str_replace(' ', '_', ($solution_files_row->filename)));
 		} //$solution_files_row = $solution_files_q->fetchObject()
 		/* dependency files */
-		$query = db_select('esim_circuit_simulation_solution_dependency');
+	/*	$query = db_select('esim_circuit_simulation_solution_dependency');
 		$query->fields('esim_circuit_simulation_solution_dependency');
 		$query->condition('solution_id', $solution_row->id);
 		$solution_dependency_files_q = $query->execute();
@@ -205,7 +205,7 @@ function circuit_simulation_download_experiment()
 	if ($zip_file_count > 0)
 	{
 		/* download zip file */
-		header('Content-Type: application/zip');
+	/*	header('Content-Type: application/zip');
 		header('Content-disposition: attachment; filename="EXP' . $experiment_data->number . '.zip"');
 		header('Content-Length: ' . filesize($zip_filename));
 		ob_clean();
@@ -231,9 +231,9 @@ function circuit_simulation_download_lab()
 	$lab_data = $lab_q->fetchObject();
 	$LAB_PATH = $lab_data->lab_title . '/';
 	/* zip filename */
-	$zip_filename = $root_path . 'zip-' . time() . '-' . rand(0, 999999) . '.zip';
+//	$zip_filename = $root_path . 'zip-' . time() . '-' . rand(0, 999999) . '.zip';
 	/* creating zip archive on the server */
-	$zip = new ZipArchive();
+/*	$zip = new ZipArchive();
 	$zip->open($zip_filename, ZipArchive::CREATE);
 	$query = db_select('esim_circuit_simulation_experiment');
 	$query->fields('esim_circuit_simulation_experiment');
@@ -266,7 +266,7 @@ function circuit_simulation_download_lab()
 			} //$solution_files_row = $solution_files_q->fetchObject()
 			// die;
 			/* dependency files */
-			while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
+	/*		while ($solution_dependency_files_row = $solution_dependency_files_q->fetchObject())
 			{
 				//$dependency_file_data = (db_query("SELECT * FROM {circuit_simulation_dependency_files} WHERE id = %d LIMIT 1", $solution_dependency_files_row->dependency_id))->fetchObject();
 				$query = db_select('esim_circuit_simulation_dependency_files');
@@ -286,7 +286,7 @@ function circuit_simulation_download_lab()
 		if ($user->uid)
 		{
 			/* download zip file */
-			header('Content-Type: application/zip');
+/*			header('Content-Type: application/zip');
 			header('Content-disposition: attachment; filename="' . str_replace(' ', '_', $lab_data->lab_title) . '.zip"');
 			header('Content-Length: ' . filesize($zip_filename));
 			ob_clean();
@@ -314,4 +314,4 @@ function circuit_simulation_download_lab()
 		drupal_set_message("There are no solutions in this Lab to download", 'error');
 		drupal_goto('lab-migration/lab-migration-run');
 	}
-}
+}*/

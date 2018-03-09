@@ -520,7 +520,7 @@ function circuit_simulation_permission()
 	// return array('esim circuit simulation create proposal', 'esim circuit simulation manage proposal', 'esim circuit simulation edit proposal', 'esim circuit simulation approve proposal', 'esim circuit simulation propose solution', 'esim circuit simulation approve code', 'esim circuit simulation bulk manage abstract', 'esim circuit simulation bulk delete code', 'esim circuit simulation upload code', 'esim circuit simulation download code', 'administer esim circuit simulation', 'esim circuit simulation generate lab');
 }
 /* AJAX CALLS */
-function circuit_simulation_ajax()
+/*function circuit_simulation_ajax()
 {
 	$query_type = arg(2);
 	if ($query_type == 'chapter_title')
@@ -577,7 +577,7 @@ function circuit_simulation_ajax()
 		} //$example_data = $example_q->fetchObject()
 	} //$query_type == 'example_exists'
 	echo '';
-}
+}*/
 /*************************** VALIDATION FUNCTIONS *****************************/
 function circuit_simulation_check_valid_filename($file_name)
 {
