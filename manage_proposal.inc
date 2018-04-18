@@ -863,7 +863,7 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		$bcc = variable_get('circuit_simulation_emails', '');
 		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
-		$params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->uid;
+		$params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->id;
 		$params['circuit_simulation_proposal_deleted']['headers'] = array(
 			'From' => $from,
 			'MIME-Version' => '1.0',

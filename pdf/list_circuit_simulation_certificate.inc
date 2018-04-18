@@ -9,7 +9,7 @@ function _list_circuit_simulation_certificates()
 	//var_dump($exist_id->id);die;
 	if ($exist_id){
 	if ($exist_id->id) {
-		if ($exist_id->id < 3) {
+		if ($exist_id->id < 2) {
 			drupal_set_message('<strong>You need to propose a <a href="https://esim.fossee.in/circuit-simulation-project/proposal">Circuit Simulation Proposal</a></strong> or if you have already proposed then your Circuit Simulation is under reviewing process', 'status');
 			return '';
 		} //$exist_id->id < 3
