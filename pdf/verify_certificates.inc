@@ -86,7 +86,7 @@ function verify_qrcode_fromdb($qr_code)
 		$page_content .= "<td>" . $data3->contributor_name . "</td></tr>";
 		$page_content .= "<tr><td>Project</td>";
 		$page_content .= "<td>Circuit Simulation Project</td></tr>";
-		$page_content .= "<tr><td>Flowsheets completed</td>";
+		$page_content .= "<tr><td>Circuits completed</td>";
 		$page_content .= "<td>" . $data3->project_title . "</td></tr>";
 		//$page_content .= "<tr><td>Book Author</td>";
 		//$page_content .= "<td>" . $data2->author . "</td></tr>";
