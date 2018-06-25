@@ -425,7 +425,7 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 		'#markup' => user_load($proposal_data->uid)->mail,
 		'#title' => t('Email')
 	);
-	$form['month_year_of_degree'] = array(
+	/*$form['month_year_of_degree'] = array(
 		'#type' => 'date_popup',
 		'#title' => t('Month and year of award of degree'),
 		'#date_label_position' => '',
@@ -438,7 +438,7 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 			'maxDate' => 0
 		),
 		'#disabled' => TRUE
-	);
+	);*/
 	$form['university'] = array(
 		'#type' => 'item',
 		'#markup' => $proposal_data->university,
@@ -863,7 +863,7 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		$bcc = variable_get('circuit_simulation_emails', '');
 		$cc = variable_get('circuit_simulation_cc_emails', '');
 		$params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
-		$params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->id;
+		$params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->uid;
 		$params['circuit_simulation_proposal_deleted']['headers'] = array(
 			'From' => $from,
 			'MIME-Version' => '1.0',
