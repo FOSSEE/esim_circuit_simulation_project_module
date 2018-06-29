@@ -134,7 +134,7 @@ FOSSEE,IIT Bombay', array(
 			break;
 		case 'circuit_simulation_proposal_approved':
 			/* initializing data */
-			$url = 'http://esim.fossee.in/circuit-simulation-project/project-upload';
+			$url = 'http://esim.fossee.in/circuit-simulation-project/abstract-code';
 			$query = db_select('esim_circuit_simulation_proposal');
 			$query->fields('esim_circuit_simulation_proposal');
 			$query->condition('id', $params['circuit_simulation_proposal_approved']['proposal_id']);
