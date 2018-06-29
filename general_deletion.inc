@@ -29,7 +29,7 @@ function circuit_simulation_abstract_delete_project($proposal_id)
 		}
 		else
 		{
-			drupal_set_message('Invalid flowsheet project abstract.', 'error');
+			drupal_set_message('Invalid circuit simulation project abstract.', 'error');
 		}
 		db_delete('esim_circuit_simulation_submitted_abstracts_file')->condition('proposal_id', $proposal_id)->execute();
 		//!dwsim_flowsheet_delete_abstract_file($abstract_data->id)
