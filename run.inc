@@ -19,7 +19,7 @@ function circuit_simulation_run_form($form, &$form_state)
 	$form = array();
 	$form['circuit_simulation'] = array(
 		'#type' => 'select',
-		'#title' => t('Title of the circuit_simulation'),
+		'#title' => t('Title of the Circuit Simulation'),
 		'#options' => _list_of_circuit_simulation(),
 		'#default_value' => $selected,
 		'#ajax' => array(
@@ -143,7 +143,7 @@ function _circuit_simulation_details($circuit_simulation_default_value)
 		}else{
 		$reference = 'Not provided';
 		}
-		$form['circuit_simulation_details']['#markup'] = '<span style="color: rgb(128, 0, 0);"><strong>About the Circuit Simulation</strong></span></td><td style="width: 35%;"><br />' . '<ul>' . '<li><strong>Proposer Name:</strong> ' . $circuit_simulation_details->name_title . ' ' . $circuit_simulation_details->contributor_name . '</li>' . '<li><strong>Title of the Flowhseet:</strong> ' . l($circuit_simulation_details->project_title,'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</li>' . '<li><strong>University:</strong> ' . $circuit_simulation_details->university . '</li>' . '<li>'.'<strong>Reference:</strong> ' . $reference .'</li>'.'</ul>';
+		$form['circuit_simulation_details']['#markup'] = '<span style="color: rgb(128, 0, 0);"><strong>About the Circuit Simulation</strong></span></td><td style="width: 35%;"><br />' . '<ul>' . '<li><strong>Proposer Name:</strong> ' . $circuit_simulation_details->name_title . ' ' . $circuit_simulation_details->contributor_name . '</li>' . '<li><strong>Title of the Circuit Simulation:</strong> ' . l($circuit_simulation_details->project_title,'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</li>' . '<li><strong>University:</strong> ' . $circuit_simulation_details->university . '</li>' . '<li>'.'<strong>Reference:</strong> ' . $reference .'</li>'.'</ul>';
 		$details = $form['circuit_simulation_details']['#markup'];
 		return $details;
 	} //$circuit_simulation_default_value != 0
