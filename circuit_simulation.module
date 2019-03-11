@@ -437,6 +437,28 @@ function circuit_simulation_menu()
 		),
 		'file' => 'pdf/cert_new.inc'
 	);
+	$items['circuit-simulation-project/certificates-custom'] = array(
+		'title' => 'List of Circuit Simulation Custom Certificates',
+		'description' => 'List of circuit simulation Custom Certificates',
+		'page callback' => '_list_circuit_simulation_custom_certificates',
+		'access arguments' => array(
+			'list circuit simulation custom certificates'
+		),
+		'file' => 'pdf/list_mentor_certificates.inc'
+	);
+	$items['circuit-simulation-project/certificates-custom/pdf'] = array(
+		'title' => 'Download Certificate',
+		'description' => 'Download Certificate',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array(
+			'generate_pdf'
+		),
+		'type' => MENU_CALLBACK,
+		'access arguments' => array(
+			'generate pdf'
+		),
+		'file' => 'pdf/mentor_cert_pdf.inc'
+	);
 	$items['circuit-simulation-project/certificates/verify'] = array(
 		"title" => "Certificate Verification",
 		"page callback" => "verify_certificates",
@@ -508,6 +530,11 @@ function circuit_simulation_permission()
 		"list circuit simulation certificates" => array(
 			"title" => t("list the certificates"),
 			"description" => t("list the certificates"),
+			'restrict access' => TRUE
+		),
+		"list circuit simulation custom certificates" => array(
+			"title" => t("list the mentor certificates"),
+			"description" => t("list the mentor certificates"),
 			'restrict access' => TRUE
 		),
 		"verify certificates" => array(
