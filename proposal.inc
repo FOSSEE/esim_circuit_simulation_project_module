@@ -414,16 +414,15 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
 		drupal_set_message('It is mandatory to login on this website to access the proposal form', 'error');
 		return;
 	} //!$user->uid
-	if ($form_state['values']['version'] == 'Old version')
+	/*if ($form_state['values']['version'] == 'Old version')
 	{
 		$form_state['values']['version'] = trim($form_state['values']['older']);
-	} //$form_state['values']['version'] == 'Old version'
+	} *///$form_state['values']['version'] == 'Old version'
 	/* inserting the user proposal */
 	$v = $form_state["values"];
 	$project_title = trim($v['project_title']);
 	$proposar_name = $v['name_title'] . ' ' . $v['contributor_name'];
 	$university = $v['university'];
-	$month_year_of_degree = $v['month_year_of_degree'];
 	$directory_name = _df_dir_name($project_title, $proposar_name);
 	$result = "INSERT INTO {esim_circuit_simulation_proposal} 
     (

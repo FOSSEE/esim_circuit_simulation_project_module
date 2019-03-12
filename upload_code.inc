@@ -16,15 +16,6 @@ function circuit_simulation_abstract()
 	$query->fields('esim_circuit_simulation_submitted_abstracts');
 	$query->condition('proposal_id', $proposal_data->id);
 	$abstracts_q = $query->execute()->fetchObject();
-	/*if ($abstracts_q)
-	{
-		if ($abstracts_q->is_submitted == 1)
-		{
-			drupal_set_message(t('You have already submited your project files, hence you can not upload more code, for any query please write to us.'), 'error', $repeat = FALSE);
-			//drupal_goto('circuit-simulation-project/abstract-code');
-			//return;
-		} //$abstracts_q->is_submitted == 1
-	}*/ //$abstracts_q
 	$query_pro = db_select('esim_circuit_simulation_proposal');
 	$query_pro->fields('esim_circuit_simulation_proposal');
 	$query_pro->condition('id', $proposal_data->id);
