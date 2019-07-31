@@ -24,9 +24,9 @@ function circuit_simulation_download_upload_file()
             header('Expires: 0');
             header('Pragma: no-cache');
             readfile($root_path . $circuit_simulation_upload_file->samplefilepath);
-	        ob_end_flush();
+	        //ob_end_flush();
            ob_clean();
-           flush();
+           //flush();
 }
 function esim_circuit_simulation_project_files() {
 	$proposal_id = arg(3);
