@@ -23,9 +23,10 @@ function circuit_simulation_download_upload_file()
             header("Content-Transfer-Encoding: binary");
             header('Expires: 0');
             header('Pragma: no-cache');
+            ob_clean();
             readfile($root_path . $circuit_simulation_upload_file->samplefilepath);
 	        //ob_end_flush();
-           ob_clean();
+           
            //flush();
 }
 function esim_circuit_simulation_project_files() {
@@ -56,9 +57,10 @@ function esim_circuit_simulation_project_files() {
 	header("Content-Transfer-Encoding: binary");
 	header("Expires: 0");
 	header("Pragma: no-cache");
+	ob_clean();
 	readfile($root_path . $directory_name . $samplecodename);
 	//ob_end_flush();
-	ob_clean();
+	//ob_clean();
 }
 /*
 function circuit_simulation_download_solution_file()
