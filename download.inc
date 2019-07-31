@@ -57,7 +57,7 @@ function esim_circuit_simulation_project_files() {
 	header("Expires: 0");
 	header("Pragma: no-cache");
 	readfile($root_path . $directory_name . $samplecodename);
-	ob_end_flush();
+	//ob_end_flush();
 	ob_clean();
 }
 /*

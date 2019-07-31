@@ -1,4 +1,5 @@
 <?php
+
 // $Id$
 function circuit_simulation_download_full_project()
 {
@@ -39,11 +40,13 @@ function circuit_simulation_download_full_project()
 			header('Content-Type: application/zip');
 			header('Content-disposition: attachment; filename="' . str_replace(' ', '_', $circuit_simulation_data->project_title) . '.zip"');
 			header('Content-Length: ' . filesize($zip_filename));
-			ob_end_flush();
 			ob_clean();
-			flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
+			/*flush();
+			ob_end_flush();
+			ob_clean();*/
+			
 		} //$user->uid
 		else {
 			header('Content-Type: application/zip');
@@ -52,9 +55,9 @@ function circuit_simulation_download_full_project()
 			header("Content-Transfer-Encoding: binary");
 			header('Expires: 0');
 			header('Pragma: no-cache');
-			ob_end_flush();
+			//ob_end_flush();
 			ob_clean();
-			flush();
+			//flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
 		}
@@ -103,9 +106,9 @@ function circuit_simulation_download_completed_project()
 			header('Content-Type: application/zip');
 			header('Content-disposition: attachment; filename="' . str_replace(' ', '_', $circuit_simulation_data->project_title) . '.zip"');
 			header('Content-Length: ' . filesize($zip_filename));
-			ob_end_flush();
+			//ob_end_flush();
 			ob_clean();
-			flush();
+			//flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
 		} //$user->uid
@@ -116,9 +119,9 @@ function circuit_simulation_download_completed_project()
 			header("Content-Transfer-Encoding: binary");
 			header('Expires: 0');
 			header('Pragma: no-cache');
-			ob_end_flush();
+			//ob_end_flush();
 			ob_clean();
-			flush();
+			//flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
 		}
