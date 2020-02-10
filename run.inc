@@ -44,7 +44,7 @@ function circuit_simulation_run_form($form, &$form_state)
 		);
 		$form['selected_circuit_simulation'] = array(
 			'#type' => 'item',
-			'#markup' => '<div id="ajax_selected_circuit_simulation">' . l('Download Circuit Simulation', 'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</div>'
+			'#markup' => '<div id="ajax_selected_circuit_simulation">' . l('Download Abstract', "circuit-simulation-project/download/project-file/" . $circuit_simulation_default_value) . '<br>' . l('Download Circuit Simulation', 'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</div>'
 		);
 	}
 	return $form;
@@ -58,7 +58,7 @@ function circuit_simulation_project_details_callback($form, $form_state)
 		$circuit_simulation_details = _circuit_simulation_information($circuit_simulation_default_value);
 		$provider = user_load($circuit_simulation_details->uid);
 		if ($circuit_simulation_details->uid > 0) {
-			$commands[] = ajax_command_html('#ajax_selected_circuit_simulation', l('Download Circuit Simulation', 'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value));
+			$commands[] = ajax_command_html('#ajax_selected_circuit_simulation',l('Download Abstract', "circuit-simulation-project/download/project-file/" . $circuit_simulation_default_value) . '<br>' . l('Download Circuit Simulation', 'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value));
 		} //$circuit_simulation_details->uid > 0
 		else {
 			$commands[] = ajax_command_html('#ajax_selected_circuit_simulation', '');
