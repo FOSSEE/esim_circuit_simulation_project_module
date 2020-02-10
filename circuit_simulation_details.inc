@@ -30,24 +30,22 @@ function circuit_simulation_completed_proposals_all()
 			$query1->condition('proposal_id', $proposal_id);
 			$esim_project_files = $query1->execute();
 			$esim_project_abstract = $esim_project_files->fetchObject();
-			$approval_date = date("Y", $row->approval_date);
+			$completion_date = date("Y", $row->actual_completion_date);
 			$preference_rows[] = array(
 				$i,
 				l($row->project_title, "circuit-simulation-project/esim-circuit-simulation-run/" . $row->id),
-				l('Download', "circuit-simulation-project/download/project-file/" . $row->id),
 				$row->contributor_name,
 				$row->university,
-				$approval_date
+				$completion_date
 			);
 			$i++;
 		} //$row = $result->fetchObject()
 		$preference_header = array(
 			'No',
 			'Circuit Simulation Project',
-			'Abstract File',
 			'Contributor Name',
-			'Institute',
-			'Year'
+			'University / Institute',
+			'Year of Completion'
 		);
 		$output .= theme('table', array(
 			'header' => $preference_header,
