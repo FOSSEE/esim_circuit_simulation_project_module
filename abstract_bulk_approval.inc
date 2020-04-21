@@ -33,7 +33,7 @@ function circuit_simulation_abstract_bulk_approval_form($form, &$form_state)
 	);
 	$form['message'] = array(
 		'#type' => 'textarea',
-		'#title' => t('If Dis-Approved please specify reason for Dis-Approval'),
+		'#title' => t('Please specify the reason for Resubmission / Dis-Approval'),
 		'#prefix' => '<div id= "message_submit">',
 		'#states' => array(
 			'visible' => array(
@@ -45,7 +45,7 @@ function circuit_simulation_abstract_bulk_approval_form($form, &$form_state)
 				'or',
 				array(
 					':input[name="circuit_simulation_actions"]' => array(
-						'value' => 4
+						'value' => 2
 					)
 				)
 			)
@@ -166,6 +166,12 @@ FOSSEE,IIT Bombay', array(
 				} //$form_state['values']['circuit_simulation_actions'] == 1
 				elseif ($form_state['values']['circuit_simulation_actions'] == 2)
 				{
+					if (strlen(trim($form_state['values']['message'])) <= 30)
+					{
+						form_set_error('message', t(''));
+						$msg = drupal_set_message("Please mention the reason for resubmission. Minimum 30 character required", 'error');
+						return $msg;
+					}
 					//pending review entire project 
 					$query = db_select('esim_circuit_simulation_submitted_abstracts');
 					$query->fields('esim_circuit_simulation_submitted_abstracts');
@@ -197,13 +203,14 @@ FOSSEE,IIT Bombay', array(
 
 Dear !user_name,
 
-Kindly resubmit the project files for the project : ' . $user_info->project_title . '.
- 
+Kindly resubmit the project files for the project : ' . $user_info->project_title . 'after making changes considering the following reviewer’s comments.
+
+Comment: ' . $form_state['values']['message'] . '
 
 Best Wishes,
 
 !site_name Team,
-FOSSEE,IIT Bombay', array(
+FOSSEE, IIT Bombay', array(
 							'!site_name' => variable_get('site_name', ''),
 							'!user_name' => $user_data->name
 						))
@@ -251,18 +258,18 @@ FOSSEE,IIT Bombay', array(
 					$email_body = array(
 						0 => t('
 
-					Dear !user_name,
+Dear !user_name,
 
-					Your uploaded circuit simulation project files for the circuit simulation project Title : ' . $user_info->project_title . ' have been marked as dis-approved.
+Your uploaded circuit simulation project files for the circuit simulation project Title : ' . $user_info->project_title . ' have been marked as dis-approved.
 
-					Reason for dis-approval: ' . $form_state['values']['message'] . '
+Reason for dis-approval: ' . $form_state['values']['message'] . '
 
-					Best Wishes,
+Best Wishes,
 
-					!site_name Team,
-					FOSSEE,IIT Bombay', array(
-												'!site_name' => variable_get('site_name', ''),
-												'!user_name' => $user_data->name
+!site_name Team,
+FOSSEE, IIT Bombay', array(
+					'!site_name' => variable_get('site_name', ''),
+					'!user_name' => $user_data->name
 											))
 					);
 					$email_to = $user_data->mail;
