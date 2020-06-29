@@ -130,7 +130,7 @@ function generate_pdf()
 	$pdf->SetX(320);
 	$pdf->Ln(10);
 	$sign = $path . "/pdf/images/sign.png";
-	$pdf->Image($sign, $pdf->GetX()+80, $pdf->GetY() + 45, 60, 0);
+	$pdf->Image($sign, $pdf->GetX()+70, $pdf->GetY() + 45, 85, 0);
 	$pdf->Image($pngAbsoluteFilePath, $pdf->GetX() + 205 , $pdf->GetY() + 40, 30, 0);
 	//$pdf->Cell(240, 8, 'Prof. Kannan M. Moudgalya', 0, 1, 'R');
 	//$pdf->SetX(199);
