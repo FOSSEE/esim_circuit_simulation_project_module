@@ -46,7 +46,7 @@ function generate_pdf()
 	} //!$pdf
 	$pdf->AddPage();
 	$image_bg = $mpath . "/pdf/images/bg_cert.png";
-	$pdf->Image($image_bg, 0, 0, $pdf->w, $pdf->h);
+	$pdf->Image($image_bg, 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight());
 	//$pdf->Rect(5, 5, 267, 207, 'D');
 	$pdf->SetMargins(18, 1, 18);
 	//$pdf->Line(7.0, 7.0, 270.0, 7.0);
@@ -55,7 +55,7 @@ function generate_pdf()
 	//$pdf->Line(7.0, 210.0, 270.0, 210.0);
 	$path   = drupal_get_path('module', 'circuit_simulation');
 	//$image1 = $mpath . "/pdf/images/dwsim_logo.png";
-	$pdf->Ln(40);
+	$pdf->Ln(30);
 	//$pdf->Cell(200, 8, $pdf->Image($image1, 105, 15, 0, 28), 0, 1, 'C');
 	//$pdf->Ln(20);
 	
@@ -89,17 +89,6 @@ function generate_pdf()
 		//$txt= $pdf->WriteHTML("<span>under</span>");
 		$pdf->SetFont('Times', 'I', 16);
 		$pdf->Cell(320, 8, 'under eSim Circuit Simulation Project', '0', '1', 'C');
-		//$pdf->Ln(0);
-		//$pdf->SetFont('Helvetica', '', 18);
-		//$pdf->Cell(0, 0, ' eSim Circuit Simulation Project', '0', '0', 'C');
-		//$pdf->Cell(240, 4, '', '0', '1', 'C');
-		//$pdf->SetX(120);
-		//$pdf->SetFont('', 'U');
-		//$pdf->SetTextColor(139, 69, 19);
-		//$pdf->write(0, 'http://esim.fossee.in/', 'http://esim.fossee.in/');
-		//$pdf->Ln(0);
-		//$pdf->Cell(240, 8, 'Book: ' . $data2->book . ', Author: ' . $data2->author . '.', '0', '1', 'C');
-		//$pdf->MultiCell(240, 8, 'Book: ' . $data2->book . ', Author: ' . $data2->author . '.', '0','C');
 		$pdf->Ln(0);
 	} //strtolower($data3->branch) != "others"
 	else {
@@ -156,55 +145,51 @@ function generate_pdf()
 	$pdf->SetY(85);
 	$pdf->SetX(320);
 	$pdf->Ln(10);
-	$sign = $path . "/pdf/images/sign.png";
-	$pdf->Image($sign, $pdf->GetX()+70, $pdf->GetY() + 45, 85, 0);
-	$pdf->Image($pngAbsoluteFilePath, $pdf->GetX() + 205 , $pdf->GetY() + 40, 30, 0);
-	//$pdf->Cell(240, 8, 'Prof. Kannan M. Moudgalya', 0, 1, 'R');
-	//$pdf->SetX(199);
-	//$pdf->SetFont('Arial', '', 10);
-	//$pdf->Cell(0, 7, 'Co - Principal Investigator - FOSSEE', 0, 1, 'L');
-	//$pdf->SetX(190);
-	//$pdf->Cell(0, 7, ' Dept. of Chemical Engineering, IIT Bombay.', 0, 1, 'L');
+	$sign1 = $path . "/pdf/images/sign1.png";
+	$sign2 = $path . "/pdf/images/sign2.png";
+	$pdf->Image($sign1, $pdf->GetX()+60, $pdf->GetY() + 45, 85, 0);
+	$pdf->Image($sign2, $pdf->GetX()+160, $pdf->GetY() + 45, 85, 0);
+	$pdf->Image($pngAbsoluteFilePath, $pdf->GetX()+15, $pdf->GetY()+70, 30, 0);
+	$fossee = $path . "/pdf/images/fossee.png";
+	$mhrd = $path . "/pdf/images/mhrd.png"; 
+	$pdf->Image($fossee, $pdf->GetX()+80, $pdf->GetY()+80, 50, 0);
+	$pdf->Image($mhrd, $pdf->GetX()+180, $pdf->GetY()+80, 40, 0);
 	//$pdf->SetX(29);
+	//$pdf->SetY(-50);
+	$pdf->Ln(2);
+	$ftr_line = $path . "/pdf/images/ftr_line.png"; 
+	$pdf->Image($ftr_line, $pdf->GetX()+50, $pdf->GetY()+102, 150, 0);
 	$pdf->SetFont('Times', 'I', 15);
-	//$pdf->SetY(-58);
-	$pdf->Ln(32);
-	$pdf->Cell(228, 8, $UniqueString, '0', '1', 'R');
-	//$pdf->SetX(29);
-	//$pdf->SetY(-50);
-	//$image4 = $path . "/pdf/images/bottom_line.png";
-	//$pdf->Image($image4, $pdf->GetX(), $pdf->GetY(), 20, 0);
-	//$pdf->SetY(-50);
-	//$pdf->SetX(80);
-	//$image3 = $path . "/pdf/images/iitb.png";
-	//$image2 = $path . "/pdf/images/fossee.png"; 
-	
-	//$pdf->Ln(8);
-	//$pdf->Image($image2, $pdf->GetX() +15, $pdf->GetY() + 7, 40, 0);
+	$pdf->SetLeftMargin(40);
+	$pdf->GetY()+60;
+	$pdf->Ln(62);
+	$pdf->Cell(320, 8, $UniqueString, '0', '1', 'L');
 	//$pdf->Ln(6);
-	$pdf->SetY(150);
-	$pdf->SetX(800);
-	//$pdf->Ln(2);
-	
-	//$pdf->Image($image3, $pdf->GetX() + 200, $pdf->GetY() -3, 15, 0);
-	//$pdf->Image($image4, $pdf->GetX() +50, $pdf->GetY() + 28, 150, 0);
 	$pdf->SetFont('Arial', 'I', 8);
 	$pdf->SetTextColor(0, 0, 0);
 	$filename = str_replace(' ', '-', $data3->contributor_name) . '-eSim-Circuit-Simulation-Certificate.pdf';
 	$file     = $path . '/pdf/temp_certificate/' . $proposal_id . '_' . $filename;
 	$pdf->Output($file, 'F');
-	header("Content-Type: application/octet-stream");
-	header("Content-Disposition: attachment; filename=" . $filename);
-	header("Content-Type: application/octet-stream");
-	header("Content-Type: application/download");
+	ob_clean();
+	header("Pragma: public");
+	header("Expires: 0");
+	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	header("Cache-Control: public");
 	header("Content-Description: File Transfer");
+	header("Content-Type: application/pdf");
+	header("Content-Disposition: attachment; filename=" . $filename);
 	header("Content-Length: " . filesize($file));
+	header("Content-Transfer-Encoding: binary");
+	header("Expires: 0");
+	header("Pragma: no-cache");
 	flush();
 	$fp = fopen($file, "r");
 	while (!feof($fp)) {
-		echo fread($fp, 65536);
+		echo fread($fp, filesize($file));
 		flush();
 	} //!feof($fp)
+	ob_end_flush();
+	ob_clean();
 	fclose($fp);
 	unlink($file);
 	//drupal_goto('flowsheeting-project/certificate');
