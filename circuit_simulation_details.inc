@@ -98,3 +98,57 @@ function circuit_simulation_progress_all()
 	}
 	return $page_content;
 }
+
+function circuit_simulation_completed_pspice_to_kicad()
+{
+	$output = "";
+	$query = db_select('pspice_to_kicad_circuits');
+	$query->fields('pspice_to_kicad_circuits');
+	//$query->condition('is_completed', 1);
+	$result = $query->execute();
+	
+	//var_dump($esim_project_abstract);die;
+	if ($result->rowCount() == 0)
+	{
+		$output .= "The following circuits have been converted from PSPICE to KICAD." ."<hr>";
+
+	} //$result->rowCount() == 0
+	else
+	{
+		$output .= "The following circuits have been converted from PSPICE to KICAD." . "<hr>";
+		$preference_rows = array();
+		$i = 1;
+		while ($row = $result->fetchObject())
+		{
+			/*$proposal_id = $row->id;
+			$query1 = db_select('esim_circuit_simulation_submitted_abstracts_file');
+			$query1->fields('esim_circuit_simulation_submitted_abstracts_file');
+			$query1->condition('file_approval_status', 1);
+			$query1->condition('proposal_id', $proposal_id);
+			$esim_project_files = $query1->execute();
+			$esim_project_abstract = $esim_project_files->fetchObject();
+			$completion_date = date("Y", $row->actual_completion_date);*/
+			$preference_rows[] = array(
+				$i,
+				$row->name_of_circuit,
+				l('Click here', 'https://static.fossee.in/esim/converters/pspicetokicad_PAGE_all/' . $row->filename . '.tar.gz')
+				//$row->university,
+				//$completion_date
+			);
+			$i++;
+		} //$row = $result->fetchObject()
+		$preference_header = array(
+			'No',
+			'Name of the Circuit',
+			'Download'
+			//'Contributor Name',
+			//'University / Institute',
+			//'Year of Completion'
+		);
+		$output .= theme('table', array(
+			'header' => $preference_header,
+			'rows' => $preference_rows
+		));
+	}
+	return $output;
+}
