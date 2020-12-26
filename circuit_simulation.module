@@ -320,13 +320,33 @@ function circuit_simulation_menu()
 		'file' => 'full_download.inc'
 	);
 	/* COMPLETED esim circuit simulationS */
-	$items['circuit-simulation-project/completed-circuit-simulations'] = array(
+	$items['circuit-simulation-project/completed-circuits'] = array(
 		'title' => 'Completed Circuit Simulations',
 		'page callback' => 'circuit_simulation_completed_proposals_all',
 		'access arguments' => array(
 			'esim circuit simulation download code'
 		),
-		'file' => 'circuit_simulation_details.inc'
+		'file' => 'circuit_simulation_details.inc',
+	);
+	$items['circuit-simulation-project/completed-circuits/simulations'] = array(
+		'title' => 'Completed Circuit Simulations',
+		'page callback' => 'circuit_simulation_completed_proposals_all',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'circuit_simulation_details.inc',
+		'type' => MENU_DEFAULT_LOCAL_TASK,
+		'weight' => 0
+	);
+	$items['circuit-simulation-project/completed-circuits/pspice-to-kicad'] = array(
+		'title' => 'Completed PSPICE to KICAD Circuits',
+		'page callback' => 'circuit_simulation_completed_pspice_to_kicad',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'circuit_simulation_details.inc',
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 1
 	);
 	/* LABS IN PROGRESS */
 	$items['circuit-simulation-project/circuit-simulation-progress'] = array(
