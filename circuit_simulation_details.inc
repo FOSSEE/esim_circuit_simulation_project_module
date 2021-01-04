@@ -110,12 +110,68 @@ function circuit_simulation_completed_pspice_to_kicad()
 	//var_dump($esim_project_abstract);die;
 	if ($result->rowCount() == 0)
 	{
-		$output .= "The following circuits have been converted from PSPICE to KICAD." ."<hr>";
+		$output .= "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
+
+<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice.&nbsp;</span></p>
+
+<p dir='ltr'><span style='color:#008000'><strong>How to convert?</strong></span></p>
+
+<ol>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>Login to eSim website</span><a href='https://esim.fossee.in/' style='text-decoration:none;' target='_blank'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'> </span><u>here</u></a><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>Upload the PSpice Schematic files by clicking <a href='https://esim.fossee.in/pspice-to-kicad/add' style='text-decoration:none;' target='_blank'><u>here</u></a><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>. </span><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>&nbsp;&nbsp;&nbsp; </span></span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>The PSpice schematic should be in standard format. Refer <a href='https://static.fossee.in/esim/manuals/trafo3ph_Dyn11.sch' target='_blank'>here</a>, for a few PSpice schematic samples.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>Your files will be converted to the KiCad schematic format. Once the conversion is complete, you will be intimated through your registered email id.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>You can use the KiCad schematic further for Simulation and for PCB generation. Follow the instructions <a href='https://static.fossee.in/esim/manuals/Instructions_PSpice_to_KiCad.pdf' target='_blank'>here</a>.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'> Converted files after verification are made available for download in the table below.</p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>  We welcome your contributions to this page</p>
+	</li>
+</ol>" . "<hr>";
 
 	} //$result->rowCount() == 0
 	else
 	{
-		$output .= "The following circuits have been converted from PSPICE to KICAD." . "<hr>";
+		$output .= "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
+
+<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice.&nbsp;</span></p>
+
+<p dir='ltr'><span style='color:#008000'><strong>How to convert?</strong></span></p>
+
+<ol>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>Login to eSim website</span><a href='https://esim.fossee.in/' style='text-decoration:none;' target='_blank'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'> </span><u>here</u></a><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>Upload the PSpice Schematic files by clicking <a href='https://esim.fossee.in/pspice-to-kicad/add' style='text-decoration:none;' target='_blank'><u>here</u></a><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>. </span><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>&nbsp;&nbsp;&nbsp; </span></span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>The PSpice schematic should be in standard format. Refer <a href='https://static.fossee.in/esim/manuals/trafo3ph_Dyn11.sch' target='_blank'>here</a>, for a few PSpice schematic samples.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>Your files will be converted to the KiCad schematic format. Once the conversion is complete, you will be intimated through your registered email id.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>You can use the KiCad schematic further for Simulation and for PCB generation. Follow the instructions <a href='https://static.fossee.in/esim/manuals/Instructions_PSpice_to_KiCad.pdf' target='_blank'>here</a>.</span></p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'> Converted files after verification are made available for download in the table below.</p>
+	</li>
+	<li dir='ltr'>
+	<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>  We welcome your contributions to this page</p>
+	</li>
+</ol>" . "<hr>";
 		$preference_rows = array();
 		$i = 1;
 		while ($row = $result->fetchObject())
@@ -130,8 +186,7 @@ function circuit_simulation_completed_pspice_to_kicad()
 			$completion_date = date("Y", $row->actual_completion_date);*/
 			$preference_rows[] = array(
 				$i,
-				$row->name_of_circuit,
-				l('Click here', 'https://static.fossee.in/esim/converters/pspicetokicad_PAGE_all/' . $row->filename . '.tar.gz')
+				l($row->name_of_circuit, 'https://static.fossee.in/esim/converters/pspicetokicad_PAGE_all/' . $row->filename . '.tar.gz')
 				//$row->university,
 				//$completion_date
 			);
@@ -140,7 +195,7 @@ function circuit_simulation_completed_pspice_to_kicad()
 		$preference_header = array(
 			'No',
 			'Name of the Circuit',
-			'Download'
+			//'Download'
 			//'Contributor Name',
 			//'University / Institute',
 			//'Year of Completion'
