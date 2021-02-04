@@ -112,7 +112,7 @@ function circuit_simulation_completed_pspice_to_kicad()
 	{
 		$output .= "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
 
-<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice.&nbsp;</span></p>
+<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice. The source code for this converter is available <span style='text-decoration: underline;'><a href='https://github.com/FOSSEE/eSim_PSpice_to_KiCad_Python_Parser' target='_blank'>here</a>.</span></p>
 
 <p dir='ltr'><span style='color:#008000'><strong>How to convert?</strong></span></p>
 
@@ -145,7 +145,7 @@ function circuit_simulation_completed_pspice_to_kicad()
 	{
 		$output .= "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
 
-<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice.&nbsp;</span></p>
+<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice. The source code for this converter is available <span style='text-decoration: underline;'><a href='https://github.com/FOSSEE/eSim_PSpice_to_KiCad_Python_Parser' target='_blank'>here</a>.</span></p>
 
 <p dir='ltr'><span style='color:#008000'><strong>How to convert?</strong></span></p>
 
