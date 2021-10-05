@@ -166,20 +166,6 @@ function circuit_simulation_proposal_approval_form($form, &$form_state)
 		'#type' => 'item',
 		'#markup' => $proposal_data->contact_no,
 	);
-	$form['month_year_of_degree'] = array(
-		'#type' => 'date_popup',
-		'#title' => t('Month and year of award of degree'),
-		'#date_label_position' => '',
-		'#description' => '',
-		'#default_value' => $proposal_data->month_year_of_degree,
-		'#date_format' => 'M-Y',
-		'#date_increment' => 0,
-		'#date_year_range' => '1960:+0',
-		'#datepicker_options' => array(
-			'maxDate' => 0
-		),
-		'#disabled' => TRUE
-	);
 	$form['university'] = array(
 		'#type' => 'item',
 		'#markup' => $proposal_data->university,
@@ -214,6 +200,11 @@ function circuit_simulation_proposal_approval_form($form, &$form_state)
 		'#type' => 'item',
 		'#title' => t('Project guide email'),
 		'#markup' => $project_guide_email_id
+	);
+	$form['operating_system'] = array(
+		'#type' => 'item',
+		'#title' => t('Operating System'),
+		'#markup' => $proposal_data->operating_system,
 	);
 	$form['project_title'] = array(
 		'#type' => 'item',
@@ -425,20 +416,6 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 		'#markup' => user_load($proposal_data->uid)->mail,
 		'#title' => t('Email')
 	);
-	/*$form['month_year_of_degree'] = array(
-		'#type' => 'date_popup',
-		'#title' => t('Month and year of award of degree'),
-		'#date_label_position' => '',
-		'#description' => '',
-		'#default_value' => $proposal_data->month_year_of_degree,
-		'#date_format' => 'M-Y',
-		'#date_increment' => 0,
-		'#date_year_range' => '1960:+0',
-		'#datepicker_options' => array(
-			'maxDate' => 0
-		),
-		'#disabled' => TRUE
-	);*/
 	$form['university'] = array(
 		'#type' => 'item',
 		'#markup' => $proposal_data->university,
@@ -473,6 +450,11 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 		'#type' => 'item',
 		'#title' => t('Project guide email'),
 		'#markup' => $proposal_data->project_guide_email_id
+	);
+	$form['operating_system'] = array(
+		'#type' => 'item',
+		'#title' => t('Operating System'),
+		'#markup' => $proposal_data->operating_system
 	);
 	$form['project_title'] = array(
 		'#type' => 'item',
@@ -675,20 +657,6 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 		'#title' => t('Email'),
 		'#markup' => $user_data->mail
 	);
-	$form['month_year_of_degree'] = array(
-		'#type' => 'date_popup',
-		'#title' => t('Month and year of award of degree'),
-		'#date_label_position' => '',
-		'#description' => '',
-		'#default_value' => $proposal_data->month_year_of_degree,
-		'#date_format' => 'M-Y',
-		'#date_increment' => 0,
-		'#date_year_range' => '1960:+0',
-		'#datepicker_options' => array(
-			'maxDate' => 0
-		),
-		'#required' => TRUE
-	);
 	$form['university'] = array(
 		'#type' => 'textfield',
 		'#title' => t('University/Institute'),
@@ -793,6 +761,15 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 		'#attributes' => array(
 			'placeholder' => 'Insert pincode of your city/ village....'
 		)
+	);
+	$form['operating_system'] = array(
+		'#type' => 'select',
+		'#title' => t('Operating System'),
+		'#options' => array(
+			'Ubuntu' => 'Ubuntu',
+			'Windows' => 'Windows'
+		),
+		'#default_value' => $proposal_data->operating_system
 	);
 	$form['project_title'] = array(
 		'#type' => 'textarea',
@@ -911,6 +888,7 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 				pincode=:pincode,
 				state=:state,
 				project_title=:project_title,
+				operating_system=:operating_system,
 				reference=:reference,
 				directory_name=:directory_name ,
 				samplefilepath=:samplefilepath
@@ -923,6 +901,7 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		':pincode' => $v['pincode'],
 		':state' => $v['all_state'],
 		':project_title' => $project_title,
+		':operating_system' => $v['operating_system'],
 		':reference' => $v['reference'],
 		':directory_name' => $directory_name,
 		':samplefilepath' => $samplefilepath,
