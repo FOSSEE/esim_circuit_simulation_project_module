@@ -678,16 +678,13 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 			'placeholder' => t('Enter full name of project guide')
 		),
 		'#maxlength' => 250,
-		'#required' => TRUE,
 		'#default_value' => $proposal_data->project_guide_name
 	);
 	$form['project_guide_email_id'] = array(
 		'#type' => 'textfield',
 		'#title' => t('Project guide email'),
 		'#size' => 30,
-		'#required' => TRUE,
 		'#default_value' => $proposal_data->project_guide_email_id
-
 	);
 	$form['country'] = array(
 		'#type' => 'select',
@@ -807,15 +804,15 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 	$form['description'] = array(
 		'#type' => 'textarea',
 		'#title' => t('Description'),
-		'#size' => 250,
 		'#description' => t('Minimum character limit is 500 and Maximum character limit is 700'),
 		'#required' => TRUE,
 		'#default_value' => $proposal_data->description
 	);	
 	$form['reference'] = array(
 		'#type' => 'textarea',
-		'#title' => t('Reference'),
+		'#title' => t('Reference'),		
 		'#size' => 250,
+		'#maxlength' => 1000,
 		'#attributes' => array(
 			'placeholder' => 'Links of must be provided....'
 		),
