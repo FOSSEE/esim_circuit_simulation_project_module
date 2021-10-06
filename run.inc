@@ -143,7 +143,11 @@ function _circuit_simulation_details($circuit_simulation_default_value)
 		}else{
 		$reference = 'Not provided';
 		}
-		$form['circuit_simulation_details']['#markup'] = '<span style="color: rgb(128, 0, 0);"><strong>About the Circuit Simulation</strong></span></td><td style="width: 35%;"><br />' . '<ul>' . '<li><strong>Proposer Name:</strong> ' . $circuit_simulation_details->name_title . ' ' . $circuit_simulation_details->contributor_name . '</li>' . '<li><strong>Title of the Circuit Simulation:</strong> ' . l($circuit_simulation_details->project_title,'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</li>' . '<li><strong>University:</strong> ' . $circuit_simulation_details->university . '</li>' . '<li>'.'<strong>Reference:</strong> ' . $reference .'</li>'.'</ul>';
+		if($circuit_simulation_details->project_guide_name != NULL){
+		$form['circuit_simulation_details']['#markup'] = '<span style="color: rgb(128, 0, 0);"><strong>About the Circuit Simulation</strong></span></td><td style="width: 35%;"><br />' . '<ul>' . '<li><strong>Contributor Name:</strong> ' . $circuit_simulation_details->name_title . ' ' . $circuit_simulation_details->contributor_name . '</li>' . '<li><strong>Title of the Circuit Simulation:</strong> ' . l($circuit_simulation_details->project_title,'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</li>' . '<li><strong>University:</strong> ' . $circuit_simulation_details->university . '</li>' . '<li><strong>Project Guide Name:</strong> ' . $circuit_simulation_details->project_guide_name . '</li>' . '<li>'.'<strong>Reference:</strong> ' . $reference .'</li>'.'</ul>';
+	}else{
+		$form['circuit_simulation_details']['#markup'] = '<span style="color: rgb(128, 0, 0);"><strong>About the Circuit Simulation</strong></span></td><td style="width: 35%;"><br />' . '<ul>' . '<li><strong>Contributor Name:</strong> ' . $circuit_simulation_details->name_title . ' ' . $circuit_simulation_details->contributor_name . '</li>' . '<li><strong>Title of the Circuit Simulation:</strong> ' . l($circuit_simulation_details->project_title,'circuit-simulation-project/full-download/project/' . $circuit_simulation_default_value) . '</li>' . '<li><strong>University:</strong> ' . $circuit_simulation_details->university . '</li>' . '<li>'.'<strong>Reference:</strong> ' . $reference .'</li>'.'</ul>';
+	}
 		$details = $form['circuit_simulation_details']['#markup'];
 		return $details;
 	} //$circuit_simulation_default_value != 0
