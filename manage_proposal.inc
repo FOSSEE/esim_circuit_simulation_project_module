@@ -461,6 +461,11 @@ function circuit_simulation_proposal_status_form($form, &$form_state)
 		'#markup' => $proposal_data->project_title,
 		'#title' => t('Title of the Circuit Simulation Project')
 	);
+	$form['description'] = array(
+		'#type' => 'item',
+		'#markup' => $proposal_data->description,
+		'#title' => t('Description of the Circuit Simulation Project')
+	);
 	/************************** reference link filter *******************/
 	$url = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i';
 	$reference = preg_replace($url, '<a href="$0" target="_blank" title="$0">$0</a>', $proposal_data->reference);
@@ -665,6 +670,25 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 		'#required' => TRUE,
 		'#default_value' => $proposal_data->university
 	);
+	$form['project_guide_name'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Project guide'),
+		'#size' => 250,
+		'#attributes' => array(
+			'placeholder' => t('Enter full name of project guide')
+		),
+		'#maxlength' => 250,
+		'#required' => TRUE,
+		'#default_value' => $proposal_data->project_guide_name
+	);
+	$form['project_guide_email_id'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Project guide email'),
+		'#size' => 30,
+		'#required' => TRUE,
+		'#default_value' => $proposal_data->project_guide_email_id
+
+	);
 	$form['country'] = array(
 		'#type' => 'select',
 		'#title' => t('Country'),
@@ -769,6 +793,7 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 			'Ubuntu' => 'Ubuntu',
 			'Windows' => 'Windows'
 		),
+		'#required' => TRUE,
 		'#default_value' => $proposal_data->operating_system
 	);
 	$form['project_title'] = array(
@@ -779,10 +804,18 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 		'#required' => TRUE,
 		'#default_value' => $proposal_data->project_title
 	);
+	$form['description'] = array(
+		'#type' => 'textarea',
+		'#title' => t('Description'),
+		'#size' => 250,
+		'#description' => t('Minimum character limit is 500 and Maximum character limit is 700'),
+		'#required' => TRUE,
+		'#default_value' => $proposal_data->description
+	);	
 	$form['reference'] = array(
 		'#type' => 'textarea',
 		'#title' => t('Reference'),
-		'#size' => 10000,
+		'#size' => 250,
 		'#attributes' => array(
 			'placeholder' => 'Links of must be provided....'
 		),
@@ -802,6 +835,46 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 	);
 	return $form;
 }
+
+function circuit_simulation_proposal_form_validate($form, &$form_state)
+{
+	//Validation for project title
+	$form_state['values']['project_title'] = trim($form_state['values']['project_title']);
+	if ($form_state['values']['project_title'] != '')
+	{
+		if (strlen($form_state['values']['project_title']) > 250)
+		{
+			form_set_error('project_title', t('Maximum charater limit is 250 charaters only, please check the length of the project title'));
+		} //strlen($form_state['values']['project_title']) > 250
+		else if (strlen($form_state['values']['project_title']) < 10)
+		{
+			form_set_error('project_title', t('Minimum charater limit is 10 charaters, please check the length of the project title'));
+		} //strlen($form_state['values']['project_title']) < 10
+	} //$form_state['values']['project_title'] != ''
+	else
+	{
+		form_set_error('project_title', t('Project title shoud not be empty'));
+	}
+
+	$form_state['values']['description'] = trim($form_state['values']['description']);
+	if ($form_state['values']['description'] != '')
+	{
+		if (strlen($form_state['values']['description']) > 700)
+		{
+			form_set_error('description', t('Maximum charater limit is 700 charaters only, please check the length of the description'));
+		} //strlen($form_state['values']['project_title']) > 250
+		else if (strlen($form_state['values']['description']) < 500)
+		{
+			form_set_error('description', t('Minimum charater limit is 500 charaters, please check the length of the description'));
+		} //strlen($form_state['values']['project_title']) < 10
+	} //$form_state['values']['project_title'] != ''
+	else
+	{
+		form_set_error('description', t('Description shoud not be empty'));
+	}
+	return $form_state;
+}
+
 function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 {
 	global $user;
@@ -884,6 +957,8 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 				name_title=:name_title,
 				contributor_name=:contributor_name,
 				university=:university,
+				project_guide_name=:project_guide_name,
+				project_guide_email_id=:project_guide_email_id,
 				city=:city,
 				pincode=:pincode,
 				state=:state,
@@ -897,6 +972,8 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 		':name_title' => $v['name_title'],
 		':contributor_name' => $v['contributor_name'],
 		':university' => $v['university'],
+		':project_guide_name' => $v['project_guide_name'],
+		':project_guide_email_id' => $v['project_guide_email_id'],
 		':city' => $v['city'],
 		':pincode' => $v['pincode'],
 		':state' => $v['all_state'],
