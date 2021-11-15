@@ -332,7 +332,7 @@ function circuit_simulation_download_proposals()
             $items = array(
                 'Contirbutor Name',
                  'Email ID',
-                 'Flowsheet Title',
+                 'Circuit Simulation Title',
                  'University',
                  'Contact', 
                  'Date of Creation',

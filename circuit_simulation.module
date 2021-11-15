@@ -53,8 +53,45 @@ function circuit_simulation_menu()
 			'esim circuit simulation manage proposal'
 		),
 		'type' => MENU_LOCAL_TASK,
-		'weight' => 4,
+		'weight' => 2,
 		'file' => 'manage_proposal.inc'
+	);
+	$items['circuit-simulation-project/manage-proposal/approved_proposals'] = array(
+		'title' => 'Approved Proposals',
+		'description' => 'Approved Proposals',
+		'page callback' => 'circuit_simulation_approved_tab',
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation manage proposal'
+		),
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 3,
+		'file' => 'proposals_review_tab.inc'
+	);
+	$items['circuit-simulation-project/manage-proposal/uploaded_proposals'] = array(
+		'title' => 'Uploaded Proposals',
+		'description' => 'Uploaded Proposals',
+		'page callback' => 'circuit_simulation_uploaded_tab',
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation manage proposal'
+		),
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 4,
+		'file' => 'proposals_review_tab.inc'
+	);
+	$items['circuit-simulation-project/manage-proposal/completed_proposals'] = array(
+		'title' => 'Completed Proposals',
+		'description' => 'Completed Proposals',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('circuit_simulation_completed_tab_form'),
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation manage proposal'
+		),
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 5,
+		'file' => 'proposals_review_tab.inc'
 	);
 	$items['circuit-simulation-project/manage-proposal/approve'] = array(
 		'title' => 'Approve Proposal',
