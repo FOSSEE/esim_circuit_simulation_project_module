@@ -319,6 +319,25 @@ function circuit_simulation_menu()
 		'type' => MENU_CALLBACK,
 		'file' => 'full_download.inc'
 	);
+	$items['circuit-simulation-project/download-proposals'] = array(
+		'title' => 'Download Proposals',
+		'description' => 'Download Proposals',
+		'page callback' => 'circuit_simulation_download_proposals',
+		'access arguments' => array(
+			'esim circuit simulation download proposals'
+		),
+		'type' => MENU_CALLBACK,
+		'file' => 'download.inc'
+	);
+	$items['circuit-simulation-project/download-completed-proposals'] = array(
+		'title' => 'Download Completed Proposals',
+		'description' => 'Download Completed Proposals',
+		'page callback' => 'esim_circuit_simulation_download_completed_proposals',
+		'access arguments' => array(
+			'esim circuit simulation download proposals'
+		),
+		'file' => 'download_proposals.inc'
+	);
 	/* COMPLETED esim circuit simulationS */
 	$items['circuit-simulation-project/completed-circuits'] = array(
 		'title' => 'Completed Circuit Simulations',
@@ -537,6 +556,10 @@ function circuit_simulation_permission()
 		),
 		'esim circuit simulation download code' => array(
 			'title' => t('esim circuit simulation download code'),
+			'restrict access' => TRUE
+		),
+		'esim circuit simulation download proposals' => array(
+			'title' => t('esim circuit simulation download proposals'),
 			'restrict access' => TRUE
 		),
 		'administer esim circuit simulation' => array(
