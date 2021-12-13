@@ -317,3 +317,90 @@ function circuit_simulation_download_lab()
 		drupal_goto('lab-migration/lab-migration-run');
 	}
 }*/
+
+function circuit_simulation_download_proposals()
+{
+	$root_path = circuit_simulation_document_path();
+
+	$result = db_query("SELECT e.contributor_name as contirbutor_name, u.mail as email_id, e.project_title as title, e.contact_no as contact, e.university as university, from_unixtime(creation_date,'%d-%m-%Y') as creation, from_unixtime(approval_date,'%d-%m-%Y') as approval, from_unixtime(actual_completion_date,'%d-%m-%Y') as year, e.approval_status as status FROM esim_circuit_simulation_proposal as e JOIN users as u ON e.uid = u.uid ORDER BY actual_completion_date DESC");
+
+//var_dump($result->rowCount());die();
+	 //$all_proposals_q = $result->execute();
+	 $participants_proposal_id_file = $root_path . "participants-proposals.csv";
+	 $fp = fopen($participants_proposal_id_file, "w");
+            /* making the first row */
+            $items = array(
+                'Contirbutor Name',
+                 'Email ID',
+                 'Circuit Simulation Title',
+                 'University',
+                 'Contact', 
+                 'Date of Creation',
+                 'Date of Approval',
+                 'Date of Completion',
+                 'Status of the proposal'
+                 );
+            fputcsv($fp, $items);
+            while($row = $result->fetchObject()) 
+            {	
+            	$status = '';
+				switch ($row->status)
+				{
+					case 0:
+						$status = 'Pending';
+						break;
+					case 1:
+						$status = 'Approved';
+						break;
+					case 2:
+						$status = 'Dis-approved';
+						break;
+					case 3:
+						$status = 'Completed';
+						break;
+					default:
+						$status = 'Unknown';
+						break;
+				} //$row->status
+				if ($row->year == 0)
+				{
+					$year = "Not Completed";
+				} //$row->year == 0
+				else
+				{	
+					$year = date('d-m-Y', $row->year);
+				}
+            	
+                $items = array(
+                    $row->contirbutor_name,
+                    $row->email_id,
+                    $row->title,
+                    $row->university,
+                    $row->contact,
+                    $row->creation,
+                    $row->approval,
+                    $row->year,
+                    $status
+                );
+                fputcsv($fp, $items);
+            }
+            fclose($fp);
+            if($participants_proposal_id_file){
+        		ob_clean();
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Cache-Control: public");
+            header("Content-Description: File Transfer");
+            header('Content-Type: application/csv');
+            header('Content-disposition: attachment; filename=participants-proposals.csv');
+            header('Content-Length:' . filesize($participants_proposal_id_file));
+            header("Content-Transfer-Encoding: binary");
+            header('Expires: 0');
+            header('Pragma: no-cache');
+            readfile($participants_proposal_id_file);
+            /*ob_end_flush();
+            ob_clean();
+            flush();*/
+        }
+}
