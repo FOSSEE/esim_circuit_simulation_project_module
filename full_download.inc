@@ -41,6 +41,7 @@ function circuit_simulation_download_full_project()
 			header('Content-disposition: attachment; filename="' . str_replace(' ', '_', $circuit_simulation_data->project_title) . '.zip"');
 			header('Content-Length: ' . filesize($zip_filename));
 			ob_clean();
+			ob_end_flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
 			/*flush();
@@ -58,6 +59,7 @@ function circuit_simulation_download_full_project()
 			//ob_end_flush();
 			ob_clean();
 			//flush();
+			ob_end_flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
 		}
@@ -109,6 +111,7 @@ function circuit_simulation_download_completed_project()
 			//ob_end_flush();
 			ob_clean();
 			//flush();
+			ob_end_flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
 		} //$user->uid
@@ -122,6 +125,7 @@ function circuit_simulation_download_completed_project()
 			//ob_end_flush();
 			ob_clean();
 			//flush();
+			ob_end_flush();
 			readfile($zip_filename);
 			unlink($zip_filename);
 		}
