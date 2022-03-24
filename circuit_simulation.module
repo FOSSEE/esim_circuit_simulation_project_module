@@ -404,6 +404,73 @@ function circuit_simulation_menu()
 		'type' => MENU_LOCAL_TASK,
 		'weight' => 1
 	);
+
+	/* COMPLETED circuit simulationS */
+	$items['circuit_simulation'] = array(
+		'#type' => 'vertical_tabs',
+	);
+	$items['completed-circuits'] = array(
+		'title' => 'Completed Circuit Simulations',
+		'page callback' => 'completed_circuit_proposals_all',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'completed_circuits.inc',
+		'#type' => 'vertical_tabs',
+		'#collapsible' => TRUE,
+      	// Open by default.
+      	'#collapsed' => FALSE,
+	);
+	$items['completed-circuits/simulations'] = array(
+		'title' => 'Completed Circuit Simulations',
+		'page callback' => 'circuit_simulation_completed_proposals_all',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'completed_circuits.inc',
+		'type' => MENU_DEFAULT_LOCAL_TASK,
+		'#type' => 'vertical_tabs',
+		'#open' => TRUE,
+		'weight' => 0
+	);
+	$items['completed-circuits/pspice-to-kicad'] = array(
+		'title' => 'Completed PSPICE to KICAD Circuits',
+		'page callback' => 'completed_circuit_pspice_to_kicad',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'completed_circuits.inc',
+		'type' => MENU_LOCAL_TASK,
+		'#type' => 'vertical_tabs',
+		'#open' => TRUE,
+		'weight' => 1 
+	);
+	$items['completed-circuits/marathon_2021'] = array(
+		'title' => 'Completed Marathon 2021 Circuits',
+		'description' => 'Completed Marathon 2021 Circuits',
+		'page callback' => 'completed_circuits_hackathon_submissions',
+		'access arguments' => array(
+			'esim circuit simulation download proposals'
+		),
+		'file' => 'completed_circuits.inc',
+		'type' => MENU_LOCAL_TASK,
+		'#type' => 'vertical_tabs',
+		'#open' => TRUE,
+		'weight' => 2
+	);
+	$items['completed-circuits/marathon_2022'] = array(
+		'title' => 'Completed Marathon 2022 Circuits',
+		'description' => 'View Completed Marathon 2022 Circuits',
+		'page callback' => 'completed_circuits_mscd_display_final_submissions',
+		'access arguments' => array(
+			'esim circuit simulation download proposals'
+		),
+		'file' => 'completed_circuits.inc',
+		'type' => MENU_LOCAL_TASK,
+		'#type' => 'vertical_tabs',
+		'#open' => TRUE,
+		'weight' => 3
+	);
 	/* LABS IN PROGRESS */
 	$items['circuit-simulation-project/circuit-simulation-progress'] = array(
 		'title' => 'Circuit Simulations in Progress',
