@@ -416,7 +416,7 @@ function circuit_simulation_menu()
 			'esim circuit simulation download code'
 		),
 		'file' => 'completed_circuits.inc',
-		'#type' => 'vertical_tabs',
+		'#type' => 'circuit_simulation',
 		'#collapsible' => TRUE,
       	// Open by default.
       	'#collapsed' => FALSE,
@@ -429,7 +429,7 @@ function circuit_simulation_menu()
 		),
 		'file' => 'completed_circuits.inc',
 		'type' => MENU_DEFAULT_LOCAL_TASK,
-		'#type' => 'vertical_tabs',
+		'#type' => 'circuit_simulation',
 		'#open' => TRUE,
 		'weight' => 0
 	);
@@ -441,7 +441,7 @@ function circuit_simulation_menu()
 		),
 		'file' => 'completed_circuits.inc',
 		'type' => MENU_LOCAL_TASK,
-		'#type' => 'vertical_tabs',
+		'#type' => 'circuit_simulation',
 		'#open' => TRUE,
 		'weight' => 1 
 	);
@@ -450,11 +450,11 @@ function circuit_simulation_menu()
 		'description' => 'Completed Marathon 2021 Circuits',
 		'page callback' => 'completed_circuits_hackathon_submissions',
 		'access arguments' => array(
-			'esim circuit simulation download proposals'
+			'esim circuit simulation download code'
 		),
 		'file' => 'completed_circuits.inc',
 		'type' => MENU_LOCAL_TASK,
-		'#type' => 'vertical_tabs',
+		'#type' => 'circuit_simulation',
 		'#open' => TRUE,
 		'weight' => 2
 	);
@@ -463,11 +463,11 @@ function circuit_simulation_menu()
 		'description' => 'View Completed Marathon 2022 Circuits',
 		'page callback' => 'completed_circuits_mscd_display_final_submissions',
 		'access arguments' => array(
-			'esim circuit simulation download proposals'
+			'esim circuit simulation download code'
 		),
 		'file' => 'completed_circuits.inc',
 		'type' => MENU_LOCAL_TASK,
-		'#type' => 'vertical_tabs',
+		'#type' => 'circuit_simulation',
 		'#open' => TRUE,
 		'weight' => 3
 	);
