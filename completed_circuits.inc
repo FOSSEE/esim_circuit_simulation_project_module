@@ -1,6 +1,6 @@
 <?php
 // display completed circuits
-function completed_circuit_proposals_all()
+function completed_circuit_proposals_all_idea1()
 {
 	$output = "";
 	$query = db_select('esim_circuit_simulation_proposal');
@@ -58,7 +58,7 @@ function completed_circuit_proposals_all()
 }
 
 
-function completed_circuit_pspice_to_kicad()
+function completed_circuit_pspice_to_kicad_idea1()
 {
 	$output = "";
 	$query = db_select('pspice_to_kicad_circuits');
@@ -170,7 +170,7 @@ function completed_circuit_pspice_to_kicad()
 }
 
 
-function completed_circuits_hackathon_submissions()
+function completed_circuits_hackathon_submissions_idea1()
 {
     $output = "";
     $query = db_select('hackathon_completed_circuits');
@@ -216,7 +216,7 @@ function completed_circuits_hackathon_submissions()
     return $output;
 }
 
-function completed_circuits_mscd_display_final_submissions()
+function completed_circuits_mscd_display_final_submissions_idea1()
 {
     $my_submission_rows = array();
     $query = db_select('mixed_signal_marathon_final_submission');
