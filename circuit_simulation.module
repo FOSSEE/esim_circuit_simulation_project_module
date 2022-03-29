@@ -687,7 +687,7 @@ function completed_circuit_form($form, &$form_state) {
 
                          <li><a data-toggle="tab" href="#pspicetokicad">Completed PSPICE to KICAD Circuits</a></li>
 
-                          <li><a data-toggle="tab" href="#hackathonsubmissions">Completed Marathon 2022 Circuits</a></li>
+                          <li><a data-toggle="tab" href="#hackathonsubmissions">Completed Marathon 2021 Circuits</a></li>
 
                            <li><a data-toggle="tab" href="#finalsubmissions">Completed Marathon 2022 Circuits</a></li>
                       </ul>'
