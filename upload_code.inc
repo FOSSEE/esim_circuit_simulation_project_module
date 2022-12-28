@@ -160,7 +160,7 @@ function circuit_simulation_upload_abstract_code_form($form, &$form_state)
 	$form['upload_circuit_simulation_developed_process'] = array(
 		'#type' => 'file',
 		'#title' => t('Upload the Project Files'),
-		'#description' => t('<span style="color:red;">Current File :</span> ' . $existing_uploaded_S_file->filename . '<br />Separate filenames with underscore. No spaces or any special characters allowed in filename.') . '<br />' . t('<span style="color:red;">Allowed file extensions : ') . variable_get('circuit_simulation_circuit_simulation_developed_process_source_extensions', '') . '</span>'
+		'#description' => t('<span style="color:red;">Current File :</span> ' . $existing_uploaded_S_file->filename . '<br />Separate filenames with underscore. No spaces or any special characters allowed in filename.') . '<br />' . t('<span style="color:red;">Allowed file extensions : ') . variable_get('circuit_simulation_project_files_extensions', '') . '</span>'
 	);
 	$form['prop_id'] = array(
 		'#type' => 'hidden',
@@ -224,7 +224,7 @@ function circuit_simulation_upload_abstract_code_form_validate($form, &$form_sta
 					switch ($file_type)
 					{
 						case 'S':
-							$allowed_extensions_str = variable_get('circuit_simulation_circuit_simulation_developed_process_source_extensions', '');
+							$allowed_extensions_str = variable_get('circuit_simulation_project_files_extensions', '');
 							break;
 						case 'A':
 							$allowed_extensions_str = variable_get('circuit_simulation_abstract_upload_extensions', '');
@@ -350,6 +350,7 @@ function circuit_simulation_upload_abstract_code_form_submit($form, &$form_state
 					if (file_exists($root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name]))
 					{
 						//unlink($root_path . $dest_path . $_FILES['files']['name'][$file_form_name]);
+						move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name])
 						drupal_set_message(t("File !filename already exists hence overwirtten the exisitng file ", array(
 							'!filename' => $_FILES['files']['name'][$file_form_name]
 						)), 'error');
@@ -410,6 +411,7 @@ function circuit_simulation_upload_abstract_code_form_submit($form, &$form_state
 					if (file_exists($root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name]))
 					{
 						//unlink($root_path . $dest_path . $_FILES['files']['name'][$file_form_name]);
+						move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name])
 						drupal_set_message(t("File !filename already exists hence overwirtten the exisitng file ", array(
 							'!filename' => $_FILES['files']['name'][$file_form_name]
 						)), 'error');
