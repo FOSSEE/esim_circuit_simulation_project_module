@@ -350,7 +350,7 @@ function circuit_simulation_upload_abstract_code_form_submit($form, &$form_state
 					if (file_exists($root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name]))
 					{
 						//unlink($root_path . $dest_path . $_FILES['files']['name'][$file_form_name]);
-						move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name])
+						move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name]);
 						drupal_set_message(t("File !filename already exists hence overwirtten the exisitng file ", array(
 							'!filename' => $_FILES['files']['name'][$file_form_name]
 						)), 'error');
@@ -411,7 +411,7 @@ function circuit_simulation_upload_abstract_code_form_submit($form, &$form_state
 					if (file_exists($root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name]))
 					{
 						//unlink($root_path . $dest_path . $_FILES['files']['name'][$file_form_name]);
-						move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name])
+						move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $dest_path_project_files . $_FILES['files']['name'][$file_form_name]);
 						drupal_set_message(t("File !filename already exists hence overwirtten the exisitng file ", array(
 							'!filename' => $_FILES['files']['name'][$file_form_name]
 						)), 'error');
