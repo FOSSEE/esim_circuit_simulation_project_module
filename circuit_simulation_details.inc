@@ -207,3 +207,32 @@ function circuit_simulation_completed_pspice_to_kicad()
 	}
 	return $output;
 }
+
+function circuit_simulation_completed_ltspice_to_kicad()
+{
+	$output = "";
+	$query = db_select('ltspice_to_kicad_circuits');
+	$query->fields('ltspice_to_kicad_circuits');
+	$result = $query->execute();
+		$preference_rows = array();
+		$i = 1;
+		while ($row = $result->fetchObject())
+		{
+			$preference_rows[] = array(
+				$i,
+				l(ltrim($row->name_of_circuit), 'https://static.fossee.in/esim/converters/ltspice_to_kicad/' . ltrim($row->name_of_circuit) . '.zip')
+				//$row->university,
+				//$completion_date
+			);
+			$i++;
+		} //$row = $result->fetchObject()
+		$preference_header = array(
+			'No',
+			'Name of the Circuit',
+		);
+		$output .= theme('table', array(
+			'header' => $preference_header,
+			'rows' => $preference_rows
+		));
+	return $output;
+}
