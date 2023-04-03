@@ -531,6 +531,18 @@ function circuit_simulation_menu()
 	);
 
 
+
+	$items['circuit-simulation-project/completed-circuits/ltspice-to-kicad'] = array(
+		'title' => 'Completed LTSpice to KICAD Circuits',
+		'page callback' => 'circuit_simulation_completed_ltspice_to_kicad',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'circuit_simulation_details.inc',
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 2
+	);
+
 	/* LABS IN PROGRESS */
 	$items['circuit-simulation-project/circuit-simulation-progress'] = array(
 		'title' => 'Circuit Simulations in Progress',

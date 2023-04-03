@@ -173,32 +173,18 @@ function circuit_simulation_completed_pspice_to_kicad()
 	</li>
 </ol>" . "<hr>";
 		$preference_rows = array();
-		$i = 1;
+		$i = $result->rowCount();
 		while ($row = $result->fetchObject())
 		{
-			/*$proposal_id = $row->id;
-			$query1 = db_select('esim_circuit_simulation_submitted_abstracts_file');
-			$query1->fields('esim_circuit_simulation_submitted_abstracts_file');
-			$query1->condition('file_approval_status', 1);
-			$query1->condition('proposal_id', $proposal_id);
-			$esim_project_files = $query1->execute();
-			$esim_project_abstract = $esim_project_files->fetchObject();
-			$completion_date = date("Y", $row->actual_completion_date);*/
 			$preference_rows[] = array(
 				$i,
 				l($row->name_of_circuit, 'https://static.fossee.in/esim/converters/pspicetokicad_PAGE_all/' . $row->filename . '.tar.gz')
-				//$row->university,
-				//$completion_date
 			);
-			$i++;
+			$i--;
 		} //$row = $result->fetchObject()
 		$preference_header = array(
 			'No',
 			'Name of the Circuit',
-			//'Download'
-			//'Contributor Name',
-			//'University / Institute',
-			//'Year of Completion'
 		);
 		$output .= theme('table', array(
 			'header' => $preference_header,
@@ -207,3 +193,38 @@ function circuit_simulation_completed_pspice_to_kicad()
 	}
 	return $output;
 }
+
+function circuit_simulation_completed_ltspice_to_kicad()
+{
+	$output = "";
+	$query = db_select('ltspice_to_kicad_circuits');
+	$query->fields('ltspice_to_kicad_circuits');
+	$result = $query->execute();
+		$preference_rows = array();
+		$output .= "
+<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>The below files are converted from LTSpice to KiCad. The converted schematic file is compatible with KiCad for PCB layout. You can also create a netlist and simulate using Ngspice. 
+<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This is a Beta Release. Please mail us at contact-esim@fossee.in in case of any issues.</span</p>
+<p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>The link to the LTSpice to KiCad Converter will be released soon.</span></p>
+<hr>";
+$i = $result->rowCount();
+		while ($row = $result->fetchObject())
+		{
+			$preference_rows[] = array(
+				$i,
+				l(ltrim($row->name_of_circuit), 'https://static.fossee.in/esim/converters/ltspice_to_kicad/' . ltrim($row->filename) . '.zip')
+				//$row->university,
+				//$completion_date
+			);
+			$i--;
+		} //$row = $result->fetchObject()
+		$preference_header = array(
+			'No',
+			'Name of the Circuit',
+		);
+		$output .= theme('table', array(
+			'header' => $preference_header,
+			'rows' => $preference_rows
+		));
+	return $output;
+}
+		
