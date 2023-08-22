@@ -71,7 +71,7 @@ function circuit_simulation_progress_all()
 	{
 		$page_content .= "Work is in progress for the following circuit simulation under Circuit Simulation Project<hr>";
 		$preference_rows = array();
-		$i = 1;
+		$i = $result->rowCount();
 		while ($row = $result->fetchObject())
 		{
 			$approval_date = date("Y", $row->approval_date);
@@ -82,7 +82,7 @@ function circuit_simulation_progress_all()
 				$row->university,
 				$approval_date
 			);
-			$i++;
+			$i--;
 		} //$row = $result->fetchObject()
 		$preference_header = array(
 			'No',
