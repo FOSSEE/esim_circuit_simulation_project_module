@@ -9,6 +9,19 @@ function circuit_simulation_menu()
 {
 	$items = array();
 	/* PROPOSAL */
+	$items['completed-circuits/all'] = array(
+		'title' => 'Completed Circuits',
+		'description' => 'Completed Circuits',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('all_completed_circuit_simulations'),
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'type' => MENU_LOCAL_TASK,
+		'weight' => 5,
+		'file' => 'all_completed_circuits.inc'
+	);
 	$items['circuit-simulation-project/proposal'] = array(
 		'title' => 'Circuit Simulation Proposal Form',
 		'description' => 'Circuit Simulation Proposal Form',

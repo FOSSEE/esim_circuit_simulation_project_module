@@ -211,7 +211,7 @@ $i = $result->rowCount();
 		{
 			$preference_rows[] = array(
 				$i,
-				l(ltrim($row->name_of_circuit), 'https://static.fossee.in/esim/converters/ltspice_to_kicad/' . ltrim($row->filename) . '.zip')
+				l(ltrim($row->circuit_full_name), 'https://static.fossee.in/esim/converters/ltspice_to_kicad/' . ltrim($row->filename))
 				//$row->university,
 				//$completion_date
 			);
