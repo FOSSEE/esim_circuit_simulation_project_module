@@ -66,7 +66,7 @@ function all_circuit_details($activity_id){
 	$result = db_query("select * from (select concat('https://esim.fossee.in/circuit-simulation-project/esim-circuit-simulation-run/', e.id) as link,from_unixtime(e.actual_completion_date, '%Y') as actual_completion_date, e.project_title as circuit_title, e.contributor_name as contributor_name, e.university as institute, 'Circuit Simulation' as activity
 from esim_circuit_simulation_proposal as e where e.approval_status = 3
 union all
-select concat('https://esim.fossee.in/hackathon-submission/download/completed-circuit/',h1.id) as link, '2021' as actual_completion_date,  h1.circuit_name as circuit_title, h1.participant_name as contributor_name, h1.institute  as institute, 'Circuit Design and Simulation Marathon using eSim' as activity from hackathon_completed_circuits as hcc
+select concat('https://esim.fossee.in/hackathon/download/completed-circuits/',h1.id) as link, '2021' as actual_completion_date,  h1.circuit_name as circuit_title, h1.participant_name as contributor_name, h1.institute  as institute, 'Circuit Design and Simulation Marathon using eSim' as activity from hackathon_completed_circuits as hcc
 left join hackathon_literature_survey as h1
 on hcc.literature_survey_id = h1.id
 union all
@@ -138,7 +138,7 @@ left join hackathon_literature_survey as h1 on hcc.literature_survey_id = h1.id"
 	while($row = $result->fetchObject()){
 		$preference_rows[] = array(
 			$i,
-			l($row->circuit_title, 'https://esim.fossee.in/hackathon-submission/download/completed-circuit/' . $row->id),
+			l($row->circuit_title, 'https://esim.fossee.in/hackathon/download/completed-circuits/' . $row->id),
 			$row->contributor_name,
 			$row->institute,
 			$row->actual_completion_date
