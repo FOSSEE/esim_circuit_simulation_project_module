@@ -9,7 +9,7 @@ function circuit_simulation_menu()
 {
 	$items = array();
 	/* PROPOSAL */
-	$items['completed-circuits/all'] = array(
+	$items['completed-circuits'] = array(
 		'title' => 'Completed Circuits',
 		'description' => 'Completed Circuits',
 		'page callback' => 'drupal_get_form',
