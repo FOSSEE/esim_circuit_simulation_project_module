@@ -66,7 +66,7 @@ function all_completed_circuit_simulations($form, $form_state)
 function _list_of_all_completed_circuits()
 {
 	$circuit_simulation_titles = array(
-		'' => 'All activities'
+		'all' => 'All activities'
 	);
 	//$lab_titles_q = db_query("SELECT * FROM {circuit_simulation_proposal} WHERE solution_display = 1 ORDER BY lab_title ASC");
 	$query = db_select('all_completed_activities');
