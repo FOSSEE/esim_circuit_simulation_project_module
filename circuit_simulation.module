@@ -866,12 +866,13 @@ function _df_list_of_departments()
 	} //$department_list_data = $department_list->fetchObject()
 	return $department;
 }
-function _df_dir_name($project, $proposar_name)
+function _cs_dir_name($project, $proposar_name)
 {
-	$project_title = ucname($project);
+	$project_title = preg_replace("/_+/", "_",preg_replace('/[^A-Za-z0-9\-]/', '_', $project));
 	$proposar_name = ucname($proposar_name);
 	$dir_name = $project_title . ' By ' . $proposar_name;
 	$directory_name = str_replace("__", "_", str_replace(" ", "_", str_replace("/","_", trim($dir_name))));
+	//var_dump($directory_name);die;
 	return $directory_name;
 }
 function circuit_simulation_document_path()

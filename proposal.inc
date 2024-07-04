@@ -208,8 +208,9 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 		'#markup' => '<hr>'
 	);
 	$form['project_title'] = array(
-		'#type' => 'textarea',
+		'#type' => 'textfield',
 		'#title' => t('Project Title'),
+		'#maxlength' => 250,
 		'#size' => 250,
 		'#description' => t('Maximum character limit is 250'),
 		'#required' => TRUE
@@ -338,11 +339,7 @@ function circuit_simulation_proposal_form_validate($form, &$form_state)
 	$form_state['values']['project_title'] = trim($form_state['values']['project_title']);
 	if ($form_state['values']['project_title'] != '')
 	{
-		if (strlen($form_state['values']['project_title']) > 250)
-		{
-			form_set_error('project_title', t('Maximum charater limit is 250 charaters only, please check the length of the project title'));
-		} //strlen($form_state['values']['project_title']) > 250
-		else if (strlen($form_state['values']['project_title']) < 10)
+		if (strlen($form_state['values']['project_title']) < 10)
 		{
 			form_set_error('project_title', t('Minimum charater limit is 10 charaters, please check the length of the project title'));
 		} //strlen($form_state['values']['project_title']) < 10
@@ -398,7 +395,7 @@ if (isset($_FILES['files']))
 				if ($_FILES['files']['size'][$file_form_name] <= 0)
 					form_set_error($file_form_name, t('File size cannot be zero.'));
 				/* check if valid file name */
-				if (!textbook_companion_check_valid_filename($_FILES['files']['name'][$file_form_name]))
+				if (!circuit_simulation_check_valid_filename($_FILES['files']['name'][$file_form_name]))
 					form_set_error($file_form_name, t('Invalid file name specified. Only alphabets and numbers are allowed as a valid filename.'));
 			} //$file_name
 		} //$_FILES['files']['name'] as $file_form_name => $file_name
@@ -423,7 +420,7 @@ function circuit_simulation_proposal_form_submit($form, &$form_state)
 	$project_title = trim($v['project_title']);
 	$proposar_name = $v['name_title'] . ' ' . $v['contributor_name'];
 	$university = $v['university'];
-	$directory_name = _df_dir_name($project_title, $proposar_name);
+	$directory_name = _cs_dir_name($project_title, $proposar_name);
 	$result = "INSERT INTO {esim_circuit_simulation_proposal} 
     (
     uid, 
