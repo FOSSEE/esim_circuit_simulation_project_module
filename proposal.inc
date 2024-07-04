@@ -235,7 +235,7 @@ function circuit_simulation_proposal_form($form, &$form_state, $no_js_use = FALS
 	);
 	$form['samplefile'] = array(
 		'#type' => 'fieldset',
-		'#title' => t('Relevant Documents (if any)'),
+		'#title' => t('Relevant Documents (if any)<span style="color:red">*</span>'),
 		'#collapsible' => FALSE,
 		'#collapsed' => FALSE
 	);
