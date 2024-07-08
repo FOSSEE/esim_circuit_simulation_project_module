@@ -794,7 +794,7 @@ function circuit_simulation_proposal_edit_form($form, &$form_state)
 		'#default_value' => $proposal_data->operating_system
 	);
 	$form['project_title'] = array(
-		'#type' => 'textarea',
+		'#type' => 'textfield',
 		'#title' => t('Title of the Circuit Simulation Project'),
 		'#size' => 300,
 		'#maxlength' => 350,
@@ -938,8 +938,8 @@ function circuit_simulation_proposal_edit_form_submit($form, &$form_state)
 	$project_title = $v['project_title'];
 	$proposar_name = $v['name_title'] . ' ' . $v['contributor_name'];
 	$university = $v['university'];
-	$directory_names = _df_dir_name($project_title, $proposar_name);
-	if (DF_RenameDir($proposal_id, $directory_names))
+	$directory_names = _cs_dir_name($project_title, $proposar_name);
+	if (CS_RenameDir($proposal_id, $directory_names))
 	{
 		$directory_name = $directory_names;
 	} //LM_RenameDir($proposal_id, $directory_names)
