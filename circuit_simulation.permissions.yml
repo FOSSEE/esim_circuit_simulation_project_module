@@ -1,0 +1,51 @@
+'esim circuit simulation create proposal':
+  title: 'esim circuit simulation create proposal'
+  'restrict access': true
+'esim circuit simulation manage proposal':
+  title: 'esim circuit simulation manage proposal'
+  'restrict access': true
+'esim circuit simulation edit proposal':
+  title: 'esim circuit simulation edit proposal'
+  'restrict access': true
+'esim circuit simulation approve proposal':
+  title: 'esim circuit simulation approve proposal'
+  'restrict access': true
+'esim circuit simulation propose solution':
+  title: 'esim circuit simulation propose solution'
+  'restrict access': true
+'esim circuit simulation approve abstract':
+  title: 'esim circuit simulation approve code'
+  'restrict access': true
+'esim circuit simulation bulk manage abstract':
+  title: 'esim circuit simulation bulk manage abstract'
+  'restrict access': true
+'esim circuit simulation bulk delete abstract':
+  title: 'esim circuit simulation bulk delete code'
+  'restrict access': true
+'esim circuit simulation upload abstract':
+  title: 'esim circuit simulation upload code'
+  'restrict access': true
+'esim circuit simulation download code':
+  title: 'esim circuit simulation download code'
+  'restrict access': true
+'esim circuit simulation download proposals':
+  title: 'esim circuit simulation download proposals'
+  'restrict access': true
+'administer esim circuit simulation':
+  title: 'administer esim circuit simulation'
+  'restrict access': true
+'esim circuit simulation generate abstract':
+  title: 'esim circuit simulation generate abstract'
+  'restrict access': true
+'list circuit simulation certificates':
+  title: 'list the certificates'
+  description: 'list the certificates'
+  'restrict access': true
+'list circuit simulation custom certificates':
+  title: 'list the mentor certificates'
+  description: 'list the mentor certificates'
+  'restrict access': true
+'verify certificates':
+  title: 'verify the certificates'
+  description: 'verify the certificates'
+  'restrict access': true

@@ -4,10 +4,10 @@ function generate_pdf()
 	$mpath = drupal_get_path('module', 'circuit_simulation');
 	require($mpath.'/pdf/fpdf/fpdf.php');
 	require($mpath.'/pdf/phpqrcode/qrlib.php');
-	global $user;
+	$user = \Drupal::currentUser();
 	$x                 = $user->uid;
 	$proposal_id       = arg(3);
-	$query3 = db_query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid AND id=:proposal_id", array(
+	$query3 = \Drupal::database()->query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid AND id=:proposal_id", array(
 		':uid' => $user->uid,
 		':proposal_id'=>$proposal_id
 	));
@@ -18,7 +18,7 @@ function generate_pdf()
 	$data3             = $query3->fetchObject();*/
 	if($data3){
 	if($data3->uid != $x){
-		drupal_set_message('Certificate is not available','error');
+		\Drupal::messenger()->addError('Certificate is not available');
 		return;
 	}
 	}
@@ -111,7 +111,7 @@ function generate_pdf()
 	$proposal_get_id = 0;
 	$UniqueString    = "";
 	$tempDir         = $path . "/pdf/temp_prcode/";
-	$query           = db_select('esim_circuit_simulation_qr_code');
+	$query           = \Drupal::database()->select('esim_circuit_simulation_qr_code');
 	$query->fields('esim_circuit_simulation_qr_code');
 	$query->condition('proposal_id', $proposal_id);
 	$result          = $query->execute();
@@ -130,9 +130,7 @@ function generate_pdf()
 			":proposal_id" => $proposal_id,
 			":qr_code" => $UniqueString
 		);
-		$result       = db_query($query, $args, array(
-			'return' => Database::RETURN_INSERT_ID
-		));
+		$result       = \Drupal::database()->query($query, $args, $query);
 	} //$DBString == "" || $DBString == "null"
 	else {
 		$UniqueString = $DBString;
@@ -209,14 +207,14 @@ function generate_copyright_form_pdf()
 {
 	$mpath = drupal_get_path('module', 'circuit_simulation');
 	require($mpath . '/pdf/fpdf/fpdf.php');
-	global $user;
+	$user = \Drupal::currentUser();
 	$x           = $user->uid;
 	$proposal_id = arg(3);
-	$query2 = db_query("SELECT id FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
+	$query2 = \Drupal::database()->query("SELECT id FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
 		':uid' => $user->uid
 	));
 	$data2             = $query2->fetchObject();
-	$query3 = db_query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
+	$query3 = \Drupal::database()->query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
 		':uid' => $user->uid
 	));
 	$data3       = $query3->fetchObject();
@@ -297,14 +295,14 @@ function generate_undertaking_form_pdf()
 {
 	$mpath = drupal_get_path('module', 'circuit_simulation');
 	require($mpath . '/pdf/fpdf/fpdf.php');
-	global $user;
+	$user = \Drupal::currentUser();
 	$x           = $user->uid;
 	$proposal_id = arg(3);
-	$query2 = db_query("SELECT id FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
+	$query2 = \Drupal::database()->query("SELECT id FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
 		':uid' => $user->uid
 	));
 	$data2             = $query2->fetchObject();
-	$query3 = db_query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
+	$query3 = \Drupal::database()->query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND uid= :uid", array(
 		':uid' => $user->uid
 	));
 	$data3       = $query3->fetchObject();

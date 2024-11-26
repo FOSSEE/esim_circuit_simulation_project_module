@@ -9,8 +9,8 @@ function verify_certificates($qr_code = 0)
 	} //$qr_code
 	else
 	{
-		$verify_certificates_form = drupal_get_form("verify_certificates_form");
-		$page_content = drupal_render($verify_certificates_form);
+		$verify_certificates_form = \Drupal::formBuilder()->getForm("verify_certificates_form");
+		$page_content = \Drupal::service("renderer")->render($verify_certificates_form);
 	}
 	return $page_content;
 }
@@ -52,7 +52,7 @@ function verify_certificates_form_submit($form, &$form_state)
 	$qr_code = $v["QR_code"];
 	$page_content = verify_qrcode_fromdb($qr_code);
 	$form['displaytable']['#markup'] = $page_content;
-	$commands[] = ajax_command_html("#displaytable", drupal_render($form['displaytable']));
+	$commands[] = ajax_command_html("#displaytable", \Drupal::service("renderer")->render($form['displaytable']));
 	return array(
 		'#type' => 'ajax',
 		'#commands' => $commands
@@ -60,7 +60,7 @@ function verify_certificates_form_submit($form, &$form_state)
 }
 function verify_qrcode_fromdb($qr_code)
 {
-	$query = db_select('esim_circuit_simulation_qr_code');
+	$query = \Drupal::database()->select('esim_circuit_simulation_qr_code');
 	$query->fields('esim_circuit_simulation_qr_code', array(
 		'proposal_id'
 	));
@@ -69,11 +69,11 @@ function verify_qrcode_fromdb($qr_code)
 	$proposal_id = $result->fetchObject()->proposal_id;
 	if ($proposal_id)
 	{
-		$query2 = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE approval_status=3", array(
+		$query2 = \Drupal::database()->query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE approval_status=3", array(
 		':uid' => $proposal_id
 		));
 		$data2 = $query2->fetchObject();
-		$query3 = db_query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND id=:uid", array(
+		$query3 = \Drupal::database()->query("SELECT * FROM esim_circuit_simulation_proposal WHERE approval_status=3 AND id=:uid", array(
 		':uid' => $proposal_id
 	));
 	$data3 = $query3->fetchObject();

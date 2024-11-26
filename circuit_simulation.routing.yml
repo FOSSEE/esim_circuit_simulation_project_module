@@ -1,0 +1,197 @@
+circuit_simulation.all_completed_circuit_simulations:
+  path: /completed-circuits
+  defaults:
+    _title: 'Completed Circuits'
+    _form: \Drupal\circuit_simulation\Form\AllCompletedCircuitSimulations
+  requirements:
+    _permission: 'esim circuit simulation download code'
+circuit_simulation.proposal_form:
+  path: /circuit-simulation-project/proposal
+  defaults:
+    _title: 'Circuit Simulation Proposal Form'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationProposalForm
+  requirements:
+    _permission: 'esim circuit simulation create proposal'
+circuit_simulation.proposal_pending:
+  path: /circuit-simulation-project/manage-proposal/pending
+  defaults:
+    _title: 'Pending Proposals'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_proposal_pending'
+  requirements:
+    _permission: 'esim circuit simulation manage proposal'
+circuit_simulation.proposal_all:
+  path: /circuit-simulation-project/manage-proposal/all
+  defaults:
+    _title: 'All Proposals'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_proposal_all'
+  requirements:
+    _permission: 'esim circuit simulation manage proposal'
+circuit_simulation.approved_tab:
+  path: /circuit-simulation-project/manage-proposal/approved_proposals
+  defaults:
+    _title: 'Approved Proposals'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_approved_tab'
+  requirements:
+    _permission: 'esim circuit simulation manage proposal'
+circuit_simulation.uploaded_tab:
+  path: /circuit-simulation-project/manage-proposal/uploaded_proposals
+  defaults:
+    _title: 'Uploaded Proposals'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_uploaded_tab'
+  requirements:
+    _permission: 'esim circuit simulation manage proposal'
+circuit_simulation.completed_tab_form:
+  path: /circuit-simulation-project/manage-proposal/completed_proposals
+  defaults:
+    _title: 'Completed Proposals'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationCompletedTabForm
+  requirements:
+    _permission: 'esim circuit simulation manage proposal'
+circuit_simulation.proposal_approval_form:
+  path: /circuit-simulation-project/manage-proposal/approve/{proposal_id}
+  defaults:
+    _title: 'Approve Proposal'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationProposalApprovalForm
+  requirements:
+    _permission: 'esim circuit simulation manage proposal'
+circuit_simulation.proposal_edit_form:
+  path: /circuit-simulation-project/manage-proposal/edit/{proposal_id}
+  defaults:
+    _title: 'Edit Proposal'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationProposalEditForm
+  requirements:
+    _permission: 'esim circuit simulation manage proposal'
+circuit_simulation.proposal_status_form:
+  path: /circuit-simulation-project/manage-proposal/status
+  defaults:
+    _title: 'Proposal Status'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationProposalStatusForm
+  requirements:
+    _permission: 'esim circuit simulation approve proposal'
+circuit_simulation.abstract_bulk_approval_form:
+  path: /circuit-simulation-project/abstract-approval/bulk
+  defaults:
+    _title: 'Bulk Manage'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationAbstractBulkApprovalForm
+  requirements:
+    _permission: 'esim circuit simulation bulk manage abstract'
+circuit_simulation.abstract:
+  path: '/circuit-simulation-project/abstract-code/circuit simulation-project-list'
+  defaults:
+    _title: 'Circuit Simulation'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_abstract'
+  requirements:
+    _permission: 'esim circuit simulation upload abstract'
+circuit_simulation.upload_abstract_code_form:
+  path: /circuit-simulation-project/abstract-code/upload
+  defaults:
+    _title: 'Abstract and Project Upload'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationUploadAbstractCodeForm
+  requirements:
+    _permission: 'esim circuit simulation upload abstract'
+circuit_simulation.download_full_project:
+  path: /circuit-simulation-project/full-download/project
+  defaults:
+    _title: 'Code Download'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_download_full_project'
+  requirements:
+    _permission: 'esim circuit simulation download code'
+circuit_simulation.download_proposals:
+  path: /circuit-simulation-project/download-proposals
+  defaults:
+    _title: 'Download Proposals'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_download_proposals'
+  requirements:
+    _permission: 'esim circuit simulation download proposals'
+circuit_simulation.esim_circuit_simulation_download_completed_proposals:
+  path: /circuit-simulation-project/download-completed-proposals
+  defaults:
+    _title: 'Download Completed Proposals'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::esim_circuit_simulation_download_completed_proposals'
+  requirements:
+    _permission: 'esim circuit simulation download proposals'
+circuit_simulation.completed_proposals_all:
+  path: /circuit-simulation-project/completed-circuits/simulations
+  defaults:
+    _title: 'Completed Circuit Simulations'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_completed_proposals_all'
+  requirements:
+    _permission: 'esim circuit simulation download code'
+circuit_simulation.completed_pspice_to_kicad:
+  path: /circuit-simulation-project/completed-circuits/pspice-to-kicad
+  defaults:
+    _title: 'Completed PSPICE to KICAD Circuits'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_completed_pspice_to_kicad'
+  requirements:
+    _permission: 'esim circuit simulation download code'
+circuit_simulation.completed_ltspice_to_kicad:
+  path: /circuit-simulation-project/completed-circuits/ltspice-to-kicad
+  defaults:
+    _title: 'Completed LTSpice to KICAD Circuits'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_completed_ltspice_to_kicad'
+  requirements:
+    _permission: 'esim circuit simulation download code'
+circuit_simulation.progress_all:
+  path: /circuit-simulation-project/circuit-simulation-progress
+  defaults:
+    _title: 'Circuit Simulations in Progress'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_progress_all'
+  requirements:
+    _permission: 'esim circuit simulation download code'
+circuit_simulation.run_form:
+  path: /circuit-simulation-project/esim-circuit-simulation-run
+  defaults:
+    _title: 'Download Codes'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationRunForm
+  requirements:
+    _permission: 'esim circuit simulation download code'
+circuit_simulation.download_upload_file:
+  path: /circuit-simulation-project/download/resource-file
+  defaults:
+    _title: 'Download user defined compound file'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_download_upload_file'
+  requirements:
+    _permission: 'download code'
+circuit_simulation.esim_circuit_simulation_project_files:
+  path: /circuit-simulation-project/download/project-file
+  defaults:
+    _title: 'Download Project file'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::esim_circuit_simulation_project_files'
+  requirements:
+    _permission: 'download code'
+circuit_simulation.settings_form:
+  path: '/admin/settings/esim-circuit-simulation'
+  defaults:
+    _title: 'esim circuit simulation Settings'
+    _form: \Drupal\circuit_simulation\Form\CircuitSimulationSettingsForm
+  requirements:
+    _permission: 'administer esim circuit simulation'
+circuit_simulation._list_circuit_simulation_certificates:
+  path: /circuit-simulation-project/certificates
+  defaults:
+    _title: 'List of Circuit Simulation Certificates'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::_list_circuit_simulation_certificates'
+  requirements:
+    _permission: 'list circuit simulation certificates'
+circuit_simulation.generate_pdf:
+  path: /circuit-simulation-project/certificates-custom/pdf
+  defaults:
+    _title: 'Download Certificate'
+    _form: \Drupal\circuit_simulation\Form\GeneratePdf
+  requirements:
+    _permission: 'generate pdf'
+circuit_simulation._list_circuit_simulation_custom_certificates:
+  path: /circuit-simulation-project/certificates-custom
+  defaults:
+    _title: 'List of Circuit Simulation Custom Certificates'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::_list_circuit_simulation_custom_certificates'
+  requirements:
+    _permission: 'list circuit simulation custom certificates'
+circuit_simulation.verify_certificates_verify_certificates:
+  path: /circuit-simulation-project/certificates/verify
+  defaults:
+    qr_code: verify_certificates
+    _title: 'Certificate Verification'
+    _controller: '\Drupal\circuit_simulation\Controller\DefaultController::verify_certificates'
+  requirements:
+    _permission: 'verify certificates'

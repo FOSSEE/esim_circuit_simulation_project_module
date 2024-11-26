@@ -1,0 +1,3 @@
+services:
+  circuit_simulation_mail:
+    class: Drupal\circuit_simulation\Services\CircuitSimulationMail
