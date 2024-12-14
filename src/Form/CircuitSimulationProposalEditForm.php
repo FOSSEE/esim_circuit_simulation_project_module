@@ -10,6 +10,12 @@ namespace Drupal\circuit_simulation\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\user\Entity\User;
+use Drupal\Core\Database\Database;
 
 class CircuitSimulationProposalEditForm extends FormBase {
 
@@ -22,8 +28,9 @@ class CircuitSimulationProposalEditForm extends FormBase {
 
   public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $user = \Drupal::currentUser();
+    $service = \Drupal::service('circuit_simulation_global');
     /* get current proposal */
-    $proposal_id = (int) arg(3);
+    $proposal_id = \Drupal::routeMatch()->getParameter('proposal_id');
     //$proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE id = %d", $proposal_id);
     $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
     $query->fields('esim_circuit_simulation_proposal');
@@ -34,15 +41,18 @@ class CircuitSimulationProposalEditForm extends FormBase {
         /* everything ok */
       } //$proposal_data = $proposal_q->fetchObject()
       else {
-        \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
-        drupal_goto('circuit-simulation-project/manage-proposal');
-        return;
+        $msg = \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
+        $response = new RedirectResponse(Url::fromRoute('circuit_simulation.proposal_pending')->toString());
+         $response->send();
+        //drupal_goto('circuit-simulation-project/manage-proposal');
+        return $msg;
       }
     } //$proposal_q
     else {
-      \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
-      drupal_goto('circuit-simulation-project/manage-proposal');
-      return;
+      $msg = \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
+      $response = new RedirectResponse(Url::fromRoute('circuit_simulation.proposal_pending')->toString());
+       $response->send();
+      return $msg;
     }
     $user_data = \Drupal::entityTypeManager()->getStorage('user')->load($proposal_data->uid);
     $form['name_title'] = [
@@ -69,7 +79,7 @@ class CircuitSimulationProposalEditForm extends FormBase {
     $form['student_email_id'] = [
       '#type' => 'item',
       '#title' => t('Email'),
-      '#markup' => $user_data->mail,
+      '#markup' => $user_data->getEmail(),
     ];
     $form['university'] = [
       '#type' => 'textfield',
@@ -158,7 +168,7 @@ class CircuitSimulationProposalEditForm extends FormBase {
     $form['all_state'] = [
       '#type' => 'select',
       '#title' => t('State'),
-      '#options' => _df_list_of_states(),
+      '#options' => $service->_esim_cs_list_of_states(),
       '#default_value' => $proposal_data->state,
       '#validated' => TRUE,
       '#states' => [
@@ -172,7 +182,7 @@ class CircuitSimulationProposalEditForm extends FormBase {
     $form['city'] = [
       '#type' => 'select',
       '#title' => t('City'),
-      '#options' => _df_list_of_cities(),
+      '#options' => $service->_esim_cs_list_of_cities(),
       '#default_value' => $proposal_data->city,
       '#states' => [
         'visible' => [
@@ -235,20 +245,21 @@ class CircuitSimulationProposalEditForm extends FormBase {
       '#type' => 'submit',
       '#value' => t('Submit'),
     ];
-    // @FIXME
-    // l() expects a Url object, created from a route name or external URI.
-    // $form['cancel'] = array(
-    // 		'#type' => 'item',
-    // 		'#markup' => l(t('Cancel'), 'circuit-simulation-project/manage-proposal')
-    // 	);
+    $cancel_url = Url::fromUri('internal:/circuit-simulation-project/manage-proposal');
+
+    $form['cancel'] = array(
+    		'#type' => 'item',
+    		'#markup' => Link::fromTextAndUrl('Cancel', $cancel_url)->toString()
+    	);
 
     return $form;
   }
 
   public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $user = \Drupal::currentUser();
+    $service = \Drupal::service('circuit_simulation_global');
     /* get current proposal */
-    $proposal_id = (int) arg(3);
+    $proposal_id = \Drupal::routeMatch()->getParameter('proposal_id');
     $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
     $query->fields('esim_circuit_simulation_proposal');
     $query->condition('id', $proposal_id);
@@ -258,46 +269,50 @@ class CircuitSimulationProposalEditForm extends FormBase {
         /* everything ok */
       } //$proposal_data = $proposal_q->fetchObject()
       else {
-        \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
-        drupal_goto('circuit-simulation-project/manage-proposal');
-        return;
+        $msg = \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
+        $response = new RedirectResponse(Url::fromRoute('circuit_simulation.proposal_pending')->toString());
+         $response->send();
+        //drupal_goto('circuit-simulation-project/manage-proposal');
+        return $msg;
       }
     } //$proposal_q
     else {
-      \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
-      drupal_goto('circuit-simulation-project/manage-proposal');
-      return;
+      $msg = \Drupal::messenger()->addError(t('Invalid proposal selected. Please try again.'));
+      $response = new RedirectResponse(Url::fromRoute('circuit_simulation.proposal_pending')->toString());
+       $response->send();
+      return $msg;
     }
     /* delete proposal */
     if ($form_state->getValue(['delete_proposal']) == 1) {
       /* sending email */
       $user_data = \Drupal::entityTypeManager()->getStorage('user')->load($proposal_data->uid);
-      $email_to = $user_data->mail;
-      $from = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_from_email');
-      $bcc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_emails');
-      $cc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_cc_emails');
-      $params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
-      $params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->uid;
-      $params['circuit_simulation_proposal_deleted']['headers'] = [
-        'From' => $from,
-        'MIME-Version' => '1.0',
-        'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
-        'Content-Transfer-Encoding' => '8Bit',
-        'X-Mailer' => 'Drupal',
-        'Cc' => $cc,
-        'Bcc' => $bcc,
-      ];
-      if (!drupal_mail('circuit_simulation', 'circuit_simulation_proposal_deleted', $email_to, user_preferred_language($user), $params, $from, TRUE)) {
-        \Drupal::messenger()->addError('Error sending email message.');
-      }
+      // $email_to = $user_data->getEmail();
+      // $from = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_from_email');
+      // $bcc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_emails');
+      // $cc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_cc_emails');
+      // $params['circuit_simulation_proposal_deleted']['proposal_id'] = $proposal_id;
+      // $params['circuit_simulation_proposal_deleted']['user_id'] = $proposal_data->uid;
+      // $params['circuit_simulation_proposal_deleted']['headers'] = [
+      //   'From' => $from,
+      //   'MIME-Version' => '1.0',
+      //   'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
+      //   'Content-Transfer-Encoding' => '8Bit',
+      //   'X-Mailer' => 'Drupal',
+      //   'Cc' => $cc,
+      //   'Bcc' => $bcc,
+      // ];
+      // if (!drupal_mail('circuit_simulation', 'circuit_simulation_proposal_deleted', $email_to, user_preferred_language($user), $params, $from, TRUE)) {
+      //   \Drupal::messenger()->addError('Error sending email message.');
+      // }
       \Drupal::messenger()->addStatus(t('eSim Cicuit simulation proposal has been deleted.'));
-      if (rrmdir_project($proposal_id) == TRUE) {
+      if ($service->rrmdir_project($proposal_id) == TRUE) {
         $query = \Drupal::database()->delete('esim_circuit_simulation_proposal');
         $query->condition('id', $proposal_id);
         $num_deleted = $query->execute();
-        \Drupal::messenger()->addStatus(t('Proposal Deleted'));
-        drupal_goto('circuit-simulation-project/manage-proposal');
-        return;
+        $msg = \Drupal::messenger()->addStatus(t('Proposal Deleted'));
+        $response = new RedirectResponse(Url::fromRoute('circuit_simulation.proposal_all')->toString());
+         $response->send();
+        return $msg;
       } //rrmdir_project($proposal_id) == TRUE
     } //$form_state['values']['delete_proposal'] == 1
 	/* update proposal */
@@ -305,8 +320,8 @@ class CircuitSimulationProposalEditForm extends FormBase {
     $project_title = $v['project_title'];
     $proposar_name = $v['name_title'] . ' ' . $v['contributor_name'];
     $university = $v['university'];
-    $directory_names = _cs_dir_name($project_title, $proposar_name);
-    if (CS_RenameDir($proposal_id, $directory_names)) {
+    $directory_names = $service->_cs_dir_name($project_title, $proposar_name);
+    if ($service->CS_RenameDir($proposal_id, $directory_names)) {
       $directory_name = $directory_names;
     } //LM_RenameDir($proposal_id, $directory_names)
     else {

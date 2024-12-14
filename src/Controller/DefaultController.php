@@ -8,6 +8,16 @@ namespace Drupal\circuit_simulation\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\Response;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Database\Database;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Service;
+use Drupal\user\Entity\User;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Render\Markup;
 
 /**
  * Default controller for the circuit_simulation module.
@@ -27,7 +37,10 @@ class DefaultController extends ControllerBase {
   $this->t('Approve'),
   Url::fromUri('internal:/circuit-simulation-project/manage-proposal/approve/' . $pending_data->id)
 )->toString();
-      $edit_url =  Link::fromTextAndUrl('Edit', Url::fromRoute('circuit_simulation.proposal_edit_form',['id'=>$pending_data->id]))->toString();
+      $edit_url =  Link::fromTextAndUrl(
+  $this->t('Edit'),
+  Url::fromUri('internal:/circuit-simulation-project/manage-proposal/edit/' . $pending_data->id)
+)->toString();
       $mainLink = t('@linkApprove | @linkReject', array('@linkApprove' => $approval_url, '@linkReject' => $edit_url));
       $pending_rows[$pending_data->id] = [
         date('d-m-Y', $pending_data->creation_date),
@@ -38,10 +51,10 @@ class DefaultController extends ControllerBase {
 
     } //$pending_data = $pending_q->fetchObject()
   /* check if there are any pending proposals */
-    if (!$pending_rows) {
-      \Drupal::messenger()->addStatus(t('There are no pending proposals.'));
-      return '';
-    } //!$pending_rows
+    /*if (!$pending_rows) {
+      $msg = \Drupal::messenger()->addStatus(t('There are no pending proposals.'));
+      return $msg;
+    } //!$pending_rows*/
     $pending_header = [
       'Date of Submission',
       'Student Name',
@@ -89,23 +102,27 @@ class DefaultController extends ControllerBase {
       else {
         $actual_completion_date = date('d-m-Y', $proposal_data->actual_completion_date);
       }
-      // @FIXME
-      // l() expects a Url object, created from a route name or external URI.
-      // $proposal_rows[] = array(
-      // 			date('d-m-Y', $proposal_data->creation_date),
-      // 			l($proposal_data->contributor_name, 'user/' . $proposal_data->uid),
-      // 			$proposal_data->project_title,
-      // 			$actual_completion_date,
-      // 			$approval_status,
-      // 			l('Status', 'circuit-simulation-project/manage-proposal/status/' . $proposal_data->id) . ' | ' . l('Edit', 'circuit-simulation-project/manage-proposal/edit/' . $proposal_data->id)
-      // 		);
-
+       $approval_url = Link::fromTextAndUrl(
+  $this->t('Status'),
+  Url::fromUri('internal:/circuit-simulation-project/manage-proposal/status/' . $proposal_data->id)
+)->toString();
+      //$approval_url = Link::fromTextAndUrl('Status', Url::fromRoute('om_flowsheet.proposal_status_form',['id'=>$proposal_data->id]))->toString();
+      $edit_url =  Link::fromTextAndUrl('Edit', Url::fromUri('internal:/circuit-simulation-project/manage-proposal/edit/' . $proposal_data->id))->toString();
+      $mainLink = t('@linkApprove | @linkReject', array('@linkApprove' => $approval_url, '@linkReject' => $edit_url));
+      $proposal_rows[$proposal_data->id] = [
+        $actual_completion_date,
+        Link::fromTextAndUrl($proposal_data->contributor_name, Url::fromRoute('entity.user.canonical', ['user' => $proposal_data->uid])),
+        $proposal_data->project_title,
+        $actual_completion_date,
+        $approval_status,
+        $mainLink
+      ];
     } //$proposal_data = $proposal_q->fetchObject()
 	/* check if there are any pending proposals */
-    if (!$proposal_rows) {
-      \Drupal::messenger()->addStatus(t('There are no proposals.'));
-      return '';
-    } //!$proposal_rows
+    // if (!$proposal_rows) {
+    //   \Drupal::messenger()->addStatus(t('There are no proposals.'));
+    //   return '';
+    // } //!$proposal_rows
     $proposal_header = [
       'Date of Submission',
       'Student Name',
@@ -114,33 +131,29 @@ class DefaultController extends ControllerBase {
       'Status',
       'Action',
     ];
-    // @FIXME
-    // theme() has been renamed to _theme() and should NEVER be called directly.
-    // Calling _theme() directly can alter the expected output and potentially
-    // introduce security issues (see https://www.drupal.org/node/2195739). You
-    // should use renderable arrays instead.
-    // 
-    // 
-    // @see https://www.drupal.org/node/2195739
-    // $output = theme('table', array(
-    // 		'header' => $proposal_header,
-    // 		'rows' => $proposal_rows
-    // 	));
+    $output =  [
+      '#type' => 'table',
+      '#header' => $proposal_header,
+      '#rows' => $proposal_rows,
+      '#empty' => 'no rows found',
+    ];
 
     return $output;
   }
 
   public function circuit_simulation_approved_tab() {
-    $page_content = "";
+    $markup = "";
     $result = \Drupal::database()->query("SELECT * from esim_circuit_simulation_proposal where id not in (select proposal_id from esim_circuit_simulation_submitted_abstracts) AND approval_status = 1 order by approval_date desc");
-    if ($result->rowCount() == 0) {
-      $page_content .= "Work is in progress for the following circuit simulation under Circuit Simulation Project: " . $result->rowCount() . "<hr>";
+    $rows = $result->fetchAll();
+$i = count($rows);
+    if ($i == 0) {
+      $markup .= "Work is in progress for the following circuit simulation under Circuit Simulation Project: " . $i . "<hr>";
     } //$result->rowCount() == 0
     else {
-      $page_content .= "Work is in progress for the following circuit simulation under Circuit Simulation Project: " . $result->rowCount() . "<hr>";
+      $markup .= "Work is in progress for the following circuit simulation under Circuit Simulation Project: " . $i . "<hr>";
       $preference_rows = [];
-      $i = 1;
-      while ($row = $result->fetchObject()) {
+      //$i = 1;
+      foreach($rows as $row) {
         $approval_date = date("d-M-Y", $row->approval_date);
         $preference_rows[] = [
           $i,
@@ -149,7 +162,7 @@ class DefaultController extends ControllerBase {
           $row->university,
           $approval_date,
         ];
-        $i++;
+        $i--;
       } //$row = $result->fetchObject()
       $preference_header = [
         'No',
@@ -158,35 +171,35 @@ class DefaultController extends ControllerBase {
         'Institute',
         'Date of Approval',
       ];
-      // @FIXME
-      // theme() has been renamed to _theme() and should NEVER be called directly.
-      // Calling _theme() directly can alter the expected output and potentially
-      // introduce security issues (see https://www.drupal.org/node/2195739). You
-      // should use renderable arrays instead.
-      // 
-      // 
-      // @see https://www.drupal.org/node/2195739
-      // $page_content .= theme('table', array(
-      // 			'header' => $preference_header,
-      // 			'rows' => $preference_rows
-      // 		));
+      $page_content = [
+        '#type' => 'table',
+        '#rows' => $preference_rows,
+        '#header' => $preference_header
+      ];
 
     }
-    return $page_content;
+    return [
+      'markup' => [
+        '#markup' => $markup,
+      ],
+      'table' => $page_content,
+    ];
+      
   }
 
   public function circuit_simulation_uploaded_tab() {
-    $page_content = "";
-    $result = \Drupal::database()->query("SELECT dfp.project_title, dfp.contributor_name, dfp.id, dfp.university, dfa.abstract_upload_date, dfa.abstract_approval_status from esim_circuit_simulation_proposal as dfp JOIN esim_circuit_simulation_submitted_abstracts as dfa on dfa.proposal_id = dfp.id where dfp.id in (select proposal_id from esim_circuit_simulation_submitted_abstracts) AND approval_status = 1");
-
-    if ($result->rowCount() == 0) {
-      $page_content .= "Uploaded Proposals under Circuit Simulation Project<hr>";
+    $markup = "";
+    $result = \Drupal::database()->query("SELECT dfp.project_title, dfp.contributor_name, dfp.id, dfp.university, dfa.abstract_upload_date, dfa.abstract_approval_status from esim_circuit_simulation_proposal as dfp JOIN esim_circuit_simulation_submitted_abstracts as dfa on dfa.proposal_id = dfp.id where dfp.id in (select proposal_id from esim_circuit_simulation_submitted_abstracts) AND approval_status = 1 order by dfa.abstract_upload_date DESC");
+    $rows = $result->fetchAll();
+$i = count($rows);
+    if ($i == 0) {
+      $markup .= "Uploaded Proposals under Circuit Simulation Project<hr>";
     }
     else {
-      $page_content .= "Uploaded Proposals under Circuit Simulation Project: " . $result->rowCount() . "<hr>";
+      $markup .= "Uploaded Proposals under Circuit Simulation Project: " . $i . "<hr>";
       $preference_rows = [];
-      $i = 1;
-      while ($row = $result->fetchObject()) {
+      //$i = 1;
+      foreach($rows as $row) {
         $abstract_upload_date = date("d-M-Y", $row->abstract_upload_date);
         $preference_rows[] = [
           $i,
@@ -195,7 +208,7 @@ class DefaultController extends ControllerBase {
           $row->university,
           $abstract_upload_date,
         ];
-        $i++;
+        $i--;
       }
       $preference_header = [
         'No',
@@ -204,29 +217,27 @@ class DefaultController extends ControllerBase {
         'University / Institute',
         'Date of file submission',
       ];
-      // @FIXME
-      // theme() has been renamed to _theme() and should NEVER be called directly.
-      // Calling _theme() directly can alter the expected output and potentially
-      // introduce security issues (see https://www.drupal.org/node/2195739). You
-      // should use renderable arrays instead.
-      // 
-      // 
-      // @see https://www.drupal.org/node/2195739
-      // $page_content .= theme('table', array(
-      // 			'header' => $preference_header,
-      // 			'rows' => $preference_rows
-      // 		));
+      $page_content = [
+        '#type' => 'table',
+        '#rows' => $preference_rows,
+        '#header' => $preference_header
+      ];
 
     }
-    return $page_content;
+    return [
+      'markup' => [
+        '#markup' => $markup,
+      ],
+      'table' => $page_content,
+    ];
   }
 
   public function circuit_simulation_abstract() {
     $user = \Drupal::currentUser();
     $return_html = "";
-    $proposal_data = circuit_simulation_get_proposal();
+    $proposal_data = \Drupal::service('circuit_simulation_global')->circuit_simulation_get_proposal();
     if (!$proposal_data) {
-      drupal_goto('');
+      //drupal_goto('');
       return;
     } //!$proposal_data
     //$return_html .= l('Upload abstract', 'circuit-simulation-project/abstract-code/upload') . '<br />';
@@ -244,7 +255,8 @@ class DefaultController extends ControllerBase {
     $query_pdf->condition('proposal_id', $proposal_data->id);
     $query_pdf->condition('filetype', 'A');
     $abstracts_pdf = $query_pdf->execute()->fetchObject();
-    if ($abstracts_pdf == TRUE) {
+    //var_dump($abstracts_pdf);die;
+    if ($abstracts_pdf) {
       if ($abstracts_pdf->filename != "NULL" || $abstracts_pdf->filename != "") {
         $abstract_filename = $abstracts_pdf->filename;
         //$abstract_filename = l($abstracts_pdf->filename, 'circuit-simulation-project/download/project-file/' . $proposal_data->id);
@@ -261,7 +273,7 @@ class DefaultController extends ControllerBase {
     $query_process->condition('proposal_id', $proposal_data->id);
     $query_process->condition('filetype', 'S');
     $abstracts_query_process = $query_process->execute()->fetchObject();
-    if ($abstracts_query_process == TRUE) {
+    if ($abstracts_query_process) {
       if ($abstracts_query_process->filename != "NULL" || $abstracts_query_process->filename != "") {
         $abstracts_query_process_filename = $abstracts_query_process->filename;
         //$abstracts_query_process_filename = l($abstracts_query_process->filename, 'circuit-simulation-project/download/project-file/' . $proposal_data->id); 
@@ -272,7 +284,10 @@ class DefaultController extends ControllerBase {
       if ($abstracts_q->is_submitted == '') {
         // @FIXME
 // l() expects a Url object, created from a route name or external URI.
-// $url = l('Upload abstract', 'circuit-simulation-project/abstract-code/upload');
+ $url = Link::fromTextAndUrl(
+  'Upload Abstract',
+  Url::fromUri('internal:/circuit-simulation-project/abstract-code/upload')
+)->toString();
 
       } //$abstracts_q->is_submitted == ''
       else {
@@ -284,7 +299,10 @@ class DefaultController extends ControllerBase {
             // @FIXME
 // l() expects a Url object, created from a route name or external URI.
 // $url = l('Edit', 'circuit-simulation-project/abstract-code/upload');
-
+$url = Link::fromTextAndUrl(
+  'Edit',
+  Url::fromUri('internal:/circuit-simulation-project/abstract-code/upload')
+)->toString();
           }
         }
       } //$abstracts_q->is_submitted == 0
@@ -293,7 +311,10 @@ class DefaultController extends ControllerBase {
       // @FIXME
 // l() expects a Url object, created from a route name or external URI.
 // $url = l('Upload abstract', 'circuit-simulation-project/abstract-code/upload');
-
+$url = Link::fromTextAndUrl(
+  'Upload Abstract',
+  Url::fromUri('internal:/circuit-simulation-project/abstract-code/upload')
+)->toString();
       $abstracts_query_process_filename = "File not uploaded";
     }
     $return_html .= '<strong>Contributor Name:</strong><br />' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '<br /><br />';
@@ -301,13 +322,18 @@ class DefaultController extends ControllerBase {
     $return_html .= '<strong>Uploaded abstract of the project:</strong><br />' . $abstract_filename . '<br /><br />';
     $return_html .= '<strong>Uploaded project files:</strong><br />' . $abstracts_query_process_filename . '<br /><br />';
     $return_html .= $url . '<br />';
-    return $return_html;
+    return [
+      '#type' => 'markup',
+      '#markup' => $return_html,
+    ];
   }
 
   public function circuit_simulation_download_full_project() {
+    $service = \Drupal::service('circuit_simulation_global');
     $user = \Drupal::currentUser();
-    $id = arg(3);
-    $root_path = circuit_simulation_path();
+    //$id = arg(3);
+    $id = \Drupal::routeMatch()->getParameter('proposal_id');
+    $root_path = $service->circuit_simulation_path();
     //var_dump($root_path);die;
     $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
     $query->fields('esim_circuit_simulation_proposal');
@@ -318,15 +344,8 @@ class DefaultController extends ControllerBase {
     /* zip filename */
     $zip_filename = $root_path . 'zip-' . time() . '-' . rand(0, 999999) . '.zip';
     /* creating zip archive on the server */
-    $zip = new ZipArchive();
-    $zip->open($zip_filename, ZipArchive::CREATE);
-    $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
-    $query->fields('esim_circuit_simulation_proposal');
-    $query->condition('id', $id);
-    $circuit_simulation_udc_q = $query->execute();
-    $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
-    $query->fields('esim_circuit_simulation_proposal');
-    $query->condition('id', $id);
+    $zip = new \ZipArchive();
+    $zip->open($zip_filename, \ZipArchive::CREATE);
     $query = \Drupal::database()->select('esim_circuit_simulation_submitted_abstracts_file');
     $query->fields('esim_circuit_simulation_submitted_abstracts_file');
     $query->condition('proposal_id', $id);
@@ -368,12 +387,14 @@ class DefaultController extends ControllerBase {
     } //$zip_file_count > 0
     else {
       \Drupal::messenger()->addError("There are no circuit simulation project in this proposal to download");
-      drupal_goto('circuit-simulation-project/full-download/project');
+      return new RedirectResponse('/circuit-simulation-project/full-download/project/' . $proposal_id);
+      //drupal_goto('circuit-simulation-project/full-download/project');
     }
   }
 
   public function circuit_simulation_download_proposals() {
-    $root_path = circuit_simulation_document_path();
+    $service = \Drupal::service('circuit_simulation_global');
+    $root_path = $service->circuit_simulation_path();
 
     $result = \Drupal::database()->query("SELECT e.contributor_name as contirbutor_name, u.mail as email_id, e.project_title as title, e.contact_no as contact, e.university as university, from_unixtime(creation_date,'%d-%m-%Y') as creation, from_unixtime(approval_date,'%d-%m-%Y') as approval, from_unixtime(actual_completion_date,'%d-%m-%Y') as year, e.approval_status as status FROM esim_circuit_simulation_proposal as e JOIN users as u ON e.uid = u.uid ORDER BY actual_completion_date DESC");
 
@@ -467,6 +488,10 @@ class DefaultController extends ControllerBase {
 
   public function circuit_simulation_completed_proposals_all() {
     $output = "";
+    $count_query = \Drupal::database()->select('esim_circuit_simulation_proposal', 't')
+  ->condition('approval_status', 3)
+  ->countQuery();
+  $i = $count_query->execute()->fetchField(); 
     $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
     $query->fields('esim_circuit_simulation_proposal');
     $query->condition('approval_status', 3);
@@ -475,69 +500,60 @@ class DefaultController extends ControllerBase {
     $result = $query->execute();
 
     //var_dump($esim_project_abstract);die;
-    if ($result->rowCount() == 0) {
-      $output .= "Work has been completed for the following circuit simulation. We welcome your contributions." . "<hr>";
+    // if ($result->rowCount() == 0) {
+    //   $output .= "Work has been completed for the following circuit simulation. We welcome your contributions." . "<hr>";
 
-    } //$result->rowCount() == 0
-    else {
+    // } //$result->rowCount() == 0
+    // else {
       $output .= "Work has been completed for the following circuit simulation. We welcome your contributions." . "<hr>";
       $preference_rows = [];
-      $i = $result->rowCount();
       while ($row = $result->fetchObject()) {
-        $proposal_id = $row->id;
-        $query1 = \Drupal::database()->select('esim_circuit_simulation_submitted_abstracts_file');
-        $query1->fields('esim_circuit_simulation_submitted_abstracts_file');
-        $query1->condition('file_approval_status', 1);
-        $query1->condition('proposal_id', $proposal_id);
-        $esim_project_files = $query1->execute();
-        $esim_project_abstract = $esim_project_files->fetchObject();
+        //var_dump($row);die;
         $completion_date = date("Y", $row->actual_completion_date);
-        // @FIXME
-        // l() expects a Url object, created from a route name or external URI.
-        // $preference_rows[] = array(
-        // 				$i,
-        // 				l($row->project_title, "circuit-simulation-project/esim-circuit-simulation-run/" . $row->id),
-        // 				$row->contributor_name,
-        // 				$row->university,
-        // 				$completion_date
-        // 			);
+        $url = Url::fromUri('internal:/circuit-simulation-project/esim-circuit-simulation-run/' . $row->id);
+        $link = Link::fromTextAndUrl($row->project_title, $url)->toString();
+
+        $preference_rows[] = array(
+                $i,
+                $link,
+                $row->contributor_name,
+                $row->university,
+                $completion_date
+              );
 
         $i--;
       } //$row = $result->fetchObject()
       $preference_header = [
         'No',
-        'Circuit Simulation Project',
+        'Flowsheet Project',
         'Contributor Name',
         'University / Institute',
         'Year of Completion',
       ];
-      // @FIXME
-      // theme() has been renamed to _theme() and should NEVER be called directly.
-      // Calling _theme() directly can alter the expected output and potentially
-      // introduce security issues (see https://www.drupal.org/node/2195739). You
-      // should use renderable arrays instead.
-      // 
-      // 
-      // @see https://www.drupal.org/node/2195739
-      // $output .= theme('table', array(
-      // 			'header' => $preference_header,
-      // 			'rows' => $preference_rows
-      // 		));
+      $output =  [
+      '#type' => 'table',
+      '#header' => $preference_header,
+      '#rows' => $preference_rows,
+      '#empty' => 'We welcome your contributions to the eSim Circuit Simulation Project',
+    ];
 
-    }
+   //}
     return $output;
   }
 
   public function circuit_simulation_completed_pspice_to_kicad() {
     $output = "";
+    $count_query = \Drupal::database()->select('pspice_to_kicad_circuits', 't')
+  ->countQuery();
+  $i = $count_query->execute()->fetchField(); 
     $query = \Drupal::database()->select('pspice_to_kicad_circuits');
     $query->fields('pspice_to_kicad_circuits');
     //$query->condition('is_completed', 1);
     $result = $query->execute();
 
     //var_dump($esim_project_abstract);die;
-    if ($result->rowCount() == 0) {
-      $output .= "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
+    if ($i == 0) {
+      $markup = "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
 
 <p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice. The source code for this converter is available <span style='text-decoration: underline;'><a href='https://github.com/FOSSEE/eSim_PSpice_to_KiCad_Python_Parser' target='_blank'>here</a>.</span></p>
 
@@ -569,7 +585,7 @@ class DefaultController extends ControllerBase {
 
     } //$result->rowCount() == 0
     else {
-      $output .= "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
+      $markup = "<h4 dir='ltr'><span style='color:#008000'><strong>PSpice to KiCad Converter</strong></span></h4>
 
 <p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This feature converts a schematic file created using PSpice&reg; to KiCad format. The converted schematic file is compatible with KiCad for PCB layout. You can also </span><span style='background-color:#fcfcfc; color:#000000; font-family:times new roman; font-size:12pt'>create a netlist and simulate using Ngspice. The source code for this converter is available <span style='text-decoration: underline;'><a href='https://github.com/FOSSEE/eSim_PSpice_to_KiCad_Python_Parser' target='_blank'>here</a>.</span></p>
 
@@ -599,14 +615,14 @@ class DefaultController extends ControllerBase {
 	</li>
 </ol>" . "<hr>";
       $preference_rows = [];
-      $i = $result->rowCount();
+     // $i = $result->rowCount();
       while ($row = $result->fetchObject()) {
-        // @FIXME
-// l() expects a Url object, created from a route name or external URI.
-// $preference_rows[] = array(
-// 				$i,
-// 				l($row->name_of_circuit, 'https://static.fossee.in/esim/converters/pspicetokicad_PAGE_all/' . $row->filename . '.tar.gz')
-// 			);
+        
+$preference_rows[] = array(
+				$i,
+        $url = Link::fromTextAndUrl($row->name_of_circuit, Url::fromUri('https://static.fossee.in/esim/converters/pspicetokicad_PAGE_all/' . $row->filename . '.tar.gz'))->toString()
+				//l($row->name_of_circuit, 'https://static.fossee.in/esim/converters/pspicetokicad_PAGE_all/' . $row->filename . '.tar.gz')
+			);
 
         $i--;
       } //$row = $result->fetchObject()
@@ -614,44 +630,43 @@ class DefaultController extends ControllerBase {
         'No',
         'Name of the Circuit',
       ];
-      // @FIXME
-      // theme() has been renamed to _theme() and should NEVER be called directly.
-      // Calling _theme() directly can alter the expected output and potentially
-      // introduce security issues (see https://www.drupal.org/node/2195739). You
-      // should use renderable arrays instead.
-      // 
-      // 
-      // @see https://www.drupal.org/node/2195739
-      // $output .= theme('table', array(
-      // 			'header' => $preference_header,
-      // 			'rows' => $preference_rows
-      // 		));
-
+      $output = [
+        '#type' => 'table',
+        '#header'=> $preference_header,
+        '#rows' => $preference_rows
+      ];
     }
-    return $output;
+    return [
+      'markup' => [
+        '#markup' => $markup,
+      ],
+      'table' => $output,
+    ];
+    //return $output;
   }
 
   public function circuit_simulation_completed_ltspice_to_kicad() {
     $output = "";
+    $count_query = \Drupal::database()->select('ltspice_to_kicad_circuits', 't')
+  ->countQuery();
+  $i = $count_query->execute()->fetchField();
     $query = \Drupal::database()->select('ltspice_to_kicad_circuits');
     $query->fields('ltspice_to_kicad_circuits');
     $result = $query->execute();
     $preference_rows = [];
-    $output .= "
+    $markup = "
 <p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>The below files are converted from LTSpice to KiCad. The converted schematic file is compatible with KiCad for PCB layout. You can also create a netlist and simulate using Ngspice. 
 <p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>This is a Beta Release. Please mail us at contact-esim@fossee.in in case of any issues.</span</p>
 <p dir='ltr'><span style='background-color:transparent; color:#000000; font-family:times new roman; font-size:12pt'>The link to the LTSpice to KiCad Converter will be released soon.</span></p>
 <hr>";
-    $i = $result->rowCount();
+    //$i = $result->rowCount();
     while ($row = $result->fetchObject()) {
-      // @FIXME
-// l() expects a Url object, created from a route name or external URI.
-// $preference_rows[] = array(
-// 				$i,
-// 				l(ltrim($row->circuit_full_name), 'https://static.fossee.in/esim/converters/ltspice_to_kicad/' . ltrim($row->filename))
-// 				//$row->university,
-// 				//$completion_date
-// 			);
+$preference_rows[] = [
+				$i,
+				Link::fromTextAndUrl(ltrim($row->circuit_full_name), Url::fromUri('https://static.fossee.in/esim/converters/ltspice_to_kicad/' . ltrim($row->filename)))->toString()
+				//$row->university,
+				//$completion_date
+			];
 
       $i--;
     } //$row = $result->fetchObject()
@@ -659,37 +674,39 @@ class DefaultController extends ControllerBase {
       'No',
       'Name of the Circuit',
     ];
-    // @FIXME
-    // theme() has been renamed to _theme() and should NEVER be called directly.
-    // Calling _theme() directly can alter the expected output and potentially
-    // introduce security issues (see https://www.drupal.org/node/2195739). You
-    // should use renderable arrays instead.
-    // 
-    // 
-    // @see https://www.drupal.org/node/2195739
-    // $output .= theme('table', array(
-    // 			'header' => $preference_header,
-    // 			'rows' => $preference_rows
-    // 		));
-
-    return $output;
+    $output = [
+        '#type' => 'table',
+        '#header'=> $preference_header,
+        '#rows' => $preference_rows
+      ];
+    
+    return [
+      'markup' => [
+        '#markup' => $markup,
+      ],
+      'table' => $output,
+    ];
   }
 
   public function circuit_simulation_progress_all() {
     $page_content = "";
+$count_query = \Drupal::database()->select('esim_circuit_simulation_proposal', 't')
+  ->condition('approval_status', '1')
+  ->condition('is_completed', 0)
+  ->countQuery();
+  $i = $count_query->execute()->fetchField(); 
     $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
     $query->fields('esim_circuit_simulation_proposal');
     $query->condition('approval_status', 1);
     $query->condition('is_completed', 0);
-    $query->orderBy('approval_date', DESC);
+    $query->orderBy('approval_date', 'DESC');
     $result = $query->execute();
-    if ($result->rowCount() == 0) {
-      $page_content .= "Work is in progress for the following circuit simulation under Circuit Simulation Project<hr>";
+    if ($i == 0) {
+      $markup = "Work is in progress for the following circuit simulation under Circuit Simulation Project<hr>";
     } //$result->rowCount() == 0
     else {
-      $page_content .= "Work is in progress for the following circuit simulation under Circuit Simulation Project<hr>";
+      $markup = "Work is in progress for the following circuit simulation under Circuit Simulation Project<hr>";
       $preference_rows = [];
-      $i = $result->rowCount();
       while ($row = $result->fetchObject()) {
         $approval_date = date("Y", $row->approval_date);
         $preference_rows[] = [
@@ -708,26 +725,27 @@ class DefaultController extends ControllerBase {
         'Institute',
         'Year',
       ];
-      // @FIXME
-      // theme() has been renamed to _theme() and should NEVER be called directly.
-      // Calling _theme() directly can alter the expected output and potentially
-      // introduce security issues (see https://www.drupal.org/node/2195739). You
-      // should use renderable arrays instead.
-      // 
-      // 
-      // @see https://www.drupal.org/node/2195739
-      // $page_content .= theme('table', array(
-      // 			'header' => $preference_header,
-      // 			'rows' => $preference_rows
-      // 		));
+      $page_content = [
+        '#type' => 'table',
+        '#header' => $preference_header,
+        '#rows' => $preference_rows
+      ];
 
     }
-    return $page_content;
+    return [
+      'markup' => [
+        '#markup' => $markup,
+      ],
+      'table' => $page_content,
+    ];
   }
 
   public function circuit_simulation_download_upload_file() {
-    $proposal_id = arg(3);
-    $root_path = circuit_simulation_document_path();
+    $service = \Drupal::service('circuit_simulation_global');
+    $user = \Drupal::currentUser();
+    //$id = arg(3);
+    $id = \Drupal::routeMatch()->getParameter('proposal_id');
+    $root_path = $service->circuit_simulation_path();
     $query = \Drupal::database()->select('esim_circuit_simulation_proposal');
     $query->fields('esim_circuit_simulation_proposal');
     $query->condition('id', $proposal_id);
@@ -755,8 +773,12 @@ class DefaultController extends ControllerBase {
   }
 
   public function esim_circuit_simulation_project_files() {
-    $proposal_id = arg(3);
-    $root_path = circuit_simulation_document_path();
+
+    $service = \Drupal::service('circuit_simulation_global');
+    $user = \Drupal::currentUser();
+    //$id = arg(3);
+    $proposal_id = \Drupal::routeMatch()->getParameter('proposal_id');
+    $root_path = $service->circuit_simulation_path();
     $query = \Drupal::database()->select('esim_circuit_simulation_submitted_abstracts_file');
     $query->fields('esim_circuit_simulation_submitted_abstracts_file');
     $query->condition('proposal_id', $proposal_id);

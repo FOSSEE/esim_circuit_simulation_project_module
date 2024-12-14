@@ -1,5 +1,5 @@
 circuit_simulation.all_completed_circuit_simulations:
-  path: /completed-circuits
+  path: /completed-circuits/{activity_name}
   defaults:
     _title: 'Completed Circuits'
     _form: \Drupal\circuit_simulation\Form\AllCompletedCircuitSimulations
@@ -27,21 +27,21 @@ circuit_simulation.proposal_all:
   requirements:
     _permission: 'esim circuit simulation manage proposal'
 circuit_simulation.approved_tab:
-  path: /circuit-simulation-project/manage-proposal/approved_proposals
+  path: /circuit-simulation-project/manage-proposal/approved-proposals
   defaults:
     _title: 'Approved Proposals'
     _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_approved_tab'
   requirements:
     _permission: 'esim circuit simulation manage proposal'
 circuit_simulation.uploaded_tab:
-  path: /circuit-simulation-project/manage-proposal/uploaded_proposals
+  path: /circuit-simulation-project/manage-proposal/uploaded-proposals
   defaults:
     _title: 'Uploaded Proposals'
     _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_uploaded_tab'
   requirements:
     _permission: 'esim circuit simulation manage proposal'
 circuit_simulation.completed_tab_form:
-  path: /circuit-simulation-project/manage-proposal/completed_proposals
+  path: /circuit-simulation-project/manage-proposal/completed-proposals
   defaults:
     _title: 'Completed Proposals'
     _form: \Drupal\circuit_simulation\Form\CircuitSimulationCompletedTabForm
@@ -62,7 +62,7 @@ circuit_simulation.proposal_edit_form:
   requirements:
     _permission: 'esim circuit simulation manage proposal'
 circuit_simulation.proposal_status_form:
-  path: /circuit-simulation-project/manage-proposal/status
+  path: /circuit-simulation-project/manage-proposal/status/{proposal_id}
   defaults:
     _title: 'Proposal Status'
     _form: \Drupal\circuit_simulation\Form\CircuitSimulationProposalStatusForm
@@ -76,7 +76,7 @@ circuit_simulation.abstract_bulk_approval_form:
   requirements:
     _permission: 'esim circuit simulation bulk manage abstract'
 circuit_simulation.abstract:
-  path: '/circuit-simulation-project/abstract-code/circuit simulation-project-list'
+  path: '/circuit-simulation-project/abstract-code'
   defaults:
     _title: 'Circuit Simulation'
     _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_abstract'
@@ -90,7 +90,7 @@ circuit_simulation.upload_abstract_code_form:
   requirements:
     _permission: 'esim circuit simulation upload abstract'
 circuit_simulation.download_full_project:
-  path: /circuit-simulation-project/full-download/project
+  path: /circuit-simulation-project/full-download/project/{proposal_id}
   defaults:
     _title: 'Code Download'
     _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_download_full_project'
@@ -111,7 +111,7 @@ circuit_simulation.esim_circuit_simulation_download_completed_proposals:
   requirements:
     _permission: 'esim circuit simulation download proposals'
 circuit_simulation.completed_proposals_all:
-  path: /circuit-simulation-project/completed-circuits/simulations
+  path: /circuit-simulation-project/completed-circuits
   defaults:
     _title: 'Completed Circuit Simulations'
     _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_completed_proposals_all'
@@ -139,21 +139,21 @@ circuit_simulation.progress_all:
   requirements:
     _permission: 'esim circuit simulation download code'
 circuit_simulation.run_form:
-  path: /circuit-simulation-project/esim-circuit-simulation-run
+  path: /circuit-simulation-project/esim-circuit-simulation-run/{proposal_id}
   defaults:
     _title: 'Download Codes'
     _form: \Drupal\circuit_simulation\Form\CircuitSimulationRunForm
   requirements:
     _permission: 'esim circuit simulation download code'
 circuit_simulation.download_upload_file:
-  path: /circuit-simulation-project/download/resource-file
+  path: /circuit-simulation-project/download/resource-file/{proposal_id}
   defaults:
-    _title: 'Download user defined compound file'
+    _title: 'Download resource file from proposal'
     _controller: '\Drupal\circuit_simulation\Controller\DefaultController::circuit_simulation_download_upload_file'
   requirements:
     _permission: 'download code'
 circuit_simulation.esim_circuit_simulation_project_files:
-  path: /circuit-simulation-project/download/project-file
+  path: /circuit-simulation-project/download/project-file/{proposal_id}
   defaults:
     _title: 'Download Project file'
     _controller: '\Drupal\circuit_simulation\Controller\DefaultController::esim_circuit_simulation_project_files'

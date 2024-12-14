@@ -761,6 +761,22 @@ function circuit_simulation_mail($key, &$message, $params) {
         // Load user entity.
 
         $user = \Drupal\user\Entity\User::load($params['circuit_simulation_proposal_received']['user_id']);
+        if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
+			{
+				$project_guide_name = "Not Entered";
+			} //$proposal_data->project_guide_name == NULL
+			else
+			{
+				$project_guide_name = $proposal_data->project_guide_name;
+			}
+			if ($proposal_data->project_guide_email_id == "NULL" || $proposal_data->project_guide_email_id == "")
+			{
+				$project_guide_email_id = "Not Entered";
+			} //$proposal_data->project_guide_email_id == NULL
+			else
+			{
+				$project_guide_email_id = $proposal_data->project_guide_email_id;
+			}
         // Prepare the email message.
         $message['headers'] = $params['circuit_simulation_proposal_received']['headers'];
         $message['subject'] = t(
@@ -782,6 +798,8 @@ City: @city
 State: @state
 Country: @country
 Project Title: @project_title
+Project Guide Name: @project_guide_name
+Project Guide Email: @project_guide_email_id
 
 Your proposal is under review. You will soon receive an email when it has been approved/disapproved.
 
@@ -798,11 +816,90 @@ FOSSEE, IIT Bombay',
             '@state' => $proposal_data->state,
             '@country' => $proposal_data->country,
             '@project_title' => $proposal_data->project_title,
+            '@project_guide_name' => $project_guide_name,
+            '@project_guide_email_id' => $project_guide_email_id,
             '@site_name' => \Drupal::config('system.site')->get('name'),
           ],
           ['langcode' => $language]
         );
         break;
+    case 'circuit_simulation_proposal_approved':
+			/* initializing data */
+			$url = 'http://esim.fossee.in/circuit-simulation-project/abstract-code';
+			$query = \Drupal::database()->select('esim_circuit_simulation_proposal');
+			$query->fields('esim_circuit_simulation_proposal');
+			$query->condition('id', $params['circuit_simulation_proposal_approved']['proposal_id']);
+			$query->range(0, 1);
+			$proposal_data = $query->execute()->fetchObject();
+			$user_data = \Drupal::entityTypeManager()->getStorage('user')->load($params['circuit_simulation_proposal_approved']['user_id']);
+
+			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
+			{
+				$project_guide_name = "Not Entered";
+			} //$proposal_data->project_guide_name == NULL
+			else
+			{
+				$project_guide_name = $proposal_data->project_guide_name;
+			}
+			if ($proposal_data->project_guide_email_id == "NULL" || $proposal_data->project_guide_email_id == "")
+			{
+				$project_guide_email_id = "Not Entered";
+			} //$proposal_data->project_guide_email_id == NULL
+			else
+			{
+				$project_guide_email_id = $proposal_data->project_guide_email_id;
+			}
+			$message['headers'] = $params['circuit_simulation_proposal_approved']['headers'];
+			$message['subject'] = t(
+          '[@site_name][Circuit Simulation Project] Your eSim Circuit Simulation Project proposal has been approved',
+          ['@site_name' => \Drupal::config('system.site')->get('name')],
+          ['langcode' => $language]
+        );
+			/*$message['subject'] = t('[@site_name][Circuit Simulation Project] Your eSim Circuit Simulation Project proposal has been approved', array(
+				'@site_name' => variable_get('site_name', '')
+			), array(
+				'language' => $language->language
+			));*/
+
+			$message['body'][] = 
+				t('
+Dear ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . ',
+
+Your eSim Circuit Simulation Project proposal with the following details has been approved:
+
+Full Name: @full_name
+Email: @user_email
+University/Institute: @university
+City: @city
+State: @state
+Country: @country
+Project Title: @project_title
+Project Guide Name: @project_guide_name
+Project Guide Email: @project_guide_email_id
+
+You can upload your abstract and the completed simulation at: @url
+
+Best Wishes,
+
+@site_name Team,
+FOSSEE,IIT Bombay',
+			[
+            '@name' => $proposal_data->name_title . ' ' . $proposal_data->contributor_name,
+            '@full_name' => $proposal_data->name_title . ' ' . $proposal_data->contributor_name,
+            '@user_email' => $user_data->getEmail(),
+            '@university' => $proposal_data->university,
+            '@city' => $proposal_data->city,
+            '@state' => $proposal_data->state,
+            '@country' => $proposal_data->country,
+            '@project_title' => $proposal_data->project_title,
+            '@project_guide_name' => $project_guide_name,
+            '@project_guide_email_id' => $project_guide_email_id,
+            '@url' => $url,
+            '@site_name' => \Drupal::config('system.site')->get('name'),
+          ],
+          ['langcode' => $language]
+			);
+			break;
     }
     //var_dump($message);die;
    // return $message;

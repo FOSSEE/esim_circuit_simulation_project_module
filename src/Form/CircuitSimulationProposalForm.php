@@ -31,6 +31,7 @@ class CircuitSimulationProposalForm extends FormBase {
 
   public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state, $no_js_use = NULL) {
     $user = \Drupal::currentUser();
+    $service = \Drupal::service('circuit_simulation_global');
     /************************ start approve book details ************************/
     if ($user->isAnonymous()) {
   // Create the error message with a link to the login page
@@ -190,7 +191,7 @@ class CircuitSimulationProposalForm extends FormBase {
     $form['all_state'] = [
       '#type' => 'select',
       '#title' => t('State'),
-      '#options' => _esim_cs_list_of_states(),
+      '#options' => $service->_esim_cs_list_of_states(),
       '#validated' => TRUE,
       '#states' => [
         'visible' => [
@@ -203,7 +204,7 @@ class CircuitSimulationProposalForm extends FormBase {
     $form['city'] = [
       '#type' => 'select',
       '#title' => t('City'),
-      '#options' => _esim_cs_list_of_cities(),
+      '#options' => $service->_esim_cs_list_of_cities(),
       '#states' => [
         'visible' => [
           ':input[name="country"]' => [
@@ -287,6 +288,7 @@ class CircuitSimulationProposalForm extends FormBase {
   }
 
   public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $service = \Drupal::service('circuit_simulation_global');
     if ($form_state->getValue(['term_condition']) == '1') {
       $form_state->setErrorByName('term_condition', t('Please check the terms and conditions'));
       // $form_state['values']['country'] = $form_state['values']['other_country'];
@@ -385,7 +387,7 @@ class CircuitSimulationProposalForm extends FormBase {
             $form_state->setErrorByName($file_form_name, t('File size cannot be zero.'));
           }
           /* check if valid file name */
-          if (!circuit_simulation_check_valid_filename($_FILES['files']['name'][$file_form_name])) {
+          if (!$service->circuit_simulation_check_valid_filename($_FILES['files']['name'][$file_form_name])) {
             $form_state->setErrorByName($file_form_name, t('Invalid file name specified. Only alphabets and numbers are allowed as a valid filename.'));
           }
         } //$file_name
@@ -396,7 +398,8 @@ class CircuitSimulationProposalForm extends FormBase {
 
   public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $user = \Drupal::currentUser();
-    $root_path = circuit_simulation_path();
+    $service = \Drupal::service('circuit_simulation_global');
+    $root_path = $service->circuit_simulation_path();
     if (!$user->id()) {
       \Drupal::messenger()->addError('It is mandatory to login on this website to access the proposal form');
       return;
@@ -410,7 +413,7 @@ class CircuitSimulationProposalForm extends FormBase {
     $project_title = trim($v['project_title']);
     $proposar_name = $v['name_title'] . ' ' . $v['contributor_name'];
     $university = $v['university'];
-    $directory_name = _cs_dir_name($project_title, $proposar_name);
+    $directory_name = $service->_cs_dir_name($project_title, $proposar_name);
     $result = "INSERT INTO {esim_circuit_simulation_proposal} 
     (
     uid, 
@@ -466,17 +469,17 @@ class CircuitSimulationProposalForm extends FormBase {
       ":uid" => $user->id(),
       ":approver_uid" => 0,
       ":name_title" => $v['name_title'],
-      ":contributor_name" => _esim_cs_sentence_case(trim($v['contributor_name'])),
+      ":contributor_name" => $service->_esim_cs_sentence_case(trim($v['contributor_name'])),
       ":contact_no" => $v['contributor_contact_no'],
-      ":university" => _esim_cs_sentence_case($v['university']),
+      ":university" => $service->_esim_cs_sentence_case($v['university']),
       ":city" => $v['city'],
       ":pincode" => $v['pincode'],
       ":state" => $v['all_state'],
       ":country" => $v['country'],
-      ":project_guide_name" => _esim_cs_sentence_case($v['project_guide_name']),
+      ":project_guide_name" => $service->_esim_cs_sentence_case($v['project_guide_name']),
       ":project_guide_email_id" => trim($v['project_guide_email_id']),
-      ":project_title" => _esim_cs_sentence_case($v['project_title']),
-      ":description" => _esim_cs_sentence_case($v['description']),
+      ":project_title" => $service->_esim_cs_sentence_case($v['project_title']),
+      ":description" => $service->_esim_cs_sentence_case($v['description']),
       ":operating_system" => $v['operating_system'],
       ":directory_name" => $directory_name,
       ":approval_status" => 0,
@@ -532,25 +535,25 @@ $proposal_id= $connection->insert('esim_circuit_simulation_proposal')->fields($a
       return;
     } //!$proposal_id
 	/* sending email */
-    $email_to = $user->getEmail();
-    $form = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_from_email');
-    $bcc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_emails');
-    $cc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_cc_emails');
-    $params['circuit_simulation_proposal_received']['proposal_id'] = $proposal_id;
-    $params['circuit_simulation_proposal_received']['user_id'] = $user->id();
-    $params['circuit_simulation_proposal_received']['headers'] = [
-      'From' => $form,
-      'MIME-Version' => '1.0',
-      'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
-      'Content-Transfer-Encoding' => '8Bit',
-      'X-Mailer' => 'Drupal',
-      'Cc' => $cc,
-      'Bcc' => $bcc,
-    ];
-    //\Drupal::service('plugin.manager.mail')->mail('circuit_simulation', 'circuit_simulation_proposal_received', $email_to, 'en', $params, $form, TRUE);
-    if (!\Drupal::service('plugin.manager.mail')->mail('circuit_simulation', 'circuit_simulation_proposal_received', $email_to, 'en', $params, $form, TRUE)) {
-      \Drupal::messenger()->addError('Error sending email message.');
-    }
+    // $email_to = $user->getEmail();
+    // $form = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_from_email');
+    // $bcc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_emails');
+    // $cc = \Drupal::config('circuit_simulation.settings')->get('circuit_simulation_cc_emails');
+    // $params['circuit_simulation_proposal_received']['proposal_id'] = $proposal_id;
+    // $params['circuit_simulation_proposal_received']['user_id'] = $user->id();
+    // $params['circuit_simulation_proposal_received']['headers'] = [
+    //   'From' => $form,
+    //   'MIME-Version' => '1.0',
+    //   'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
+    //   'Content-Transfer-Encoding' => '8Bit',
+    //   'X-Mailer' => 'Drupal',
+    //   'Cc' => $cc,
+    //   'Bcc' => $bcc,
+    // ];
+    // if (!\Drupal::service('plugin.manager.mail')->mail('circuit_simulation', 'circuit_simulation_proposal_received', $email_to, 'en', $params, $form, TRUE)){
+    // //if (!\Drupal::service('circuit_simulation_mail')->circuit_simulation_mail('circuit_simulation', 'circuit_simulation_proposal_received', $email_to, 'en', $params, $form, TRUE)) {
+    //   \Drupal::messenger()->addError('Error sending email message.');
+    // }
     \Drupal::messenger()->addStatus(t('We have received your eSim circuit simulation proposal. We will get back to you soon.'));
     $response = new RedirectResponse(Url::fromRoute('<front>')->toString());
     // Send the redirect response

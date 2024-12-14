@@ -42,24 +42,6 @@ class GeneratePdf extends FormBase {
         return;
       }
     }
-    $gender = [
-      'salutation' => 'Mr. /Ms.',
-      'gender' => 'He/She',
-    ];
-    if ($data3->gender) {
-      if ($data3->gender == 'M') {
-        $gender = [
-          'salutation' => 'Mr.',
-          'gender' => 'He',
-        ];
-      } //$data3->gender == 'M'
-      else {
-        $gender = [
-          'salutation' => 'Ms.',
-          'gender' => 'She',
-        ];
-      }
-    } //$data3->gender
     $pdf = new FPDF('L', 'mm', 'Letter');
     if (!$pdf) {
       echo "Error!";

@@ -1,0 +1,40 @@
+circuit_simulation.completed_proposals_all:
+  route_name: circuit_simulation.completed_proposals_all
+  title: 'Completed Circuit Simulations'
+  weight: 1
+  base_route: circuit_simulation.completed_proposals_all
+circuit_simulation.completed_pspice_to_kicad:
+  route_name: circuit_simulation.completed_pspice_to_kicad
+  title: 'Completed PSPICE to KICAD Circuits'
+  weight: 2
+  base_route: circuit_simulation.completed_proposals_all
+circuit_simulation.completed_ltspice_to_kicad:
+  route_name: circuit_simulation.completed_ltspice_to_kicad
+  title: 'Completed LTSpice to KICAD Circuits'
+  weight: 3
+  base_route: circuit_simulation.completed_proposals_all
+circuit_simulation.proposal_pending:
+  route_name: circuit_simulation.proposal_pending
+  title: 'Pending Proposals'
+  weight: 1
+  base_route: circuit_simulation.proposal_pending
+circuit_simulation.proposal_all:
+  route_name: circuit_simulation.proposal_all
+  title: 'All Proposals'
+  weight: 2
+  base_route: circuit_simulation.proposal_pending
+circuit_simulation.approved_tab:
+  route_name: circuit_simulation.approved_tab
+  title: 'Approved Proposals'
+  weight: 3
+  base_route: circuit_simulation.proposal_pending
+circuit_simulation.uploaded_tab:
+  route_name: circuit_simulation.uploaded_tab
+  title: 'Uploaded Proposals'
+  weight: 4
+  base_route: circuit_simulation.proposal_pending
+circuit_simulation.completed_tab_form:
+  route_name: circuit_simulation.completed_tab_form
+  title: 'Completed Proposals'
+  weight: 5
+  base_route: circuit_simulation.proposal_pending
