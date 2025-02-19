@@ -1,0 +1,5 @@
+services:
+  circuit_simulation_global:
+    class: Drupal\circuit_simulation\Services\CircuitSimulationGlobalfunction
+  circuit_simulation_mail:
+    class: Drupal\circuit_simulation\Services\CircuitSimulationMail

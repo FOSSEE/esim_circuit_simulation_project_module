@@ -1,7 +1,7 @@
 <?php
 // $Id$
-require_once('general_deletion.inc');
-require_once('email.inc');
+//require_once('general_deletion.inc');
+//require_once('email.inc');
 /**
  * Implementation of hook_menu().
  */
@@ -9,6 +9,19 @@ function circuit_simulation_menu()
 {
 	$items = array();
 	/* PROPOSAL */
+	$items['completed-circuits'] = array(
+		'title' => 'Completed Circuits',
+		'description' => 'Completed Circuits',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('all_completed_circuit_simulations'),
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		//'type' => MENU_LOCAL_TASK,
+		'weight' => 5,
+		'file' => 'all_completed_circuits.inc'
+	);
 	$items['circuit-simulation-project/proposal'] = array(
 		'title' => 'Circuit Simulation Proposal Form',
 		'description' => 'Circuit Simulation Proposal Form',
@@ -19,7 +32,7 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation create proposal'
 		),
-		'type' => MENU_NORMAL_ITEM,
+		//'type' => MENU_NORMAL_ITEM,
 		'file' => 'proposal.inc'
 	);
 	$items['circuit-simulation-project/manage-proposal'] = array(
@@ -40,7 +53,7 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation manage proposal'
 		),
-		'type' => MENU_DEFAULT_LOCAL_TASK,
+		//'type' => MENU_DEFAULT_LOCAL_TASK,
 		'weight' => 1,
 		'file' => 'manage_proposal.inc'
 	);
@@ -52,9 +65,46 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation manage proposal'
 		),
-		'type' => MENU_LOCAL_TASK,
-		'weight' => 4,
+		//'type' => MENU_LOCAL_TASK,
+		'weight' => 2,
 		'file' => 'manage_proposal.inc'
+	);
+	$items['circuit-simulation-project/manage-proposal/approved_proposals'] = array(
+		'title' => 'Approved Proposals',
+		'description' => 'Approved Proposals',
+		'page callback' => 'circuit_simulation_approved_tab',
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation manage proposal'
+		),
+		//'type' => MENU_LOCAL_TASK,
+		'weight' => 3,
+		'file' => 'proposals_review_tab.inc'
+	);
+	$items['circuit-simulation-project/manage-proposal/uploaded_proposals'] = array(
+		'title' => 'Uploaded Proposals',
+		'description' => 'Uploaded Proposals',
+		'page callback' => 'circuit_simulation_uploaded_tab',
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation manage proposal'
+		),
+		//'type' => MENU_LOCAL_TASK,
+		'weight' => 4,
+		'file' => 'proposals_review_tab.inc'
+	);
+	$items['circuit-simulation-project/manage-proposal/completed_proposals'] = array(
+		'title' => 'Completed Proposals',
+		'description' => 'Completed Proposals',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('circuit_simulation_completed_tab_form'),
+		'access callback' => 'user_access',
+		'access arguments' => array(
+			'esim circuit simulation manage proposal'
+		),
+		//'type' => MENU_LOCAL_TASK,
+		'weight' => 5,
+		'file' => 'proposals_review_tab.inc'
 	);
 	$items['circuit-simulation-project/manage-proposal/approve'] = array(
 		'title' => 'Approve Proposal',
@@ -66,21 +116,8 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation manage proposal'
 		),
-		'type' => MENU_CALLBACK,
+		//'type' => MENU_CALLBACK,
 		'file' => 'manage_proposal.inc'
-	);
-	$items['circuit-simulation-project/manage-proposal/solution-proposal-approve'] = array(
-		'title' => 'Approve Solution Proposal',
-		'description' => 'Approve Solution Proposal',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array(
-			'circuit_simulation_solution_proposal_approval_form'
-		),
-		'access arguments' => array(
-			'esim circuit simulation manage proposal'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'manage_solution_proposal.inc'
 	);
 	$items['circuit-simulation-project/manage-proposal/edit'] = array(
 		'title' => 'Edit Proposal',
@@ -92,7 +129,7 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation manage proposal'
 		),
-		'type' => MENU_CALLBACK,
+		//'type' => MENU_CALLBACK,
 		'file' => 'manage_proposal.inc'
 	);
 	$items['circuit-simulation-project/manage-proposal/status'] = array(
@@ -105,45 +142,8 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation approve proposal'
 		),
-		'type' => MENU_CALLBACK,
+		//'type' => MENU_CALLBACK,
 		'file' => 'manage_proposal.inc'
-	);
-	$items['circuit-simulation-project/show-proposal'] = array(
-		'title' => 'esim circuit simulation Solution Proposal',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array(
-			'circuit_simulation_solution_proposal_form'
-		),
-		'access arguments' => array(
-			'esim circuit simulation propose solution'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'solution_proposal.inc'
-	);
-	/* CODE REVIEW */
-	$items['circuit-simulation-project/code-approval'] = array(
-		'title' => 'LM Manage Code Approval',
-		'description' => 'Manage Code Approval',
-		'page callback' => 'circuit_simulation_code_approval',
-		'access arguments' => array(
-			'esim circuit simulation approve code'
-		),
-		'type' => MENU_NORMAL_ITEM,
-		'file' => 'code_approval.inc'
-	);
-	$items['circuit-simulation-project/abstract-approval/approve'] = array(
-		'title' => 'Code Approval',
-		'description' => 'Code Approval',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array(
-			'circuit_simulation_abstract_approval_form'
-		),
-		'access arguments' => array(
-			'esim circuit simulation approve code'
-		),
-		'type' => MENU_DEFAULT_LOCAL_TASK,
-		'weight' => 1,
-		'file' => 'code_approval.inc'
 	);
 	$items['circuit-simulation-project/abstract-approval/bulk'] = array(
 		'title' => 'Bulk Manage',
@@ -155,177 +155,48 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation bulk manage abstract'
 		),
-		'type' => MENU_LOCAL_TASK,
+		//'type' => MENU_LOCAL_TASK,
 		'weight' => 2,
 		'file' => 'abstract_bulk_approval.inc'
 	);
-	$items['circuit-simulation-project/code-approval/bulk'] = array(
-		'title' => 'Bulk Manage',
-		'description' => 'Bulk Mangage',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array(
-			'circuit_simulation_bulk_approval_form'
-		),
-		'access arguments' => array(
-			'esim circuit simulation bulk manage abstract'
-		),
-		'type' => MENU_LOCAL_TASK,
-		'weight' => 2,
-		'file' => 'bulk_approval.inc'
-	);
-	/*$items['circuit_simulation/code_approval/dependency'] = array(
-	'title' => 'Dependency',
-	'description' => 'Dependency Mangage',
-	'page callback' => 'drupal_get_form',
-	'page arguments' => array('circuit_simulation_dependency_approval_form'),
-	'access arguments' => array('esim circuit simulation bulk manage abstract'),
-	'type' => MENU_LOCAL_TASK,
-	'weight' => 3,
-	'file' => 'dependency_approval.inc',
-	);*/
-	$items['circuit-simulation-project/code-approval/upload'] = array(
-		'title' => 'Upload Code',
-		'description' => 'Admin Upload',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array(
-			'circuit_simulation_bulk_upload_code_form'
-		),
-		'access arguments' => array(
-			'esim circuit simulation bulk manage abstract'
-		),
-		'type' => MENU_CALLBACK,
-		'weight' => 4,
-		'file' => 'bulk_upload_code.inc'
-	);
-	$items['circuit-simulation-project/code-approval/notes'] = array(
-		'title' => 'Notes for Reviewers',
-		'description' => 'Notes for Reviewers',
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array(
-			'circuit_simulation_lab_notes_form'
-		),
-		'access arguments' => array(
-			'esim circuit simulation bulk manage abstract'
-		),
-		'type' => MENU_CALLBACK,
-		'weight' => 4,
-		'file' => 'notes.inc'
-	);
+	
 	/* CODE UPLOAD */
 	$items['circuit-simulation-project/abstract-code'] = array(
-		'title' => 'Abstract and Circuit Simulation Submission',
+		'title' => 'Abstract and Project Files Upload',
 		'description' => 'Abstract Submission',
 		'page callback' => 'circuit_simulation_abstract',
 		'access callback' => 'user_access',
 		'access arguments' => array(
-			'esim circuit simulation upload code'
+			'esim circuit simulation upload abstract'
 		),
 		'file' => 'upload_code.inc'
 	);
 	$items['circuit-simulation-project/abstract-code/circuit simulation-project-list'] = array(
-		'title' => 'Circuit Simulation project',
+		'title' => 'Circuit Simulation',
 		'description' => 'List Experiments',
 		'page callback' => 'circuit_simulation_abstract',
 		'access arguments' => array(
-			'esim circuit simulation upload code'
+			'esim circuit simulation upload abstract'
 		),
-		'type' => MENU_DEFAULT_LOCAL_TASK,
+		//'type' => MENU_DEFAULT_LOCAL_TASK,
 		'file' => 'upload_code.inc',
 		'weight' => 1
 	);
 	$items['circuit-simulation-project/abstract-code/upload'] = array(
-		'title' => 'Abstract and Circuit Simulation Submission',
-		'description' => 'Abstract Submission',
+		'title' => 'Abstract and Project Upload',
+		'description' => 'Project Upload',
 		'page callback' => 'drupal_get_form',
 		'page arguments' => array(
 			'circuit_simulation_upload_abstract_code_form'
 		),
 		'access arguments' => array(
-			'esim circuit simulation upload code'
+			'esim circuit simulation upload abstract'
 		),
-		'type' => MENU_LOCAL_TASK,
+		//'type' => MENU_LOCAL_TASK,
 		'file' => 'upload_code.inc',
 		'weight' => 2
 	);
-	/* $items['circuit_simulation/code/upload_dep'] = array(
-	'title' => 'Upload Dependency',
-	'description' => 'Upload Dependency Files',
-	'page callback' => 'drupal_get_form',
-	'page arguments' => array('circuit_simulation_upload_dependency_form'),
-	'access arguments' => array('esim circuit simulation upload code'),
-	'type' => MENU_LOCAL_TASK,
-	'file' => 'dependency.inc',
-	'weight' => 3,
-	);*/
-	$items['circuit-simulation-project/abstract-code/delete'] = array(
-		'title' => 'Delete Solution',
-		'description' => 'Delete Solution',
-		'page callback' => 'circuit_simulation_upload_code_delete',
-		'access arguments' => array(
-			'esim circuit simulation upload code'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'upload_code_delete.inc'
-	);
 	/* CODE DOWNLOADS */
-	$items['circuit-simulation-project/download/file'] = array(
-		'title' => 'Code Download',
-		'description' => 'Code Download',
-		'page callback' => 'circuit_simulation_download_solution_file',
-		'access arguments' => array(
-			'esim circuit simulation download code'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'download.inc'
-	);
-	/*$items['circuit_simulation/download/dependency'] = array(
-	'title' => 'Code Download',
-	'description' => 'Code Download', 
-	'page callback' => 'circuit_simulation_download_dependency_file',
-	'access arguments' => array('esim circuit simulation download code'),
-	'type' => MENU_CALLBACK,
-	'file' => 'download.inc',
-	);*/
-	$items['circuit-simulation-project/download/solution'] = array(
-		'title' => 'Code Download',
-		'description' => 'Code Download',
-		'page callback' => 'circuit_simulation_download_solution',
-		'access arguments' => array(
-			'esim circuit simulation download code'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'download.inc'
-	);
-	$items['circuit-simulation-project/download/experiment'] = array(
-		'title' => 'Code Download',
-		'description' => 'Code Download',
-		'page callback' => 'circuit_simulation_download_experiment',
-		'access arguments' => array(
-			'esim circuit simulation download code'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'download.inc'
-	);
-	$items['circuit-simulation-project/download/lab'] = array(
-		'title' => 'Code Download',
-		'description' => 'Code Download',
-		'page callback' => 'circuit_simulation_download_lab',
-		'access arguments' => array(
-			'esim circuit simulation download code'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'download.inc'
-	);
-	$items['circuit-simulation-project/full-download/experiment'] = array(
-		'title' => 'Code Download',
-		'description' => 'Code Download',
-		'page callback' => 'circuit_simulation_download_completed_project',
-		'access arguments' => array(
-			'esim circuit simulation approve code'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'full_download.inc'
-	);
 	$items['circuit-simulation-project/full-download/project'] = array(
 		'title' => 'Code Download',
 		'description' => 'Code Download',
@@ -333,17 +204,66 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation download code'
 		),
-		'type' => MENU_CALLBACK,
+		//'type' => MENU_CALLBACK,
 		'file' => 'full_download.inc'
 	);
+	$items['circuit-simulation-project/download-proposals'] = array(
+		'title' => 'Download Proposals',
+		'description' => 'Download Proposals',
+		'page callback' => 'circuit_simulation_download_proposals',
+		'access arguments' => array(
+			'esim circuit simulation download proposals'
+		),
+		//'type' => MENU_CALLBACK,
+		'file' => 'download.inc'
+	);
+	$items['circuit-simulation-project/download-completed-proposals'] = array(
+		'title' => 'Download Completed Proposals',
+		'description' => 'Download Completed Proposals',
+		'page callback' => 'esim_circuit_simulation_download_completed_proposals',
+		'access arguments' => array(
+			'esim circuit simulation download proposals'
+		),
+		'file' => 'download_proposals.inc'
+	);
 	/* COMPLETED esim circuit simulationS */
-	$items['circuit-simulation-project/completed-circuit-simulations'] = array(
+	$items['circuit-simulation-project/completed-circuits'] = array(
 		'title' => 'Completed Circuit Simulations',
 		'page callback' => 'circuit_simulation_completed_proposals_all',
 		'access arguments' => array(
 			'esim circuit simulation download code'
 		),
-		'file' => 'circuit_simulation_details.inc'
+		'file' => 'circuit_simulation_details.inc',
+	);
+	$items['circuit-simulation-project/completed-circuits/simulations'] = array(
+		'title' => 'Completed Circuit Simulations',
+		'page callback' => 'circuit_simulation_completed_proposals_all',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'circuit_simulation_details.inc',
+		//'type' => MENU_DEFAULT_LOCAL_TASK,
+		'weight' => 0
+	);
+	$items['circuit-simulation-project/completed-circuits/pspice-to-kicad'] = array(
+		'title' => 'Completed PSPICE to KICAD Circuits',
+		'page callback' => 'circuit_simulation_completed_pspice_to_kicad',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'circuit_simulation_details.inc',
+		//'type' => MENU_LOCAL_TASK,
+		'weight' => 1
+	);
+	$items['circuit-simulation-project/completed-circuits/ltspice-to-kicad'] = array(
+		'title' => 'Completed LTSpice to KICAD Circuits',
+		'page callback' => 'circuit_simulation_completed_ltspice_to_kicad',
+		'access arguments' => array(
+			'esim circuit simulation download code'
+		),
+		'file' => 'circuit_simulation_details.inc',
+		//'type' => MENU_LOCAL_TASK,
+		'weight' => 2
 	);
 	/* LABS IN PROGRESS */
 	$items['circuit-simulation-project/circuit-simulation-progress'] = array(
@@ -364,7 +284,7 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'esim circuit simulation download code'
 		),
-		'type' => MENU_NORMAL_ITEM,
+		//'type' => MENU_NORMAL_ITEM,
 		'file' => 'run.inc'
 	);
 	$items['circuit-simulation-project/download/resource-file'] = array(
@@ -374,51 +294,20 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'download code'
 		),
-		'type' => MENU_CALLBACK,
+		//'type' => MENU_CALLBACK,
 		'file' => 'download.inc'
 	);
-	/*$items['circuit_simulation_run'] = array(
-	'title' => 'Download Codes',
-	'page callback' => 'drupal_get_form',
-	'page arguments' => array('circuit_simulation_run_form_ajax'),
-	'access arguments' => array('access content'),
-	'type' => MENU_NORMAL_ITEM,
-	'file' => 'run.inc',
-	);
-	$items['circuit_simulation_run_ajax'] = array(
-	'page callback' => 'circuit_simulation_run_ajax',
-	'access callback' => TRUE,
-	'file' => 'run.inc',
-	);
-	$items['download_codes'] = array(
-	'title' => 'Download Codes',
-	'page callback' => 'drupal_get_form',
-	'page arguments' => array('circuit_simulation_run_form_ajax'),
-	'access arguments' => array('access content'),
-	'type' => MENU_NORMAL_ITEM,
-	'file' => 'run.inc',
-	);*/
-	/* LATEX SCRIPT */
-	$items['circuit-simulation-project/generate-lab'] = array(
-		'title' => 'Generate Lab',
-		'description' => 'Generate Lab From Latex Script',
-		'page callback' => 'circuit_simulation_download_lab_pdf',
+	$items['circuit-simulation-project/download/project-file'] = array(
+		'title' => 'Download Project file',
+		'description' => 'Download project file',
+		'page callback' => 'esim_circuit_simulation_project_files',
 		'access arguments' => array(
-			'esim circuit simulation generate lab'
+			'download code'
 		),
-		'type' => MENU_CALLBACK,
-		'file' => 'latex.inc'
+		//'type' => MENU_CALLBACK,
+		'file' => 'download.inc'
 	);
-	$items['circuit-simulation-project/delete-lab'] = array(
-		'title' => 'Delete Lab PDF',
-		'description' => 'Delete Lab PDF',
-		'page callback' => 'circuit_simulation_delete_lab_pdf',
-		'access arguments' => array(
-			'esim circuit simulation approve code'
-		),
-		'type' => MENU_CALLBACK,
-		'file' => 'latex.inc'
-	);
+	
 	/* ADMIN SETTINGS */
 	$items['admin/settings/esim-circuit simulation'] = array(
 		'title' => 'esim circuit simulation Settings',
@@ -430,27 +319,17 @@ function circuit_simulation_menu()
 		'access arguments' => array(
 			'administer esim circuit simulation'
 		),
-		'type' => MENU_NORMAL_ITEM,
+		//'type' => MENU_NORMAL_ITEM,
 		'file' => 'settings.inc'
-	);
-	/* AJAX REQUEST */
-	$items["lab-bulk-manage-exp/ajax"] = array(
-		"title" => "Ajax callbacks",
-		"page callback" => "lab_bulk_manage_exp_ajax",
-		"access arguments" => array(
-			"esim circuit simulation bulk manage abstract"
-		),
-		"type" => MENU_CALLBACK,
-		'file' => 'bulk_approval.inc'
 	);
 	$items['circuit-simulation-project/certificates'] = array(
 		'title' => 'List of Circuit Simulation Certificates',
 		'description' => 'List of circuit simulation Certificates',
-		'page callback' => '_list_circuit simulation_certificates',
+		'page callback' => '_list_circuit_simulation_certificates',
 		'access arguments' => array(
 			'list circuit simulation certificates'
 		),
-		'file' => 'pdf/list_circuit simulation_certificate.inc'
+		'file' => 'pdf/list_circuit_simulation_certificate.inc'
 	);
 	$items['circuit-simulation-project/certificates/generate-pdf'] = array(
 		'title' => 'Download Certificate',
@@ -459,11 +338,33 @@ function circuit_simulation_menu()
 		'page arguments' => array(
 			'generate_pdf'
 		),
-		'type' => MENU_CALLBACK,
+		//'type' => MENU_CALLBACK,
 		'access arguments' => array(
 			'generate pdf'
 		),
 		'file' => 'pdf/cert_new.inc'
+	);
+	$items['circuit-simulation-project/certificates-custom'] = array(
+		'title' => 'List of Circuit Simulation Custom Certificates',
+		'description' => 'List of circuit simulation Custom Certificates',
+		'page callback' => '_list_circuit_simulation_custom_certificates',
+		'access arguments' => array(
+			'list circuit simulation custom certificates'
+		),
+		'file' => 'pdf/list_mentor_certificates.inc'
+	);
+	$items['circuit-simulation-project/certificates-custom/pdf'] = array(
+		'title' => 'Download Certificate',
+		'description' => 'Download Certificate',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array(
+			'generate_pdf'
+		),
+		//'type' => MENU_CALLBACK,
+		'access arguments' => array(
+			'generate pdf'
+		),
+		'file' => 'pdf/mentor_cert_pdf.inc'
 	);
 	$items['circuit-simulation-project/certificates/verify'] = array(
 		"title" => "Certificate Verification",
@@ -474,16 +375,9 @@ function circuit_simulation_menu()
 		"access arguments" => array(
 			"verify certificates"
 		),
-		'type' => MENU_CALLBACK,
+		//'type' => MENU_CALLBACK,
 		'file' => 'pdf/verify_certificates.inc'
 	);
-	/*  $items["circuit_simulation/code_approval/dependency/ajax"] = array(
-	"title" => "Ajax callbacks",
-	"page callback" => "circuit_simulation_dependency_approval_ajax",
-	"access arguments" => array("esim circuit simulation bulk manage abstract"),
-	"type" => MENU_CALLBACK,
-	'file' => 'dependency_approval.inc',
-	);*/
 	return $items;
 }
 /**
@@ -532,6 +426,10 @@ function circuit_simulation_permission()
 			'title' => t('esim circuit simulation download code'),
 			'restrict access' => TRUE
 		),
+		'esim circuit simulation download proposals' => array(
+			'title' => t('esim circuit simulation download proposals'),
+			'restrict access' => TRUE
+		),
 		'administer esim circuit simulation' => array(
 			'title' => t('administer esim circuit simulation'),
 			'restrict access' => TRUE
@@ -545,6 +443,11 @@ function circuit_simulation_permission()
 			"description" => t("list the certificates"),
 			'restrict access' => TRUE
 		),
+		"list circuit simulation custom certificates" => array(
+			"title" => t("list the mentor certificates"),
+			"description" => t("list the mentor certificates"),
+			'restrict access' => TRUE
+		),
 		"verify certificates" => array(
 			"title" => t("verify the certificates"),
 			"description" => t("verify the certificates"),
@@ -552,66 +455,6 @@ function circuit_simulation_permission()
 		)
 
 	);
-	// return array('esim circuit simulation create proposal', 'esim circuit simulation manage proposal', 'esim circuit simulation edit proposal', 'esim circuit simulation approve proposal', 'esim circuit simulation propose solution', 'esim circuit simulation approve code', 'esim circuit simulation bulk manage abstract', 'esim circuit simulation bulk delete code', 'esim circuit simulation upload code', 'esim circuit simulation download code', 'administer esim circuit simulation', 'esim circuit simulation generate lab');
-}
-/* AJAX CALLS */
-function circuit_simulation_ajax()
-{
-	$query_type = arg(2);
-	if ($query_type == 'chapter_title')
-	{
-		$chapter_number = arg(3);
-		$preference_id = arg(4);
-		//$chapter_q = db_query("SELECT * FROM {esim_circuit_simulation_chapter} WHERE number = %d AND preference_id = %d LIMIT 1", $chapter_number, $preference_id);
-		$query = db_select('esim_circuit_simulation_chapter');
-		$query->fields('esim_circuit_simulation_chapter');
-		$query->condition('number', $chapter_number);
-		$query->condition('preference_id', $preference_id);
-		$query->range(0, 1);
-		$chapter_q = $query->execute();
-		if ($chapter_data = $chapter_q->fetchObject())
-		{
-			echo $chapter_data->name;
-			return;
-		} //$chapter_data = $chapter_q->fetchObject()
-	} //$query_type == 'chapter_title'
-	else if ($query_type == 'example_exists')
-	{
-		$chapter_number = arg(3);
-		$preference_id = arg(4);
-		$example_number = arg(5);
-		$chapter_id = 0;
-		$query = db_select('esim_circuit_simulation_chapter');
-		$query->fields('esim_circuit_simulation_chapter');
-		$query->condition('number', $chapter_number);
-		$query->condition('preference_id', $preference_id);
-		$query->range(0, 1);
-		$chapter_q = $query->execute();
-		if (!$chapter_data = $chapter_q->fetchObject())
-		{
-			echo '';
-			return;
-		} //!$chapter_data = $chapter_q->fetchObject()
-		else
-		{
-			$chapter_id = $chapter_data->id;
-		}
-		$query = db_select('esim_circuit_simulation_example');
-		$query->fields('esim_circuit_simulation_example');
-		$query->condition('chapter_id', $chapter_id);
-		$query->condition('number', $example_number);
-		$query->range(0, 1);
-		$example_q = $query->execute();
-		if ($example_data = $example_q->fetchObject())
-		{
-			if ($example_data->approval_status == 1)
-				echo 'Warning! Solution already approved. You cannot upload the same solution again.';
-			else
-				echo 'Warning! Solution already uploaded. Delete the solution and reupload it.';
-			return;
-		} //$example_data = $example_q->fetchObject()
-	} //$query_type == 'example_exists'
-	echo '';
 }
 /*************************** VALIDATION FUNCTIONS *****************************/
 function circuit_simulation_check_valid_filename($file_name)
@@ -648,9 +491,8 @@ function circuit_simulation_file_path($value='')
 /************************* USER VERIFICATION FUNCTIONS ************************/
 function circuit_simulation_get_proposal()
 {
-	global $user;
-	//$proposal_q = db_query("SELECT * FROM {esim_circuit_simulation_proposal} WHERE solution_provider_uid = ".$user->uid." AND solution_status = 2 ORDER BY id DESC LIMIT 1");
-	$query = db_select('esim_circuit_simulation_proposal');
+	$user = \Drupal::currentUser();
+	$query = \Drupal::database()->select('esim_circuit_simulation_proposal');
 	$query->fields('esim_circuit_simulation_proposal');
 	$query->condition('uid', $user->uid);
 	$query->orderBy('id', 'DESC');
@@ -659,24 +501,24 @@ function circuit_simulation_get_proposal()
 	$proposal_data = $proposal_q->fetchObject();
 	if (!$proposal_data)
 	{
-		drupal_set_message("You do not have any approved eSim Circuit Simulation proposal. Please propose the circuit simulation proposal", 'error');
+		\Drupal::messenger()->addError("You do not have any approved eSim Circuit Simulation proposal. Please propose the circuit simulation proposal");
 		drupal_goto('');
 	} //!$proposal_data
 	switch ($proposal_data->approval_status)
 	{
 		case 0:
-			drupal_set_message(t('Proposal is awaiting approval.'), 'status');
+			\Drupal::messenger()->addStatus(t('Proposal is awaiting approval.'));
 			return FALSE;
 		case 1:
 			return $proposal_data;
 		case 2:
-			drupal_set_message(t('Proposal has been dis-approved.'), 'error');
+			\Drupal::messenger()->addError(t('Proposal has been dis-approved.'));
 			return FALSE;
 		case 3:
-			drupal_set_message(t('Proposal has been marked as completed.'), 'status');
+			\Drupal::messenger()->addStatus(t('Proposal has been marked as completed.'));
 			return FALSE;
 		default:
-			drupal_set_message(t('Invalid proposal state. Please contact site administrator for further information.'), 'error');
+			\Drupal::messenger()->addError(t('Invalid proposal state. Please contact site administrator for further information.'));
 			return FALSE;
 	} //$proposal_data->approval_status
 	return FALSE;
@@ -699,7 +541,7 @@ function ucname($string)
 	} //array( '-', '\'' ) as $delimiter
 	return $string;
 }
-function _df_sentence_case($string)
+function _esim_cs_sentence_case($string)
 {
 	$string = ucwords(strtolower($string));
 	foreach (array(
@@ -713,65 +555,13 @@ function _df_sentence_case($string)
 		} //strpos($string, $delimiter) !== false
 	} //array( '-', '\'' ) as $delimiter
 	return $string;
-}/*
-function _df_list_of_esim_compound()
-{
-	$esim_compound = array();
-	$query = db_select('esim_circuit_simulation_compounds_from_esim');
-	$query->fields('esim_circuit_simulation_compounds_from_esim');
-	$query->orderBy('compound', 'ASC');
-	$esim_compound_list = $query->execute();
-	while ($esim_compound_list_data = $esim_compound_list->fetchObject())
-	{
-		$esim_compound[$esim_compound_list_data->compound] = $esim_compound_list_data->compound;
-	} //$esim_compound_list_data = $esim_compound_list->fetchObject()
-	return $esim_compound;
 }
-function _df_list_of_unit_operations()
-{
-	$esim_unit_operations = array();
-	$query = db_select('esim_circuit_simulation_unit_operations');
-	$query->fields('esim_circuit_simulation_unit_operations');
-	$query->orderBy('id', 'ASC');
-	$esim_unit_operations_list = $query->execute();
-	while ($esim_unit_operations_list_data = $esim_unit_operations_list->fetchObject())
-	{
-		$esim_unit_operations[$esim_unit_operations_list_data->unit_operations] = $esim_unit_operations_list_data->unit_operations;
-	} //$esim_unit_operations_list_data = $esim_unit_operations_list->fetchObject()
-	return $esim_unit_operations;
-}
-function _df_list_of_thermodynamic_packages()
-{
-	$esim_thermodynamic_packages = array();
-	$query = db_select('esim_circuit_simulation_thermodynamic_packages');
-	$query->fields('esim_circuit_simulation_thermodynamic_packages');
-	$query->orderBy('id', 'ASC');
-	$esim_thermodynamic_packages_list = $query->execute();
-	while ($esim_thermodynamic_packages_list_data = $esim_thermodynamic_packages_list->fetchObject())
-	{
-		$esim_thermodynamic_packages[$esim_thermodynamic_packages_list_data->thermodynamic_packages] = $esim_thermodynamic_packages_list_data->thermodynamic_packages;
-	} //$esim_thermodynamic_packages_list_data = $esim_thermodynamic_packages_list->fetchObject()
-	return $esim_thermodynamic_packages;
-}*//*
-function _df_list_of_logical_block()
-{
-	$esim_logical_block = array();
-	$query = db_select('esim_circuit_simulation_logical_block');
-	$query->fields('esim_circuit_simulation_logical_block');
-	$query->orderBy('id', 'ASC');
-	$esim_logical_block_list = $query->execute();
-	while ($esim_logical_block_list_data = $esim_logical_block_list->fetchObject())
-	{
-		$esim_logical_block[$esim_logical_block_list_data->logical_block] = $esim_logical_block_list_data->logical_block;
-	} //$esim_logical_block_list_data = $esim_logical_block_list->fetchObject()
-	return $esim_logical_block;
-}*/
-function _df_list_of_states()
+function _esim_cs_list_of_states()
 {
 	$states = array(
 		0 => '-Select-'
 	);
-	$query = db_select('list_states_of_india');
+	$query = \Drupal::database()->select('list_states_of_india');
 	$query->fields('list_states_of_india');
 	//$query->orderBy('', '');
 	$states_list = $query->execute();
@@ -781,12 +571,12 @@ function _df_list_of_states()
 	} //$states_list_data = $states_list->fetchObject()
 	return $states;
 }
-function _df_list_of_cities()
+function _esim_cs_list_of_cities()
 {
 	$city = array(
 		0 => '-Select-'
 	);
-	$query = db_select('list_cities_of_india');
+	$query = \Drupal::database()->select('list_cities_of_india');
 	$query->fields('list_cities_of_india');
 	$query->orderBy('city', 'ASC');
 	$city_list = $query->execute();
@@ -796,12 +586,12 @@ function _df_list_of_cities()
 	} //$city_list_data = $city_list->fetchObject()
 	return $city;
 }
-function _df_list_of_pincodes()
+function _esim_cs_list_of_pincodes()
 {
 	$pincode = array(
 		0 => '-Select-'
 	);
-	$query = db_select('list_of_all_india_pincode');
+	$query = \Drupal::database()->select('list_of_all_india_pincode');
 	$query->fields('list_of_all_india_pincode');
 	$query->orderBy('pincode', 'ASC');
 	$pincode_list = $query->execute();
@@ -811,10 +601,10 @@ function _df_list_of_pincodes()
 	} //$pincode_list_data = $pincode_list->fetchObject()
 	return $pincode;
 }
-function _df_list_of_departments()
+function _esim_cs_list_of_departments()
 {
 	$department = array();
-	$query = db_select('list_of_departments');
+	$query = \Drupal::database()->select('list_of_departments');
 	$query->fields('list_of_departments');
 	$query->orderBy('id', 'DESC');
 	$department_list = $query->execute();
@@ -824,36 +614,24 @@ function _df_list_of_departments()
 	} //$department_list_data = $department_list->fetchObject()
 	return $department;
 }
-/*function _df_list_of_software_version()
+function _cs_dir_name($project, $proposar_name)
 {
-	$software_version = array();
-	$query = db_select('esim_software_version');
-	$query->fields('esim_software_version');
-	$query->orderBy('esim_version', 'ASC');
-	$software_version_list = $query->execute();
-	while ($software_version_list_data = $software_version_list->fetchObject())
-	{
-		$software_version[$software_version_list_data->esim_version] = $software_version_list_data->esim_version;
-	} //$software_version_list_data = $software_version_list->fetchObject()
-	return $software_version;
-}*/
-function _df_dir_name($project, $proposar_name)
-{
-	$project_title = ucname($project);
-	$proposar_name = ucname($proposar_name);
+	$project_title = preg_replace("/_+/", "_",preg_replace('/[^A-Za-z0-9\-]/', '_', $project));
+	$proposar_name = $proposar_name;
 	$dir_name = $project_title . ' By ' . $proposar_name;
 	$directory_name = str_replace("__", "_", str_replace(" ", "_", str_replace("/","_", trim($dir_name))));
+	//var_dump($directory_name);die;
 	return $directory_name;
 }
 function circuit_simulation_document_path()
 {
 	return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'esim_uploads/circuit_simulation_uploads/';
 }
-function DF_RenameDir($proposal_id, $dir_name)
+function CS_RenameDir($proposal_id, $dir_name)
 {
 	$proposal_id = $proposal_id;
 	$dir_name = $dir_name;
-	$query = db_query("SELECT directory_name,id FROM esim_circuit_simulation_proposal WHERE id = :proposal_id", array(
+	$query = \Drupal::database()->query("SELECT directory_name,id FROM esim_circuit_simulation_proposal WHERE id = :proposal_id", array(
 		':proposal_id' => $proposal_id
 	));
 	$result = $query->fetchObject();
@@ -875,29 +653,20 @@ function DF_RenameDir($proposal_id, $dir_name)
 		} //is_dir($files_id_dir)
 		else
 		{
-			drupal_set_message('Directory not available for rename.');
+			\Drupal::messenger()->addMessage('Directory not available for rename.');
 			return;
 		}
 	} //$result != NULL
 	else
 	{
-		drupal_set_message('Project directory name not present in databse');
+		\Drupal::messenger()->addMessage('Project directory name not present in databse');
 		return;
 	}
-	//var_dump($files);die;
-	/* if ($files != NULL)
-	{
-	$new_directory_name = rename(circuit_simulation_path() . $result->directory_name, circuit_simulation_path() . $dir_name) or drupal_set_message("Unable to rename folder");
-	}
-	else
-	{
-	$new_directory_name = 'Can not rename the directory. Directory not present';
-	}*/
 	return;
 }
 function CreateReadmeFileeSimCircuitSimulationProject($proposal_id)
 {
-	$result = db_query("
+	$result = \Drupal::database()->query("
                         SELECT * from esim_circuit_simulation_proposal WHERE id = :proposal_id", array(
 		":proposal_id" => $proposal_id
 	));
@@ -919,7 +688,7 @@ function CreateReadmeFileeSimCircuitSimulationProject($proposal_id)
 function rrmdir_project($prop_id)
 {
 	$proposal_id = $prop_id;
-	$result = db_query("
+	$result = \Drupal::database()->query("
 					SELECT * from esim_circuit_simulation_proposal WHERE id = :proposal_id", array(
 		":proposal_id" => $proposal_id
 	));
@@ -947,15 +716,15 @@ function rrmdir_project($prop_id)
 			} //$objects as $object
 			reset($objects);
 			rmdir($dir);
-			$msg = drupal_set_message("Directory deleted successfully");
+			$msg = \Drupal::messenger()->addMessage("Directory deleted successfully");
 			return $msg;
 		} //is_dir($dir)
-		$msg = drupal_set_message("Directory not present");
+		$msg = \Drupal::messenger()->addMessage("Directory not present");
 		return $msg;
 	} //$proposal_data->id == $prop_id
 	else
 	{
-		$msg = drupal_set_message("Data not found");
+		$msg = \Drupal::messenger()->addMessage("Data not found");
 		return $msg;
 	}
 }
@@ -978,35 +747,160 @@ function rrmdir($dir)
 		rmdir($dir);
 	} //is_dir($dir)
 }
-function _circuit_simulation_list_of_user_defined_compound($proposal_id)
-{
-	$data = "";
-	//$query = db_select('esim_esim_circuit_simulation_user_defined_compound');
-	//$query->fields('circuit_simulation_user_defined_compound');
-	//$query->condition('proposal_id', $proposal_id, '=');
-	//$query->orderBy('user_defined_compound', 'ASC');
-	$user_defined_compound_list = db_query("SELECT * FROM esim_circuit_simulation_user_defined_compound WHERE proposal_id = :proposal_id", array(":proposal_id" => $proposal_id));
-	$headers = array(
-		"List of user defined compounds used in process circuit simulation",
-		"CAS No."
-	);
-	if($user_defined_compound_list){
-	$rows = array();
-	while ($row = $user_defined_compound_list->fetchObject())
-	{
-		$item = array(
-			"{$row->user_defined_compound}",
-			"{$row->cas_no}"
-		);
-		array_push($rows, $item);
-	} //$row = $user_defined_compound_list->fetchObject()
-	
-	$data .= theme('table', array(
-		'header' => $headers,
-		'rows' => $rows
-	));
-	}else{
-		$data .= "Not entered";
-	}
-	return $data;
-}
+
+
+function circuit_simulation_mail($key, &$message, $params) {
+    switch ($key) {
+      case 'circuit_simulation_proposal_received':
+        $query = \Drupal::database()->select('esim_circuit_simulation_proposal', 'p')
+          ->fields('p')
+          ->condition('id', $params['circuit_simulation_proposal_received']['proposal_id'])
+          ->range(0, 1);
+        $proposal_data = $query->execute()->fetchObject();
+        //var_dump($proposal_data);die;
+        // Load user entity.
+
+        $user = \Drupal\user\Entity\User::load($params['circuit_simulation_proposal_received']['user_id']);
+        if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
+			{
+				$project_guide_name = "Not Entered";
+			} //$proposal_data->project_guide_name == NULL
+			else
+			{
+				$project_guide_name = $proposal_data->project_guide_name;
+			}
+			if ($proposal_data->project_guide_email_id == "NULL" || $proposal_data->project_guide_email_id == "")
+			{
+				$project_guide_email_id = "Not Entered";
+			} //$proposal_data->project_guide_email_id == NULL
+			else
+			{
+				$project_guide_email_id = $proposal_data->project_guide_email_id;
+			}
+        // Prepare the email message.
+        $message['headers'] = $params['circuit_simulation_proposal_received']['headers'];
+        $message['subject'] = t(
+          '[@site_name][Circuit Simulation Project] Your eSim Circuit Simulation Project proposal has been received',
+          ['@site_name' => \Drupal::config('system.site')->get('name')],
+          ['langcode' => $language]
+        );
+        //var_dump($message);die;
+        $message['body'][] = t(
+          '
+Dear @name,
+
+We have received your eSim Circuit Simulation Project proposal with the following details:
+
+Full Name: @full_name
+Email: @user_email
+University/Institute: @university
+City: @city
+State: @state
+Country: @country
+Project Title: @project_title
+Project Guide Name: @project_guide_name
+Project Guide Email: @project_guide_email_id
+
+Your proposal is under review. You will soon receive an email when it has been approved/disapproved.
+
+Best Wishes,
+
+@site_name Team,
+FOSSEE, IIT Bombay',
+          [
+            '@name' => $proposal_data->name_title . ' ' . $proposal_data->contributor_name,
+            '@full_name' => $proposal_data->name_title . ' ' . $proposal_data->contributor_name,
+            '@user_email' => $user->getEmail(),
+            '@university' => $proposal_data->university,
+            '@city' => $proposal_data->city,
+            '@state' => $proposal_data->state,
+            '@country' => $proposal_data->country,
+            '@project_title' => $proposal_data->project_title,
+            '@project_guide_name' => $project_guide_name,
+            '@project_guide_email_id' => $project_guide_email_id,
+            '@site_name' => \Drupal::config('system.site')->get('name'),
+          ],
+          ['langcode' => $language]
+        );
+        break;
+    case 'circuit_simulation_proposal_approved':
+			/* initializing data */
+			$url = 'http://esim.fossee.in/circuit-simulation-project/abstract-code';
+			$query = \Drupal::database()->select('esim_circuit_simulation_proposal');
+			$query->fields('esim_circuit_simulation_proposal');
+			$query->condition('id', $params['circuit_simulation_proposal_approved']['proposal_id']);
+			$query->range(0, 1);
+			$proposal_data = $query->execute()->fetchObject();
+			$user_data = \Drupal::entityTypeManager()->getStorage('user')->load($params['circuit_simulation_proposal_approved']['user_id']);
+
+			if ($proposal_data->project_guide_name == "NULL" || $proposal_data->project_guide_name == "")
+			{
+				$project_guide_name = "Not Entered";
+			} //$proposal_data->project_guide_name == NULL
+			else
+			{
+				$project_guide_name = $proposal_data->project_guide_name;
+			}
+			if ($proposal_data->project_guide_email_id == "NULL" || $proposal_data->project_guide_email_id == "")
+			{
+				$project_guide_email_id = "Not Entered";
+			} //$proposal_data->project_guide_email_id == NULL
+			else
+			{
+				$project_guide_email_id = $proposal_data->project_guide_email_id;
+			}
+			$message['headers'] = $params['circuit_simulation_proposal_approved']['headers'];
+			$message['subject'] = t(
+          '[@site_name][Circuit Simulation Project] Your eSim Circuit Simulation Project proposal has been approved',
+          ['@site_name' => \Drupal::config('system.site')->get('name')],
+          ['langcode' => $language]
+        );
+			/*$message['subject'] = t('[@site_name][Circuit Simulation Project] Your eSim Circuit Simulation Project proposal has been approved', array(
+				'@site_name' => variable_get('site_name', '')
+			), array(
+				'language' => $language->language
+			));*/
+
+			$message['body'][] = 
+				t('
+Dear ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . ',
+
+Your eSim Circuit Simulation Project proposal with the following details has been approved:
+
+Full Name: @full_name
+Email: @user_email
+University/Institute: @university
+City: @city
+State: @state
+Country: @country
+Project Title: @project_title
+Project Guide Name: @project_guide_name
+Project Guide Email: @project_guide_email_id
+
+You can upload your abstract and the completed simulation at: @url
+
+Best Wishes,
+
+@site_name Team,
+FOSSEE,IIT Bombay',
+			[
+            '@name' => $proposal_data->name_title . ' ' . $proposal_data->contributor_name,
+            '@full_name' => $proposal_data->name_title . ' ' . $proposal_data->contributor_name,
+            '@user_email' => $user_data->getEmail(),
+            '@university' => $proposal_data->university,
+            '@city' => $proposal_data->city,
+            '@state' => $proposal_data->state,
+            '@country' => $proposal_data->country,
+            '@project_title' => $proposal_data->project_title,
+            '@project_guide_name' => $project_guide_name,
+            '@project_guide_email_id' => $project_guide_email_id,
+            '@url' => $url,
+            '@site_name' => \Drupal::config('system.site')->get('name'),
+          ],
+          ['langcode' => $language]
+			);
+			break;
+    }
+    //var_dump($message);die;
+   // return $message;
+  }

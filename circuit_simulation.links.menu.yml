@@ -1,0 +1,136 @@
+circuit_simulation.all_completed_circuit_simulations:
+  route_name: circuit_simulation.all_completed_circuit_simulations
+  title: 'Completed Circuits'
+  weight: 5
+  description: 'Completed Circuits'
+circuit_simulation.proposal_form:
+  route_name: circuit_simulation.proposal_form
+  title: 'Circuit Simulation Proposal Form'
+  description: 'Circuit Simulation Proposal Form'
+circuit_simulation.proposal_pending:
+  route_name: circuit_simulation.proposal_pending
+  title: 'Manage Circuit Simulation Proposals'
+  description: 'Manage Circuit Simulation Proposals'
+circuit_simulation.proposal_pending_0:
+  route_name: circuit_simulation.proposal_pending
+  title: 'Pending Proposals'
+  weight: 1
+  description: 'Pending esim circuit simulation Proposals Queue'
+circuit_simulation.proposal_all:
+  route_name: circuit_simulation.proposal_all
+  title: 'All Proposals'
+  weight: 2
+  description: 'All Proposals'
+circuit_simulation.approved_tab:
+  route_name: circuit_simulation.approved_tab
+  title: 'Approved Proposals'
+  weight: 3
+  description: 'Approved Proposals'
+circuit_simulation.uploaded_tab:
+  route_name: circuit_simulation.uploaded_tab
+  title: 'Uploaded Proposals'
+  weight: 4
+  description: 'Uploaded Proposals'
+circuit_simulation.completed_tab_form:
+  route_name: circuit_simulation.completed_tab_form
+  title: 'Completed Proposals'
+  weight: 5
+  description: 'Completed Proposals'
+circuit_simulation.proposal_approval_form:
+  route_name: circuit_simulation.proposal_approval_form
+  title: 'Approve Proposal'
+  description: 'Approve Proposal'
+circuit_simulation.proposal_edit_form:
+  route_name: circuit_simulation.proposal_edit_form
+  title: 'Edit Proposal'
+  description: 'Edit Proposal'
+circuit_simulation.proposal_status_form:
+  route_name: circuit_simulation.proposal_status_form
+  title: 'Proposal Status'
+  description: 'Proposal Status'
+circuit_simulation.abstract_bulk_approval_form:
+  route_name: circuit_simulation.abstract_bulk_approval_form
+  title: 'Bulk Manage'
+  weight: 2
+  description: 'Bulk Mangage'
+circuit_simulation.abstract:
+  route_name: circuit_simulation.abstract
+  title: 'Abstract and Project Files Upload'
+  description: 'Abstract Submission'
+circuit_simulation.abstract_0:
+  route_name: circuit_simulation.abstract
+  title: 'Circuit Simulation'
+  weight: 1
+  description: 'List Experiments'
+circuit_simulation.upload_abstract_code_form:
+  route_name: circuit_simulation.upload_abstract_code_form
+  title: 'Abstract and Project Upload'
+  weight: 2
+  description: 'Project Upload'
+circuit_simulation.download_full_project:
+  route_name: circuit_simulation.download_full_project
+  title: 'Code Download'
+  description: 'Code Download'
+circuit_simulation.download_proposals:
+  route_name: circuit_simulation.download_proposals
+  title: 'Download Proposals'
+  description: 'Download Proposals'
+circuit_simulation.esim_circuit_simulation_download_completed_proposals:
+  route_name: circuit_simulation.esim_circuit_simulation_download_completed_proposals
+  title: 'Download Completed Proposals'
+  description: 'Download Completed Proposals'
+circuit_simulation.completed_proposals_all:
+  route_name: circuit_simulation.completed_proposals_all
+  title: 'Completed Circuit Simulations'
+circuit_simulation.completed_proposals_all_0:
+  route_name: circuit_simulation.completed_proposals_all
+  title: 'Completed Circuit Simulations'
+  weight: 0
+circuit_simulation.completed_pspice_to_kicad:
+  route_name: circuit_simulation.completed_pspice_to_kicad
+  title: 'Completed PSPICE to KICAD Circuits'
+  weight: 1
+circuit_simulation.completed_ltspice_to_kicad:
+  route_name: circuit_simulation.completed_ltspice_to_kicad
+  title: 'Completed LTSpice to KICAD Circuits'
+  weight: 2
+circuit_simulation.progress_all:
+  route_name: circuit_simulation.progress_all
+  title: 'Circuit Simulations in Progress'
+circuit_simulation.run_form:
+  route_name: circuit_simulation.run_form
+  title: 'Download Codes'
+circuit_simulation.download_upload_file:
+  route_name: circuit_simulation.download_upload_file
+  title: 'Download user defined compound file'
+  description: 'Download resource file'
+circuit_simulation.esim_circuit_simulation_project_files:
+  route_name: circuit_simulation.esim_circuit_simulation_project_files
+  title: 'Download Project file'
+  description: 'Download project file'
+circuit_simulation.settings_form:
+  route_name: circuit_simulation.settings_form
+  title: 'esim circuit simulation Settings'
+  description: 'esim circuit simulation Settings'
+circuit_simulation._list_circuit_simulation_certificates:
+  route_name: circuit_simulation._list_circuit_simulation_certificates
+  title: 'List of Circuit Simulation Certificates'
+  description: 'List of circuit simulation Certificates'
+circuit_simulation.generate_pdf:
+  route_name: circuit_simulation.generate_pdf
+  title: 'Download Certificate'
+  description: 'Download Certificate'
+  parent: circuit_simulation._list_circuit_simulation_custom_certificates
+circuit_simulation._list_circuit_simulation_custom_certificates:
+  route_name: circuit_simulation._list_circuit_simulation_custom_certificates
+  title: 'List of Circuit Simulation Custom Certificates'
+  description: 'List of circuit simulation Custom Certificates'
+circuit_simulation.generate_pdf_0:
+  route_name: circuit_simulation.generate_pdf
+  title: 'Download Certificate'
+  description: 'Download Certificate'
+  parent: circuit_simulation._list_circuit_simulation_custom_certificates
+circuit_simulation.verify_certificates_verify_certificates:
+  route_name: circuit_simulation.verify_certificates_verify_certificates
+  title: 'Certificate Verification'
+  parent: circuit_simulation._list_circuit_simulation_certificates
